@@ -31,7 +31,13 @@
   .navtag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.05em;}
 
   /* hero */
-  .hero{padding:64px 0 48px;}
+  .hero{padding:64px 0 48px;display:flex;gap:52px;align-items:center;justify-content:space-between;}
+  .hero-content{flex:1 1 480px;}
+  .hero-photo{flex:0 1 300px;align-self:stretch;display:flex;align-items:center;}
+  .hero-photo .frame{position:relative;width:100%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised);box-shadow:0 1px 2px rgba(28,43,42,.05);}
+  .hero-photo img{width:100%;height:400px;object-fit:cover;display:block;filter:grayscale(30%) contrast(1.05);}
+  .hero-photo .duotone{position:absolute;inset:0;background:linear-gradient(165deg, rgba(61,107,92,.38), rgba(28,43,42,.14));mix-blend-mode:multiply;pointer-events:none;}
+  .photo-tag{position:absolute;top:12px;left:12px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink);padding:4px 9px;border-radius:2px;border:1px solid var(--line);}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--scrub);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
   .eyebrow::before{content:'';width:16px;height:1px;background:var(--scrub);display:inline-block;}
   h1{font-family:'Fraunces',serif;font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.015em;margin:0 0 22px;max-width:11.5ch;}
@@ -92,6 +98,9 @@
 
   @media (max-width:760px){
     h1{font-size:34px;}
+    .hero{flex-direction:column;gap:32px;padding:44px 0 36px;}
+    .hero-photo{flex:none;width:100%;}
+    .hero-photo img{height:260px;}
     .timeline{grid-template-columns:1fr 1fr;row-gap:32px;}
     .tl-item:nth-child(2)::after{display:none;}
     iframe{height:560px;}
@@ -117,12 +126,21 @@
 <div class="wrap">
 
   <section class="hero">
-    <div class="eyebrow">AI-built compliance training</div>
-    <h1>Training that updates as fast as <em>your policies do.</em></h1>
-    <p class="sub">Scenario-based compliance modules — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
-    <div class="hero-ctas">
-      <a href="#exhibit" class="btn btn-primary">See the live example</a>
-      <a href="#intake" class="btn btn-ghost">Request an intake call</a>
+    <div class="hero-content">
+      <div class="eyebrow">AI-built compliance training</div>
+      <h1>Training that updates as fast as <em>your policies do.</em></h1>
+      <p class="sub">Scenario-based compliance modules — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
+      <div class="hero-ctas">
+        <a href="#exhibit" class="btn btn-primary">See the live example</a>
+        <a href="#intake" class="btn btn-ghost">Request an intake call</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="frame">
+        <span class="photo-tag">CARE TEAM · 4 WEST</span>
+        <img src="images/hero-photo.jpg" alt="Healthcare worker reviewing patient care notes">
+        <div class="duotone"></div>
+      </div>
     </div>
   </section>
 
