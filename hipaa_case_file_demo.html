@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File 04 — The Curious Visitor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#54615F;
+    --scrub:#3D6B5C;
+    --scrub-tint:#E4ECE8;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --alert:#B84C3E;
+    --alert-tint:#F6E1DD;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+  /* header / chart tab bar */
+  .chartbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+  }
+  .brandmark{display:flex;align-items:baseline;gap:10px;}
+  .brandmark .mark{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+    background:var(--ink);color:var(--paper);padding:3px 7px;border-radius:2px;
+  }
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
+  .casetag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;}
+
+  /* progress dots — real sequence, so numbering is earned */
+  .progress{display:flex;gap:6px;margin:18px 0 30px;}
+  .dot{height:4px;flex:1;background:var(--line);border-radius:2px;overflow:hidden;position:relative;}
+  .dot.done{background:var(--scrub);}
+  .dot.current::after{
+    content:'';position:absolute;inset:0;background:var(--scrub);
+    animation:fillDot 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes fillDot{from{opacity:.35;}to{opacity:1;}}
+
+  .stepline{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;
+  }
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 18px;letter-spacing:-.01em;
+  }
+
+  /* scenario chart note */
+  .note{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--scrub);
+    border-radius:3px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .note .meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .note p{margin:0 0 10px;line-height:1.62;font-size:15.5px;}
+  .note p:last-child{margin-bottom:0;}
+
+  .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .choice{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .choice:hover{border-color:var(--scrub);}
+  .choice:active{transform:scale(.995);}
+  .choice.locked{cursor:default;opacity:.55;}
+  .choice.locked:hover{border-color:var(--line);}
+
+  /* feedback */
+  .feedback{
+    display:none;margin-top:22px;border-radius:3px;padding:20px 22px;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--scrub-tint);border:1px solid var(--scrub);}
+  .feedback.caution{background:var(--amber-tint);border:1px solid var(--amber);}
+  .feedback .flag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:500;margin-bottom:8px;display:block;
+  }
+  .feedback.good .flag{color:var(--scrub);}
+  .feedback.caution .flag{color:var(--amber);}
+  .feedback p{margin:0 0 10px;font-size:14.5px;line-height:1.6;}
+  .cite{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:12px;
+  }
+
+  .continue{
+    display:none;margin-top:20px;background:var(--ink);color:var(--paper);
+    border:none;border-radius:3px;padding:12px 20px;font-size:14px;font-weight:500;
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .continue.show{display:inline-block;}
+  .continue:hover{background:var(--scrub);}
+
+  /* knowledge check */
+  .kc-result{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
+  }
+  .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
+
+  /* coach panel — signature element */
+  .coach{
+    margin-top:34px;border:1px solid var(--line);border-radius:6px;
+    background:var(--paper-raised);overflow:hidden;
+  }
+  .coach-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:var(--scrub-tint);
+  }
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;}
+  .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
+  .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
+  .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
+  .sugg{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--scrub);
+    background:transparent;border:1px solid var(--scrub);border-radius:20px;
+    padding:6px 12px;cursor:pointer;
+  }
+  .sugg:hover{background:var(--scrub);color:var(--paper);}
+  .sugg[disabled]{opacity:.35;cursor:default;}
+  .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+
+  .cta{
+    margin-top:40px;border-top:2px solid var(--ink);padding-top:20px;
+    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;
+  }
+  .cta .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;}
+  .cta .line{font-size:14px;color:var(--ink-soft);}
+
+  @media (prefers-reduced-motion: reduce){
+    .dot.current::after{animation:none;opacity:1;}
+    .feedback{animation:none;}
+  }
+  @media (max-width:520px){
+    h1{font-size:23px;}
+    .wrap{padding:22px 16px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chartbar">
+    <div class="brandmark">
+      <span class="mark">RX·L&D</span>
+      <span class="name">Case File</span>
+    </div>
+    <span class="casetag">MODULE 04 · MINIMUM NECESSARY STANDARD</span>
+  </div>
+
+  <div class="progress">
+    <div class="dot done"></div>
+    <div class="dot done"></div>
+    <div class="dot current"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div id="stage-scenario">
+    <div class="stepline">Scenario</div>
+    <h1>The Curious Visitor</h1>
+    <div class="note">
+      <div class="meta">
+        <span>UNIT: 4 WEST</span>
+        <span>SHIFT: 14:20</span>
+        <span>ROLE: CHARGE NURSE</span>
+      </div>
+      <p>A man approaches the nurses' station. He says he's the brother of a patient on your unit and asks what room she's in and how she's doing — he "just flew in and wants to surprise her."</p>
+      <p>You don't recognize him. The patient hasn't listed visitor restrictions, but she also hasn't confirmed who's allowed to receive updates.</p>
+    </div>
+
+    <div class="prompt">What do you do?</div>
+    <div class="choices" id="choices">
+      <button class="choice" data-outcome="caution">Give him the room number — he clearly knows details only family would know.</button>
+      <button class="choice" data-outcome="good">Ask him to wait, and check with the patient directly before sharing anything.</button>
+      <button class="choice" data-outcome="caution">Confirm she's on the unit, but say he'll need to ask her about her condition himself.</button>
+    </div>
+
+    <div class="feedback caution" id="fb-caution">
+      <span class="flag">Worth a second look</span>
+      <p>Family-sounding details aren't verification. Well-intentioned visitors — and people impersonating them — both tend to know just enough to sound convincing.</p>
+      <p>The safer default is to let the patient decide who hears what, every time, not just when something feels off.</p>
+      <div class="cite">§164.502(b) — Minimum Necessary Standard: disclose only what's needed, only to who's confirmed.</div>
+    </div>
+
+    <div class="feedback good" id="fb-good">
+      <span class="flag">On the mark</span>
+      <p>Checking with the patient first isn't overcaution — it's the standard. She may want him to know everything, or nothing. That's her call, not an assumption made at the desk.</p>
+      <p>This single habit prevents the majority of front-desk disclosure incidents.</p>
+      <div class="cite">§164.502(b) — Minimum Necessary Standard: disclose only what's needed, only to who's confirmed.</div>
+    </div>
+
+    <button class="continue" id="btn-continue">Continue to knowledge check →</button>
+  </div>
+
+  <div id="stage-kc" style="display:none;">
+    <div class="stepline">Knowledge Check</div>
+    <h1>Quick gut-check</h1>
+    <div class="note">
+      <p><strong>A coworker asks you to confirm whether her friend was admitted last night "just to put her mind at ease." What's the right response?</strong></p>
+    </div>
+    <div class="choices" id="choices-kc">
+      <button class="choice" data-kc="wrong">Confirm it quietly — it's a coworker, not a stranger.</button>
+      <button class="choice" data-kc="right">Decline — the coworker isn't part of the patient's care team or an authorized contact.</button>
+    </div>
+    <div class="feedback good" id="fb-kc">
+      <span class="flag">Correct</span>
+      <p>Being on staff doesn't grant access — being on that patient's care team, or being an authorized contact, does. Curiosity, even kind curiosity, isn't a credential.</p>
+    </div>
+    <button class="continue" id="btn-continue2">See results →</button>
+  </div>
+
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result">2/2 — Case closed</div>
+    <div class="kc-sub">You correctly applied the minimum necessary standard in both scenarios.</div>
+
+    <div class="coach">
+      <div class="coach-head">
+        <div class="coach-dot"></div>
+        <div class="coach-title">Ask the coach</div>
+      </div>
+      <div class="coach-body" id="coach-body">
+        <div class="bubble reply">Questions about this case? Tap a prompt below, or picture this as a live chat — in the real product, this reasoning is generated per-learner, per-scenario, in real time.</div>
+      </div>
+      <div class="coach-suggest" id="coach-suggest">
+        <button class="sugg" data-q="badge">What if he'd shown a badge or ID?</button>
+        <button class="sugg" data-q="phone">Does this apply to phone calls too?</button>
+        <button class="sugg" data-q="emergency">What changes in an emergency?</button>
+      </div>
+    </div>
+
+    <div class="cta">
+      <span class="label">Prototype · built in Claude</span>
+      <span class="line">This is a 20-minute build. A full 12-module compliance track is a 2-week one.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const choices = document.getElementById('choices');
+  const fbCaution = document.getElementById('fb-caution');
+  const fbGood = document.getElementById('fb-good');
+  const btnContinue = document.getElementById('btn-continue');
+  const dots = document.querySelectorAll('.dot');
+
+  choices.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.choice');
+    if(!btn || choices.classList.contains('answered')) return;
+    choices.classList.add('answered');
+    [...choices.children].forEach(c=>c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    const outcome = btn.dataset.outcome;
+    (outcome === 'good' ? fbGood : fbCaution).classList.add('show');
+    btnContinue.classList.add('show');
+  });
+
+  btnContinue.addEventListener('click', ()=>{
+    document.getElementById('stage-scenario').style.display = 'none';
+    document.getElementById('stage-kc').style.display = 'block';
+    dots[2].classList.remove('current');
+    dots[2].classList.add('done');
+    dots[3].classList.add('current');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  const choicesKc = document.getElementById('choices-kc');
+  const fbKc = document.getElementById('fb-kc');
+  const btnContinue2 = document.getElementById('btn-continue2');
+
+  choicesKc.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.choice');
+    if(!btn || choicesKc.classList.contains('answered')) return;
+    choicesKc.classList.add('answered');
+    [...choicesKc.children].forEach(c=>c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    fbKc.classList.add('show');
+    btnContinue2.classList.add('show');
+  });
+
+  btnContinue2.addEventListener('click', ()=>{
+    document.getElementById('stage-kc').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots[3].classList.remove('current');
+    dots[3].classList.add('done');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  const coachAnswers = {
+    badge: "A badge helps, but it still isn't verification of the patient's consent — it verifies his identity, not her wishes. The desk should still check with her, just faster and with an easier conscience.",
+    phone: "Yes — phone disclosure is actually the more common incident. No face, no ID, no way to gauge hesitation. Same standard applies: confirm with the patient or check the authorized contact list first.",
+    emergency: "In an emergency, clinical judgment can override the wait-and-confirm step if withholding information would cause harm — but it's a documented exception, not a shortcut for convenience."
+  };
+
+  document.getElementById('coach-suggest').addEventListener('click',(e)=>{
+    const btn = e.target.closest('.sugg');
+    if(!btn) return;
+    const q = btn.dataset.q;
+    const body = document.getElementById('coach-body');
+    const ask = document.createElement('div');
+    ask.className = 'bubble ask';
+    ask.textContent = btn.textContent;
+    body.appendChild(ask);
+    btn.disabled = true;
+    setTimeout(()=>{
+      const reply = document.createElement('div');
+      reply.className = 'bubble reply';
+      reply.textContent = coachAnswers[q];
+      body.appendChild(reply);
+      body.scrollTop = body.scrollHeight;
+    }, 450);
+  });
+</script>
+</body>
+</html>

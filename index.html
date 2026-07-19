@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RX·L&D — AI-Built Compliance Training</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#54615F;
+    --scrub:#3D6B5C;
+    --scrub-tint:#E4ECE8;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
+
+  /* header */
+  header{border-bottom:2px solid var(--ink);}
+  .chartbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
+  .brandmark{display:flex;align-items:baseline;gap:10px;}
+  .brandmark .mark{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;background:var(--ink);color:var(--paper);padding:3px 7px;border-radius:2px;}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
+  .navtag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.05em;}
+
+  /* hero */
+  .hero{padding:64px 0 48px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--scrub);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+  .eyebrow::before{content:'';width:16px;height:1px;background:var(--scrub);display:inline-block;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.015em;margin:0 0 22px;max-width:11.5ch;}
+  h1 em{font-style:normal;color:var(--scrub);}
+  .sub{font-size:17px;line-height:1.6;color:var(--ink-soft);max-width:52ch;margin:0 0 34px;}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;font-weight:500;padding:13px 22px;border-radius:3px;cursor:pointer;border:1px solid var(--ink);text-decoration:none;display:inline-block;}
+  .btn-primary{background:var(--ink);color:var(--paper);}
+  .btn-primary:hover{background:var(--scrub);border-color:var(--scrub);}
+  .btn-ghost{background:transparent;color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--scrub);color:var(--scrub);}
+
+  /* problem note */
+  .note{background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:3px;padding:22px 24px;margin:0 0 64px;}
+  .note .flag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:block;}
+  .note p{margin:0;font-size:15.5px;line-height:1.65;max-width:66ch;}
+
+  /* timeline */
+  .section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+  .section-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin:0 0 36px;}
+
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:70px;position:relative;}
+  .tl-item{position:relative;padding:0 18px 0 0;}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;top:13px;right:-2px;width:calc(100% - 40px);height:1px;background:var(--line);}
+  .tl-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--scrub);border:1px solid var(--scrub);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:var(--paper);position:relative;z-index:1;}
+  .tl-item h3{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;margin:0 0 8px;}
+  .tl-item p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+
+  /* exhibit / demo embed */
+  .exhibit{margin-bottom:70px;}
+  .exhibit-frame{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised);box-shadow:0 1px 2px rgba(28,43,42,.04);}
+  .exhibit-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--scrub-tint);}
+  .exhibit-dot{width:7px;height:7px;border-radius:50%;background:var(--scrub);}
+  .exhibit-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--ink);}
+  iframe{width:100%;height:640px;border:none;display:block;}
+
+  /* intake form */
+  .intake{margin-bottom:80px;}
+  .intake-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:6px;padding:36px;max-width:560px;}
+  .intake-card .section-label{margin-bottom:6px;}
+  .intake-card h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:0 0 6px;}
+  .intake-card .sub{font-size:14.5px;margin-bottom:26px;}
+  form{display:flex;flex-direction:column;gap:16px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
+  input,textarea,select{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:11px 13px;border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--scrub);outline-offset:1px;border-color:var(--scrub);}
+  textarea{resize:vertical;min-height:70px;font-family:'IBM Plex Sans',sans-serif;}
+  .submit-row{display:flex;align-items:center;gap:14px;margin-top:6px;}
+  .btn-submit{background:var(--ink);color:var(--paper);border:none;border-radius:3px;padding:13px 22px;font-size:14.5px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
+  .btn-submit:hover{background:var(--scrub);}
+  .form-note{font-size:12px;color:var(--ink-soft);}
+  .confirm{display:none;padding:16px 18px;background:var(--scrub-tint);border:1px solid var(--scrub);border-radius:4px;font-size:14px;}
+  .confirm.show{display:block;}
+
+  footer{border-top:2px solid var(--ink);padding:26px 0 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  footer .line{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.03em;}
+
+  @media (max-width:760px){
+    h1{font-size:34px;}
+    .timeline{grid-template-columns:1fr 1fr;row-gap:32px;}
+    .tl-item:nth-child(2)::after{display:none;}
+    iframe{height:560px;}
+    .intake-card{padding:26px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap chartbar">
+    <div class="brandmark">
+      <span class="mark">RX·L&D</span>
+      <span class="name">Case Intake</span>
+    </div>
+    <span class="navtag">AI COMPLIANCE TRAINING · HEALTHCARE</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">AI-built compliance training</div>
+    <h1>Training that updates as fast as <em>your policies do.</em></h1>
+    <p class="sub">Scenario-based compliance modules — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
+    <div class="hero-ctas">
+      <a href="#exhibit" class="btn btn-primary">See the live example</a>
+      <a href="#intake" class="btn btn-ghost">Request an intake call</a>
+    </div>
+  </section>
+
+  <div class="note">
+    <span class="flag">The pattern we keep seeing</span>
+    <p>Annual re-certification content is technically compliant but rarely current — policies shift, but the training built around them takes a quarter or more to catch up. That gap is where risk lives.</p>
+  </div>
+
+  <section class="timeline">
+    <div class="section-label" style="grid-column:1/-1;">Case Timeline</div>
+    <div class="tl-item">
+      <div class="tl-num">1</div>
+      <h3>Intake</h3>
+      <p>A short call to review your current training and where it's falling behind.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">2</div>
+      <h3>Diagnosis</h3>
+      <p>We identify the highest-risk, highest-staleness modules to rebuild first.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">3</div>
+      <h3>Build</h3>
+      <p>A 2-week accelerator turns your policy documents into scenario-based modules.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-num">4</div>
+      <h3>Handoff</h3>
+      <p>Your team owns the system, with a process for updating it as policy changes.</p>
+    </div>
+  </section>
+
+  <section class="exhibit" id="exhibit">
+    <div class="section-label">Exhibit A</div>
+    <div class="section-title">A live module, not a mockup</div>
+    <div class="exhibit-frame">
+      <div class="exhibit-bar">
+        <div class="exhibit-dot"></div>
+        <span class="exhibit-label">hipaa_case_file_demo — Module 04</span>
+      </div>
+      <iframe src="hipaa_case_file_demo.html" title="Live HIPAA training module demo" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <section class="intake" id="intake">
+    <div class="intake-card">
+      <div class="section-label">Request intake</div>
+      <h3>Tell us about your training</h3>
+      <p class="sub">15 minutes. No obligation — just a look at where AI-assisted content could help.</p>
+      <form id="intake-form">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="field">
+          <label for="org">Organization</label>
+          <input type="text" id="org" name="org" required>
+        </div>
+        <div class="field">
+          <label for="email">Work email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="notes">What's stale or painful right now? (optional)</label>
+          <textarea id="notes" name="notes"></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn-submit">Request intake call</button>
+          <span class="form-note">Reply within 1 business day.</span>
+        </div>
+      </form>
+      <div class="confirm" id="confirm">Thanks — request received. We'll follow up within a business day.</div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;width:100%;">
+    <span class="line">RX·L&D — AI-BUILT COMPLIANCE TRAINING</span>
+    <span class="line">[YOUR EMAIL] · [YOUR PHONE / LINKEDIN]</span>
+  </div>
+</footer>
+
+<script>
+  // Placeholder submit handler — see deployment notes for wiring this to Supabase.
+  document.getElementById('intake-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('confirm').classList.add('show');
+    this.reset();
+  });
+</script>
+
+</body>
+</html>
