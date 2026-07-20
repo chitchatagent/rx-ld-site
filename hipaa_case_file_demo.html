@@ -235,17 +235,21 @@
       <button class="choice" data-kc="wrong">Confirm it quietly — it's a coworker, not a stranger.</button>
       <button class="choice" data-kc="right">Decline — the coworker isn't part of the patient's care team or an authorized contact.</button>
     </div>
-    <div class="feedback good" id="fb-kc">
+    <div class="feedback good" id="fb-kc-right">
       <span class="flag">Correct</span>
       <p>Being on staff doesn't grant access — being on that patient's care team, or being an authorized contact, does. Curiosity, even kind curiosity, isn't a credential.</p>
+    </div>
+    <div class="feedback caution" id="fb-kc-wrong">
+      <span class="flag">Worth a second look</span>
+      <p>Being a coworker doesn't grant access either — the same standard applies to staff as to anyone else. Being on that patient's care team, or being an authorized contact, is what matters. Curiosity, even kind curiosity, isn't a credential.</p>
     </div>
     <button class="continue" id="btn-continue2">See results →</button>
   </div>
 
   <div id="stage-done" style="display:none;">
     <div class="stepline">Complete</div>
-    <div class="kc-result">2/2 — Case closed</div>
-    <div class="kc-sub">You correctly applied the minimum necessary standard in both scenarios.</div>
+    <div class="kc-result" id="kc-result">2/2 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You correctly applied the minimum necessary standard in both scenarios.</div>
 
     <div class="coach">
       <div class="coach-head">
@@ -271,6 +275,8 @@
 </div>
 
 <script>
+  let score = 0;
+
   const choices = document.getElementById('choices');
   const fbCaution = document.getElementById('fb-caution');
   const fbGood = document.getElementById('fb-good');
@@ -284,6 +290,7 @@
     [...choices.children].forEach(c=>c.classList.add('locked'));
     btn.style.borderColor = 'var(--ink)';
     const outcome = btn.dataset.outcome;
+    if (outcome === 'good') score++;
     (outcome === 'good' ? fbGood : fbCaution).classList.add('show');
     btnContinue.classList.add('show');
   });
@@ -298,7 +305,8 @@
   });
 
   const choicesKc = document.getElementById('choices-kc');
-  const fbKc = document.getElementById('fb-kc');
+  const fbKcRight = document.getElementById('fb-kc-right');
+  const fbKcWrong = document.getElementById('fb-kc-wrong');
   const btnContinue2 = document.getElementById('btn-continue2');
 
   choicesKc.addEventListener('click', (e)=>{
@@ -307,7 +315,9 @@
     choicesKc.classList.add('answered');
     [...choicesKc.children].forEach(c=>c.classList.add('locked'));
     btn.style.borderColor = 'var(--ink)';
-    fbKc.classList.add('show');
+    const isRight = btn.dataset.kc === 'right';
+    if (isRight) score++;
+    (isRight ? fbKcRight : fbKcWrong).classList.add('show');
     btnContinue2.classList.add('show');
   });
 
@@ -316,6 +326,12 @@
     document.getElementById('stage-done').style.display = 'block';
     dots[3].classList.remove('current');
     dots[3].classList.add('done');
+
+    document.getElementById('kc-result').textContent = score + '/2 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 2
+      ? "You correctly applied the minimum necessary standard in both scenarios."
+      : "Take another look at the flagged answer above — the minimum necessary standard applies consistently, even when it doesn't feel like it should.";
+
     window.scrollTo({top:0, behavior:'smooth'});
   });
 
