@@ -12,8 +12,9 @@
     --paper-raised:#FFFFFF;
     --ink:#1C2B2A;
     --ink-soft:#54615F;
-    --scrub:#3D6B5C;
-    --scrub-tint:#E4ECE8;
+    --scrub:#1E2A3A;
+    --scrub-hover:#16202D;
+    --scrub-tint:#E6E9EE;
     --amber:#C97B3D;
     --amber-tint:#F5E8DA;
     --line:#D8D3C7;
@@ -36,7 +37,7 @@
   .hero-photo{flex:0 1 300px;align-self:stretch;display:flex;align-items:center;}
   .hero-photo .frame{position:relative;width:100%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised);box-shadow:0 1px 2px rgba(28,43,42,.05);}
   .hero-photo img{width:100%;height:400px;object-fit:cover;display:block;filter:grayscale(30%) contrast(1.05);}
-  .hero-photo .duotone{position:absolute;inset:0;background:linear-gradient(165deg, rgba(61,107,92,.38), rgba(28,43,42,.14));mix-blend-mode:multiply;pointer-events:none;}
+  .hero-photo .duotone{position:absolute;inset:0;background:linear-gradient(165deg, rgba(30,42,58,.38), rgba(28,43,42,.14));mix-blend-mode:multiply;pointer-events:none;}
   .photo-tag{position:absolute;top:12px;left:12px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink);padding:4px 9px;border-radius:2px;border:1px solid var(--line);}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--scrub);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
   .eyebrow::before{content:'';width:16px;height:1px;background:var(--scrub);display:inline-block;}
@@ -48,7 +49,7 @@
   .btn-primary{background:var(--amber);color:var(--paper);border-color:var(--amber);}
   .btn-primary:hover{background:#B06B30;border-color:#B06B30;}
   .btn-ghost{background:transparent;color:var(--scrub);border-color:var(--scrub);}
-  .btn-ghost:hover{background:var(--amber);color:var(--paper);border-color:var(--amber);}
+  .btn-ghost:hover{background:var(--scrub-hover);color:var(--paper);border-color:var(--scrub-hover);}
 
   /* problem note */
   .note{background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:3px;padding:22px 24px;margin:0 0 64px;}
