@@ -11,7 +11,7 @@
     --paper:#F7F5F0;
     --paper-raised:#FFFFFF;
     --ink:#1C2B2A;
-    --ink-soft:#54615F;
+    --ink-soft:#5A6270;
     --scrub:#1E2A3A;
     --scrub-hover:#16202D;
     --scrub-tint:#E6E9EE;
@@ -25,11 +25,15 @@
 
   /* header */
   header{border-bottom:2px solid var(--ink);}
-  .chartbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0;}
-  .brandmark{display:flex;align-items:baseline;gap:10px;}
-  .brandmark .mark{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;background:var(--ink);color:var(--paper);padding:3px 7px;border-radius:2px;}
-  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
-  .navtag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.05em;}
+  .chartbar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px 0;}
+  .brandmark{display:flex;align-items:center;gap:13px;}
+  .brandmark .mark{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:4px 8px;border-radius:3px;}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:20px;letter-spacing:-.01em;padding-left:13px;border-left:1px solid var(--line);}
+  .navtag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;color:var(--ink-soft);letter-spacing:.14em;text-transform:uppercase;border-left:2px solid var(--amber);padding-left:11px;}
+  @media (max-width:560px){
+    .chartbar{flex-wrap:wrap;gap:12px;padding:18px 0;}
+    .navtag{border-left:none;padding-left:0;flex-basis:100%;}
+  }
 
   /* hero */
   .hero{padding:64px 0 48px;display:flex;gap:52px;align-items:center;justify-content:space-between;}
@@ -120,7 +124,7 @@
       <span class="mark">RX·L&D</span>
       <span class="name">Case Intake</span>
     </div>
-    <span class="navtag">AI COMPLIANCE TRAINING · HEALTHCARE</span>
+    <span class="navtag">AI COMPLIANCE TRAINING · EDUCATION</span>
   </div>
 </header>
 
