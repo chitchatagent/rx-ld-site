@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Case File 04 — The Curious Visitor</title>
+<title>Case File 04 — The Overheard Conversation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -179,78 +179,100 @@
       <span class="mark">RX·L&D</span>
       <span class="name">Case File</span>
     </div>
-    <span class="casetag">MODULE 04 · MINIMUM NECESSARY STANDARD</span>
+    <span class="casetag">MODULE 04 · REASONABLE SUSPICION STANDARD</span>
   </div>
 
   <div class="progress">
-    <div class="dot done"></div>
-    <div class="dot done"></div>
     <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
     <div class="dot"></div>
   </div>
 
-  <div id="stage-scenario">
+  <div id="stage-dp1">
     <div class="stepline">Scenario</div>
-    <h1>The Curious Visitor</h1>
+    <h1>The Overheard Conversation</h1>
     <div class="note">
       <div class="meta">
-        <span>UNIT: 4 WEST</span>
-        <span>SHIFT: 14:20</span>
-        <span>ROLE: CHARGE NURSE</span>
+        <span>ROOM: 204</span>
+        <span>PERIOD: 3</span>
+        <span>ROLE: HOMEROOM TEACHER</span>
       </div>
-      <p>A man approaches the nurses' station. He says he's the brother of a patient on your unit and asks what room she's in and how she's doing — he "just flew in and wants to surprise her."</p>
-      <p>You don't recognize him. The patient hasn't listed visitor restrictions, but she also hasn't confirmed who's allowed to receive updates.</p>
+      <p>You're circulating during independent work time. Two students near the back are talking quietly — not disruptive, just quieter than usual. As you pass, you catch a fragment: one student says something like "…he does that every time, it's not a big deal," and the other goes quiet when she notices you.</p>
+      <p>You don't have the full conversation. You don't know if "he" is a parent, a sibling, another student, or someone else. The tone wasn't panicked — more resigned than upset.</p>
     </div>
 
-    <div class="prompt">What do you do?</div>
-    <div class="choices" id="choices">
-      <button class="choice" data-outcome="caution">Give him the room number — he clearly knows details only family would know.</button>
-      <button class="choice" data-outcome="good">Ask him to wait, and check with the patient directly before sharing anything.</button>
-      <button class="choice" data-outcome="caution">Confirm she's on the unit, but say he'll need to ask her about her condition himself.</button>
+    <div class="prompt">What do you do in the next 60 seconds?</div>
+    <div class="choices" id="choices-1">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Reasonable suspicion isn't about certainty — it's about noticing a pattern worth a private follow-up. Moving on without any note risks losing the moment.">Keep circulating. It's out of context and probably nothing.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Public questioning can shut a student down fast, and it puts her in a position of explaining herself in front of peers before she's chosen to disclose anything.">Ask the student directly, in front of the class, what she meant.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Low-pressure and private — it doesn't force disclosure, but it keeps the door open.">Make a mental note, and find a private, low-pressure moment later in the period to check in with her one-on-one.</button>
     </div>
 
-    <div class="feedback caution" id="fb-caution">
-      <span class="flag">Worth a second look</span>
-      <p>Family-sounding details aren't verification. Well-intentioned visitors — and people impersonating them — both tend to know just enough to sound convincing.</p>
-      <p>The safer default is to let the patient decide who hears what, every time, not just when something feels off.</p>
-      <div class="cite">§164.502(b) — Minimum Necessary Standard: disclose only what's needed, only to who's confirmed.</div>
+    <div class="feedback" id="fb-1">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — reasonable suspicion is a pattern worth a private follow-up, not a conclusion you have to reach first.</div>
     </div>
 
-    <div class="feedback good" id="fb-good">
-      <span class="flag">On the mark</span>
-      <p>Checking with the patient first isn't overcaution — it's the standard. She may want him to know everything, or nothing. That's her call, not an assumption made at the desk.</p>
-      <p>This single habit prevents the majority of front-desk disclosure incidents.</p>
-      <div class="cite">§164.502(b) — Minimum Necessary Standard: disclose only what's needed, only to who's confirmed.</div>
-    </div>
-
-    <button class="continue" id="btn-continue">Continue to knowledge check →</button>
+    <button class="continue" id="next-1">Continue →</button>
   </div>
 
-  <div id="stage-kc" style="display:none;">
-    <div class="stepline">Knowledge Check</div>
-    <h1>Quick gut-check</h1>
+  <div id="stage-dp2" style="display:none;">
+    <div class="stepline">The Private Check-In</div>
+    <h1>The check-in</h1>
     <div class="note">
-      <p><strong>A coworker asks you to confirm whether her friend was admitted last night "just to put her mind at ease." What's the right response?</strong></p>
+      <p>Later in the period, you find a quiet moment and check in with her one-on-one. She says: <strong>"It's fine, I don't want to talk about it."</strong></p>
     </div>
-    <div class="choices" id="choices-kc">
-      <button class="choice" data-kc="wrong">Confirm it quietly — it's a coworker, not a stranger.</button>
-      <button class="choice" data-kc="right">Decline — the coworker isn't part of the patient's care team or an authorized contact.</button>
+
+    <div class="prompt">Where do you take it from here?</div>
+    <div class="choices" id="choices-2">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A student declining to elaborate doesn't end a mandated reporter's responsibility when reasonable suspicion already exists based on what was overheard.">Respect that and drop it entirely — she said she's fine.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="You're not required to investigate or confirm — that isn't a teacher's role, and pressing can feel coercive.">Press for more detail so you have "enough" to report.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Respects the student, is honest about the process, and doesn't over-promise confidentiality.">Let her know gently that you're glad she told you what she did, and that you need to loop in the counselor — not because she's in trouble, but because that's what you're required to do.</button>
     </div>
-    <div class="feedback good" id="fb-kc-right">
-      <span class="flag">Correct</span>
-      <p>Being on staff doesn't grant access — being on that patient's care team, or being an authorized contact, does. Curiosity, even kind curiosity, isn't a credential.</p>
+
+    <div class="feedback" id="fb-2">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — a reluctant student doesn't cancel a reporting obligation that already exists.</div>
     </div>
-    <div class="feedback caution" id="fb-kc-wrong">
-      <span class="flag">Worth a second look</span>
-      <p>Being a coworker doesn't grant access either — the same standard applies to staff as to anyone else. Being on that patient's care team, or being an authorized contact, is what matters. Curiosity, even kind curiosity, isn't a credential.</p>
+
+    <button class="continue" id="next-2">Continue →</button>
+  </div>
+
+  <div id="stage-dp3" style="display:none;">
+    <div class="stepline">Closing The Loop</div>
+    <h1>Closing the loop</h1>
+    <div class="note">
+      <p>You now have what you need — what you overheard, and what the student told you in the check-in. The next step is how you record it and route it.</p>
     </div>
-    <button class="continue" id="btn-continue2">See results →</button>
+
+    <div class="prompt">How do you close the loop?</div>
+    <div class="choices" id="choices-3">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Undocumented &quot;informal&quot; reports create liability and leave no record that the standard was met.">Handle it informally with the counselor over lunch, no documentation.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Timely, factual, non-editorialized documentation is the actual compliance requirement.">File a written report through the official channel the same day — exact time, what was overheard (as close to verbatim as possible), and what was said in the private check-in.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Reasonable suspicion triggers reporting obligations promptly — waiting to gather more evidence is not the standard, and the delay itself can be a compliance failure.">Wait until the end of the week to see if anything else comes up before reporting.</button>
+    </div>
+
+    <div class="feedback" id="fb-3">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — prompt, factual, documented. Investigation and confirmation are not the teacher's role.</div>
+    </div>
+
+    <button class="continue" id="next-3">See results →</button>
   </div>
 
   <div id="stage-done" style="display:none;">
     <div class="stepline">Complete</div>
-    <div class="kc-result" id="kc-result">2/2 — Case closed</div>
-    <div class="kc-sub" id="kc-sub">You correctly applied the minimum necessary standard in both scenarios.</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You applied the reasonable suspicion standard cleanly at every step.</div>
+
+    <div class="note">
+      <p><strong>The takeaway.</strong> Reasonable suspicion ≠ certainty. The standard is met by what you observed and were told — not by a full picture.</p>
+      <p>The teacher's job is notice → private check-in → prompt, factual documentation → handoff to the right channel. Not investigation. Not confirmation. Not silence.</p>
+    </div>
 
     <div class="coach">
       <div class="coach-head">
@@ -261,9 +283,9 @@
         <div class="bubble reply">Questions about this case? Tap a prompt below, or picture this as a live chat — in the real product, this reasoning is generated per-learner, per-scenario, in real time.</div>
       </div>
       <div class="coach-suggest" id="coach-suggest">
-        <button class="sugg" data-q="badge">What if he'd shown a badge or ID?</button>
-        <button class="sugg" data-q="phone">Does this apply to phone calls too?</button>
-        <button class="sugg" data-q="emergency">What changes in an emergency?</button>
+        <button class="sugg" data-q="tone">What if she'd seemed upset, not resigned?</button>
+        <button class="sugg" data-q="tell">Should I tell the student I'm reporting?</button>
+        <button class="sugg" data-q="threshold">What if I'm not sure it clears the bar?</button>
       </div>
     </div>
 
@@ -277,69 +299,53 @@
 
 <script>
   let score = 0;
-
-  const choices = document.getElementById('choices');
-  const fbCaution = document.getElementById('fb-caution');
-  const fbGood = document.getElementById('fb-good');
-  const btnContinue = document.getElementById('btn-continue');
   const dots = document.querySelectorAll('.dot');
 
-  choices.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.choice');
-    if(!btn || choices.classList.contains('answered')) return;
-    choices.classList.add('answered');
-    [...choices.children].forEach(c=>c.classList.add('locked'));
-    btn.style.borderColor = 'var(--ink)';
-    const outcome = btn.dataset.outcome;
-    if (outcome === 'good') score++;
-    (outcome === 'good' ? fbGood : fbCaution).classList.add('show');
-    btnContinue.classList.add('show');
-  });
+  function wireStage(n, fromStage, toStage, dotFrom, dotTo, isLast){
+    const choices = document.getElementById('choices-' + n);
+    const fb = document.getElementById('fb-' + n);
+    const next = document.getElementById('next-' + n);
 
-  btnContinue.addEventListener('click', ()=>{
-    document.getElementById('stage-scenario').style.display = 'none';
-    document.getElementById('stage-kc').style.display = 'block';
-    dots[2].classList.remove('current');
-    dots[2].classList.add('done');
-    dots[3].classList.add('current');
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
+    choices.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.choice');
+      if(!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach(c=>c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if(correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      next.classList.add('show');
+    });
 
-  const choicesKc = document.getElementById('choices-kc');
-  const fbKcRight = document.getElementById('fb-kc-right');
-  const fbKcWrong = document.getElementById('fb-kc-wrong');
-  const btnContinue2 = document.getElementById('btn-continue2');
+    next.addEventListener('click', ()=>{
+      document.getElementById(fromStage).style.display = 'none';
+      document.getElementById(toStage).style.display = 'block';
+      dots[dotFrom].classList.remove('current');
+      dots[dotFrom].classList.add('done');
+      if(isLast){
+        dots[dotTo].classList.add('done');
+        document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+        document.getElementById('kc-sub').textContent = score === 3
+          ? "You applied the reasonable suspicion standard cleanly at every step — notice, private check-in, prompt documentation, handoff."
+          : "Revisit the flagged steps above. The standard is a short chain — notice, private check-in, prompt factual documentation, handoff — not investigation, and not silence.";
+      } else {
+        dots[dotTo].classList.add('current');
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
 
-  choicesKc.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.choice');
-    if(!btn || choicesKc.classList.contains('answered')) return;
-    choicesKc.classList.add('answered');
-    [...choicesKc.children].forEach(c=>c.classList.add('locked'));
-    btn.style.borderColor = 'var(--ink)';
-    const isRight = btn.dataset.kc === 'right';
-    if (isRight) score++;
-    (isRight ? fbKcRight : fbKcWrong).classList.add('show');
-    btnContinue2.classList.add('show');
-  });
-
-  btnContinue2.addEventListener('click', ()=>{
-    document.getElementById('stage-kc').style.display = 'none';
-    document.getElementById('stage-done').style.display = 'block';
-    dots[3].classList.remove('current');
-    dots[3].classList.add('done');
-
-    document.getElementById('kc-result').textContent = score + '/2 — Case closed';
-    document.getElementById('kc-sub').textContent = score === 2
-      ? "You correctly applied the minimum necessary standard in both scenarios."
-      : "Take another look at the flagged answer above — the minimum necessary standard applies consistently, even when it doesn't feel like it should.";
-
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
+  wireStage(1, 'stage-dp1', 'stage-dp2', 0, 1, false);
+  wireStage(2, 'stage-dp2', 'stage-dp3', 1, 2, false);
+  wireStage(3, 'stage-dp3', 'stage-done', 2, 3, true);
 
   const coachAnswers = {
-    badge: "A badge helps, but it still isn't verification of the patient's consent — it verifies his identity, not her wishes. The desk should still check with her, just faster and with an easier conscience.",
-    phone: "Yes — phone disclosure is actually the more common incident. No face, no ID, no way to gauge hesitation. Same standard applies: confirm with the patient or check the authorized contact list first.",
-    emergency: "In an emergency, clinical judgment can override the wait-and-confirm step if withholding information would cause harm — but it's a documented exception, not a shortcut for convenience."
+    tone: "Tone doesn't set the threshold. Reasonable suspicion rests on what you observed and were told — an upset student and a resigned one get the same follow-up.",
+    tell: "Yes — briefly and honestly. Don't promise confidentiality you can't keep. Framing it as something you're required to do, not a punishment, is what keeps her trust intact.",
+    threshold: "That's the counselor's call to sort, not yours to screen out. Your job is to pass along what you noticed and heard, promptly — the channel decides what it adds up to."
   };
 
   document.getElementById('coach-suggest').addEventListener('click',(e)=>{
