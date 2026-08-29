@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Literacy &amp; Appropriate Use Training for K-12 | RX·L&D</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Turn your state's K-12 AI guidance into staff training that actually gets completed — a scenario-based AI literacy and appropriate-use module, customized to your state's framework and delivered in your LMS.">
+<link rel="canonical" href="https://www.rxldtraining.com/ai-literacy">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RX·L&D">
+<meta property="og:url" content="https://www.rxldtraining.com/ai-literacy">
+<meta property="og:title" content="AI Literacy &amp; Appropriate Use Training for K-12 | RX·L&D">
+<meta property="og:description" content="A policy PDF isn't training. We turn your state's AI guidance into a scenario-based module your staff will actually complete.">
+<meta property="og:image" content="https://www.rxldtraining.com/images/hero2-calm.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Literacy &amp; Appropriate Use Training for K-12 | RX·L&D">
+<meta name="twitter:description" content="A policy PDF isn't training. We turn your state's AI guidance into a scenario-based module your staff will actually complete.">
+<meta name="twitter:image" content="https://www.rxldtraining.com/images/hero2-calm.jpg">
+<script>
+  /* One-time cleanup: a service worker left over from a previous site on this domain
+     was intercepting fetches and serving stale HTML (survives cache-busted URLs).
+     This site ships no service worker — remove any that are still registered, and
+     drop their Cache Storage, so the browser serves live content again. */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations()
+      .then(function (rs) { rs.forEach(function (r) { r.unregister(); }); })
+      .catch(function () {});
+  }
+  if (window.caches && caches.keys) {
+    caches.keys()
+      .then(function (ks) { ks.forEach(function (k) { caches.delete(k); }); })
+      .catch(function () {});
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E2A3A;
+    --navy-deep:#18222F;
+    --navy-lift:#26344A;
+    --navy-dash:#5A6678;
+    --navy-border:#3A465A;
+    --navy-hair:#33415A;
+    --orange:#C77440;
+    --orange-hover:#B0642F;
+    --cream:#F5F3EE;
+    --cream-alt:#EFECE4;
+    --white:#FFFFFF;
+    --charcoal:#1A1A1A;
+    --slate:#5A6270;
+    --slate-light:#8E97A5;
+    --slate-lighter:#B9C1CC;
+    --slate-lightest:#C3CAD4;
+    --border:#D8D3C7;
+    --maxw:1180px;
+    --gutter:56px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  h1,h2,h3,p{margin:0;text-wrap:pretty;}
+
+  .band{width:100%;}
+  .inner{max-width:var(--maxw);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter);}
+
+  /* ── wordmark ── */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wm-rx,.wm-dot{font-family:'Fraunces',serif;font-weight:680;line-height:1;}
+  .wm-rx{letter-spacing:-.035em;color:var(--cream);}
+  .wm-dot{color:var(--orange);padding:0 1px;}
+  .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;letter-spacing:.02em;line-height:1;color:var(--cream);}
+
+  /* ── utility strip ── */
+  .util{background:var(--navy-deep);}
+  .util .inner{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:8px;padding-bottom:8px;}
+  .util span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate-light);}
+  .util .u-left{letter-spacing:.2em;text-transform:uppercase;}
+  .util .u-right{letter-spacing:.12em;}
+
+  /* ── nav ── */
+  .nav{background:var(--navy);border-bottom:1px solid var(--navy-hair);}
+  .nav .inner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap;}
+  .nav .wordmark .wm-rx,.nav .wordmark .wm-dot{font-size:26px;}
+  .nav .wordmark .wm-ld{font-size:18px;}
+  .nav-right{display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .nav-link{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-lightest);transition:color .13s ease;}
+  .nav-link:hover{color:var(--cream);}
+  .btn{display:inline-block;font-family:'IBM Plex Sans',sans-serif;border-radius:3px;cursor:pointer;transition:background-color .13s ease,color .13s ease;border:1px solid transparent;}
+  .btn-primary{background:var(--orange);color:var(--cream);border-color:var(--orange);}
+  .btn-primary:hover{background:var(--orange-hover);border-color:var(--orange-hover);}
+  .nav .btn-primary{font-size:13.5px;font-weight:500;padding:11px 20px;}
+
+  /* ── shared hero bits ── */
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:12px;margin-bottom:30px;}
+  .eyebrow .rule{width:26px;height:1px;background:var(--orange);display:inline-block;flex:none;}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+  .hero-ctas .btn{flex:1 1 0;min-width:220px;text-align:center;white-space:nowrap;font-size:14.5px;font-weight:500;padding:15px 26px;}
+  .btn-ghost{background:transparent;color:var(--cream);border:1px solid #4A5567;}
+  .btn-ghost:hover{background:var(--navy-lift);color:var(--cream);}
+
+  /* ── problem note (reused for "the pattern") ── */
+  .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
+  .problem .inner{padding-top:60px;padding-bottom:62px;display:grid;grid-template-columns:220px 1fr;gap:60px;align-items:start;}
+  .problem .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);line-height:1.75;border-top:2px solid var(--orange);padding-top:12px;}
+  .problem .p-stack{display:flex;flex-direction:column;gap:20px;}
+  .problem p{font-family:'Fraunces',serif;font-size:24px;font-weight:500;line-height:1.5;color:var(--charcoal);max-width:46ch;}
+  .problem p.small{font-size:18.5px;color:var(--slate);max-width:52ch;}
+  .problem em{font-style:normal;color:var(--orange);}
+
+  /* ── intake / lead forms (reused) ── */
+  .intake .inner{padding-top:86px;padding-bottom:92px;display:grid;grid-template-columns:1fr 600px;gap:72px;align-items:start;}
+  .intake-copy{padding-top:6px;}
+  .intake-copy .eyebrow{color:var(--orange);letter-spacing:.18em;font-size:11px;margin-bottom:16px;}
+  .intake-copy h2{font-family:'Fraunces',serif;font-size:36px;font-weight:600;line-height:1.12;letter-spacing:-.025em;margin-bottom:16px;}
+  .intake-copy p{font-size:16px;line-height:1.7;color:var(--slate);max-width:36ch;margin-bottom:34px;}
+  .intake-contact{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:var(--slate);border-top:1px solid var(--border);padding-top:16px;line-height:2;}
+
+  .intake-card{background:var(--white);border:1px solid var(--navy);padding:40px;display:flex;flex-direction:column;gap:20px;}
+  .lead-form{display:flex;flex-direction:column;gap:20px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--slate);}
+  .field input,.field textarea,.field select{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:13px;border:1px solid var(--border);border-radius:3px;background:var(--cream);color:var(--charcoal);width:100%;}
+  .field textarea{min-height:96px;resize:vertical;}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--navy);outline-offset:1px;border-color:var(--navy);}
+  .submit-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:6px;}
+  .btn-submit{background:var(--orange);color:var(--cream);border:none;border-radius:3px;padding:15px 26px;font-size:14.5px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background-color .13s ease;}
+  .btn-submit:hover{background:var(--orange-hover);}
+  .btn-submit:disabled{opacity:.7;cursor:default;}
+  .form-note{font-size:12.5px;color:var(--slate);}
+  .confirm{display:none;padding:14px 16px;background:var(--cream-alt);border:1px solid var(--navy);border-radius:3px;font-size:13.5px;color:var(--charcoal);}
+  .confirm.show{display:block;}
+
+  /* ── footer ── */
+  .site-footer{background:var(--navy);}
+  .site-footer .inner{padding-top:34px;padding-bottom:34px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .site-footer .f-left{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .site-footer .wordmark .wm-rx,.site-footer .wordmark .wm-dot{font-size:24px;}
+  .site-footer .wordmark .wm-ld{font-size:16.5px;}
+  .f-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate-light);padding-left:16px;border-left:1px solid var(--navy-border);}
+  .f-links{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A8B0BC;display:flex;gap:10px;flex-wrap:wrap;}
+  .f-links a{color:#A8B0BC;transition:color .13s ease;}
+  .f-links a:hover{color:var(--orange);}
+
+  /* ══ ai-literacy page ══ */
+  /* hero */
+  .lp-hero{background:var(--navy);}
+  .lp-hero .inner{padding-top:84px;padding-bottom:92px;}
+  .lp-hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,5vw,52px);line-height:1.07;letter-spacing:-.028em;color:var(--cream);max-width:20ch;margin-bottom:26px;}
+  .lp-hero h1 em{font-style:normal;color:var(--orange);}
+  .lp-hero .lp-sub{font-size:17px;line-height:1.72;color:var(--slate-lighter);max-width:62ch;margin-bottom:38px;}
+  .lp-hero .hero-ctas{max-width:520px;}
+
+  /* generic content section */
+  .sec .inner{padding-top:74px;padding-bottom:78px;}
+  .sec-navy{background:var(--navy);}
+  .sec-white{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .sec-cream{background:var(--cream-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .sec .eyebrow{margin-bottom:20px;}
+  .sec h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(25px,3.2vw,33px);line-height:1.16;letter-spacing:-.022em;margin-bottom:18px;max-width:26ch;color:var(--charcoal);}
+  .sec-navy h2{color:var(--cream);}
+  .sec>.inner>p{font-size:16px;line-height:1.72;color:var(--slate);max-width:64ch;margin-bottom:15px;}
+  .sec-navy>.inner>p{color:var(--slate-lighter);}
+  .sec>.inner>p:last-child{margin-bottom:0;}
+  .sec strong{font-weight:600;color:var(--charcoal);}
+  .sec-navy strong{color:var(--cream);}
+  .sec em{font-style:normal;color:var(--orange);}
+  .lead-out{font-family:'Fraunces',serif;font-size:21px;font-weight:500;line-height:1.5;color:var(--charcoal);max-width:44ch;margin-top:22px;}
+  .sec-navy .lead-out{color:var(--cream);}
+
+  /* fact list */
+  .facts{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-direction:column;gap:16px;max-width:64ch;}
+  .facts li{position:relative;padding-left:26px;font-size:15.5px;line-height:1.66;color:var(--slate);}
+  .facts li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:1px;background:var(--orange);}
+  .sec-navy .facts li{color:var(--slate-lighter);}
+
+  /* two-column definition pair */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:4px 0 26px;}
+  .pair .card{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);padding:26px 24px 28px;}
+  .pair .card .t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
+  .pair .card h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:9px;color:var(--charcoal);}
+  .pair .card p{font-size:14px;line-height:1.66;color:var(--slate);margin:0;}
+
+  /* numbered offer list */
+  .offer{display:flex;flex-direction:column;margin-top:6px;}
+  .offer .row{display:grid;grid-template-columns:60px 1fr;gap:24px;padding:26px 0;border-top:1px solid var(--border);}
+  .offer .row:last-child{border-bottom:1px solid var(--border);}
+  .offer .num{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--orange);padding-top:5px;}
+  .offer h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-bottom:9px;color:var(--charcoal);}
+  .offer .badge{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);border:1px solid var(--orange);border-radius:3px;padding:3px 7px;margin-left:10px;vertical-align:middle;white-space:nowrap;}
+  .offer p{font-size:15px;line-height:1.68;color:var(--slate);margin:0;max-width:62ch;}
+
+  /* dark intake variant (waitlist) */
+  .intake.sec-navy .intake-copy h2{color:var(--cream);}
+  .intake.sec-navy .intake-copy p{color:var(--slate-lighter);}
+
+  /* ── responsive ── */
+  @media (max-width:900px){
+    .intake .inner{grid-template-columns:1fr;gap:44px;}
+    .intake-card{width:100%;}
+  }
+  @media (max-width:760px){
+    :root{--gutter:24px;}
+    .problem .inner{grid-template-columns:1fr;gap:20px;}
+    .problem p{font-size:21px;}
+    .problem p.small{font-size:17px;}
+    .pair{grid-template-columns:1fr;gap:14px;}
+    .intake-copy h2{font-size:30px;}
+    .util span,.f-tag,.f-links{font-size:12px;}
+  }
+  @media (max-width:600px){
+    .offer .row{grid-template-columns:1fr;gap:8px;}
+    .field-row{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    .util .u-right{display:none;}
+    .nav .inner{gap:14px;}
+    .nav-right{gap:18px;}
+    .f-tag{padding-left:0;border-left:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="band util">
+  <div class="inner">
+    <span class="u-left">AI compliance training · education</span>
+    <span class="u-right">hello@rxldtraining.com · (470) 207-3594</span>
+  </div>
+</div>
+
+<header class="band nav">
+  <div class="inner">
+    <a class="wordmark" href="/" aria-label="RX·L&D — home">
+      <span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span>
+    </a>
+    <nav class="nav-right">
+      <a class="nav-link" href="/#method">How it works</a>
+      <a class="nav-link" href="/#exhibit">Exhibits</a>
+      <a class="nav-link" href="#intake">Intake</a>
+      <a class="btn btn-primary" href="#intake">Request an intake call</a>
+    </nav>
+  </div>
+</header>
+
+<section class="band lp-hero">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>AI-built compliance training · Education</div>
+    <h1>Your state already told you to do this. <em>We'll help you actually do it.</em></h1>
+    <p class="lp-sub">27 states have active AI-in-education legislation this year. 5 are already signed into law. Districts are being handed frameworks and guidance documents — but a policy PDF isn't training. We turn state guidance into a module your staff will actually complete.</p>
+    <div class="hero-ctas">
+      <a href="#intake" class="btn btn-primary">Request an intake call</a>
+      <a href="/#exhibit" class="btn btn-ghost">See live examples</a>
+    </div>
+  </div>
+</section>
+
+<section class="band problem">
+  <div class="inner">
+    <div class="label">The pattern<br>we keep seeing</div>
+    <div class="p-stack">
+      <p>State departments of education are moving fast on AI policy — faster than most districts can translate that policy into actual staff training. A template or guidance document tells your district <em>what</em> to require. It doesn't tell your front-office staff, teachers, and administrators <em>how</em> to apply it in the moment a parent asks about a chatbot, or a teacher wonders if using AI to draft a family email crosses a line.</p>
+      <p class="small">That gap — between policy and practice — is exactly where risk lives, and exactly where we build.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band sec sec-white">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>What's actually happening right now</div>
+    <ul class="facts">
+      <li><strong>37 states plus Puerto Rico</strong> now have some form of official AI guidance or policy framework for K-12 education.</li>
+      <li><strong>27 states</strong> have active AI-in-education legislation in 2026; <strong>5 are already signed into law.</strong></li>
+      <li>Maryland now requires every district to name a central-office AI coordinator. Oklahoma requires a written district AI policy with parental transparency. South Carolina is considering requiring written parental opt-in consent for AI tool use.</li>
+      <li>At the federal level, a bill in Congress (the K–12 AI Literacy and Readiness Act) would allow federal education funds to be used specifically for AI curricula and staff training.</li>
+    </ul>
+    <p class="lead-out">This isn't a future problem. It's a this-school-year problem.</p>
+  </div>
+</section>
+
+<section class="band sec sec-navy">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>Case study: Mississippi</div>
+    <h2>A model worth following</h2>
+    <p>Mississippi is further ahead than most states — and it shows exactly the gap districts are facing everywhere.</p>
+    <ul class="facts">
+      <li>The Mississippi Department of Education issued statewide AI classroom guidance as early as 2025.</li>
+      <li>SB 2429 established an AI in Education Task Force specifically charged with developing <strong>guidelines for training K-12 educators</strong> to use AI tools responsibly.</li>
+      <li>In April 2026, the Mississippi Artificial Intelligence Network published a governance <strong>template</strong> for districts to adapt locally — a planning document, not a finished training program.</li>
+    </ul>
+    <p class="lead-out">Mississippi did the policy work. What's still missing in most districts — Mississippi included — is the actual training delivery: a real module staff sit through, understand, and can apply. That's the gap we fill.</p>
+  </div>
+</section>
+
+<section class="band sec sec-cream">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>AI literacy and appropriate use are not the same thing</div>
+    <div class="pair">
+      <div class="card">
+        <div class="t">Literacy</div>
+        <h3>Understanding</h3>
+        <p>Knowing what AI is, what it's good and bad at, and how to think critically about its output.</p>
+      </div>
+      <div class="card">
+        <div class="t">Appropriate use</div>
+        <h3>Conduct</h3>
+        <p>The actual rules for what staff and students are permitted to do with it — and the consequences when they don't.</p>
+      </div>
+    </div>
+    <p>A staff member can understand AI well and still misuse it. A policy without literacy just produces confused compliance. Districts need both, paired — which is why we build both into one module, not two separate initiatives competing for the same training hour.</p>
+  </div>
+</section>
+
+<section class="band sec sec-navy">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>This isn't tool training</div>
+    <p>Free AI literacy resources exist — and they're worth using. But they teach staff how to use a specific tool. They aren't built around your state's specific guidance, your district's actual policy language, or the liability your compliance team is accountable for.</p>
+    <p>That's the gap between “training exists” and “training matches what we're legally required to do.” We build the second one — scenario-based, compliance-framed, and mapped to your state's actual framework, not a generic course library.</p>
+  </div>
+</section>
+
+<section class="band sec sec-white">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>The offer</div>
+    <h2>What we build</h2>
+    <div class="offer">
+      <div class="row">
+        <div class="num">01</div>
+        <div>
+          <h3>Foundational AI Literacy &amp; Appropriate Use Module</h3>
+          <p>A scenario-based training module — built the same way as our mandated-reporter demo (Exhibit A) — covering both AI literacy and appropriate use for staff and students. Delivered as a SCORM package that runs inside your existing LMS, so your compliance team gets the same completion tracking and audit trail you already rely on for other required training.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="num">02</div>
+        <div>
+          <h3>District Customization</h3>
+          <p>Every state's guidance is different. We adapt the module's scenarios, terminology, and standards references to match your state's specific framework — so staff are trained on <em>your</em> actual policy, not a generic one.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="num">03</div>
+        <div>
+          <h3>Professional Development Sessions <span class="badge">Premium add-on</span></h3>
+          <p>For districts who want more than a self-paced module, we offer live-facilitated PD sessions — a higher-touch layer on top of the core training, for kickoff sessions, administrator briefings, or deeper staff workshops.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band intake sec-navy" id="waitlist">
+  <div class="inner">
+    <div class="intake-copy">
+      <div class="eyebrow">Early adopter list</div>
+      <h2>Be one of the first districts through the door.</h2>
+      <p>This module is in active development. Districts who join the early adopter list get first access when it's ready, input into what the customization covers, and founding-district pricing that won't be offered again once the module ships broadly.</p>
+    </div>
+    <div class="intake-card">
+      <form class="lead-form" data-source="ai-literacy waitlist">
+        <div class="field-row">
+          <div class="field">
+            <label for="wl-name">Name</label>
+            <input type="text" id="wl-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="wl-org">Organization</label>
+            <input type="text" id="wl-org" name="org" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="wl-email">Work email</label>
+          <input type="email" id="wl-email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="wl-state">What's your state's current AI guidance status? (optional)</label>
+          <select id="wl-state" name="state_status">
+            <option value="">Select one…</option>
+            <option value="We have guidance, no training yet">We have guidance, no training yet</option>
+            <option value="Still waiting on state guidance">Still waiting on state guidance</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn-submit">Join the early adopter list</button>
+          <span class="form-note">First access when the module ships.</span>
+        </div>
+      </form>
+      <div class="confirm">Thanks — you're on the early adopter list. We'll be in touch as the module takes shape.</div>
+    </div>
+  </div>
+</section>
+
+<section class="band intake" id="intake">
+  <div class="inner">
+    <div class="intake-copy">
+      <div class="eyebrow">Request intake</div>
+      <h2>Tell us where your district stands.</h2>
+      <p>15 minutes. No obligation — just a look at where your state's guidance is, and where your staff training isn't yet.</p>
+      <div class="intake-contact">hello@rxldtraining.com<br>(470) 207-3594</div>
+    </div>
+    <div class="intake-card">
+      <form class="lead-form" data-source="ai-literacy intake">
+        <div class="field-row">
+          <div class="field">
+            <label for="ik-name">Name</label>
+            <input type="text" id="ik-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="ik-org">Organization</label>
+            <input type="text" id="ik-org" name="org" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ik-email">Work email</label>
+          <input type="email" id="ik-email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="ik-notes">What's stale or painful right now? (optional)</label>
+          <textarea id="ik-notes" name="notes"></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn-submit">Request intake call</button>
+          <span class="form-note">Reply within 1 business day.</span>
+        </div>
+      </form>
+      <div class="confirm">Thanks — request received. We'll follow up within a business day.</div>
+    </div>
+  </div>
+</section>
+
+<footer class="band site-footer">
+  <div class="inner">
+    <span class="f-left">
+      <a class="wordmark" href="/" aria-label="RX·L&D — home"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span></a>
+      <span class="f-tag">AI-built compliance training · Education</span>
+    </span>
+    <span class="f-links">
+      <a href="mailto:hello@rxldtraining.com">hello@rxldtraining.com</a>
+      <span>·</span>
+      <a href="tel:+14702073594">(470) 207-3594</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/dorethacarter" target="_blank" rel="noopener">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseClient = window.supabase.createClient(
+    'https://yhbvmgpbuqrovkhmsciz.supabase.co',
+    'sb_publishable_R7WBrs3ZZ8XXOm4nvF9DEQ_7VytuXKY'
+  );
+
+  /* Same logic and table as the main site's intake form, generalized to every
+     .lead-form on the page. The optional state-status answer and a per-form
+     source tag are folded into the notes column so waitlist and intake rows
+     stay distinguishable in Supabase without a schema change. */
+  document.querySelectorAll('.lead-form').forEach(function (form) {
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const submitBtn = form.querySelector('.btn-submit');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
+      const val = function (name) {
+        const el = form.querySelector('[name="' + name + '"]');
+        return el ? el.value.trim() : '';
+      };
+
+      let notes = val('notes');
+      const stateStatus = val('state_status');
+      if (stateStatus) notes = 'State AI guidance status: ' + stateStatus + (notes ? '\n\n' + notes : '');
+      if (form.dataset.source) notes = '[' + form.dataset.source + ']' + (notes ? ' ' + notes : '');
+
+      const { error } = await supabaseClient.from('intake_requests').insert({
+        name: val('name'),
+        org: val('org'),
+        email: val('email'),
+        notes: notes
+      });
+
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+
+      if (error) {
+        alert('Something went wrong sending your request. Please try again or email hello@rxldtraining.com directly.');
+        console.error(error);
+        return;
+      }
+
+      const confirm = form.closest('.intake-card').querySelector('.confirm');
+      if (confirm) confirm.classList.add('show');
+      form.reset();
+    });
+  });
+</script>
+
+</body>
+</html>
