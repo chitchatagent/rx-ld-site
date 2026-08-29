@@ -87,17 +87,16 @@
   .btn-ghost{background:transparent;color:var(--cream);border:1px solid #4A5567;}
   .btn-ghost:hover{background:var(--navy-lift);color:var(--cream);}
 
-  .hero-photo{position:relative;overflow:hidden;min-height:660px;}
+  .hero-photo-wrap{position:relative;min-height:660px;}
+  .hero-photo{position:absolute;inset:0;overflow:hidden;}
   /* zoomed in past most of the curtain headroom so the subject's head lines up with the headline */
   .hero-photo .img{position:absolute;inset:0;background-image:url('images/hero2-calm.jpg');background-size:auto 123%;background-position:50% 48%;}
   /* blend every edge of the photo into the surrounding navy: strong left (into the text
      column), and matching fades on the right, top and bottom so there is no hard seam */
   .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.98) 0%,rgba(30,42,58,.88) 8%,rgba(30,42,58,.6) 16%,rgba(30,42,58,.28) 26%,rgba(30,42,58,.08) 38%,rgba(30,42,58,0) 52%);}
   .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.6),rgba(30,42,58,0) 28%),linear-gradient(180deg,rgba(30,42,58,.72),rgba(30,42,58,0) 18%);}
-  /* bottom:96px matches .hero-text's padding-bottom so the tag lines up with the hero button.
-     translateZ/will-change give the tag its own layer — the standard fix for a mobile-Safari
-     repaint trail (absolutely-positioned element inside an overflow-clipped box). */
-  .caption-tag{position:absolute;left:28px;bottom:96px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;transform:translateZ(0);will-change:transform;}
+  /* sits outside .hero-photo's overflow clip so iOS Safari doesn't leave a repaint ghost */
+  .caption-tag{position:absolute;left:28px;bottom:96px;z-index:1;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
   /* ── problem note ── */
   .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
@@ -208,7 +207,7 @@
     /* text leads, photo follows. Explicit height, not aspect-ratio: as a grid item with only
        absolutely-positioned children the row has 0 content height, and align-items:stretch (or a
        browser without aspect-ratio support) collapsed the panel to nothing. */
-    .hero-photo{min-height:0;height:min(120vw,520px);align-self:start;}
+    .hero-photo-wrap{min-height:0;height:min(120vw,520px);align-self:start;}
     /* the confirmed mobile waist-up crop — cover, not the desktop zoom */
     .hero-photo .img{background-size:cover;background-position:50% 16%;}
     /* tag sits back near the photo's bottom edge on mobile (no button to align with here) */
@@ -281,10 +280,12 @@
         <a href="#intake" class="btn btn-ghost">Request an intake call</a>
       </div>
     </div>
-    <div class="hero-photo">
-      <div class="img" role="img" aria-label="Front office staff member at a school"></div>
-      <div class="scrim-x"></div>
-      <div class="scrim-y"></div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <div class="img" role="img" aria-label="Front office staff member at a school"></div>
+        <div class="scrim-x"></div>
+        <div class="scrim-y"></div>
+      </div>
       <span class="caption-tag">STAFF · FRONT OFFICE</span>
     </div>
   </div>
