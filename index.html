@@ -75,8 +75,10 @@
 
   /* ── hero ── */
   .hero{background:var(--navy);}
-  .hero .inner{max-width:var(--maxw);padding:0;display:grid;grid-template-columns:1fr 520px;align-items:stretch;}
-  .hero-text{padding:92px 60px 96px 56px;display:flex;flex-direction:column;justify-content:center;}
+  /* full-bleed: photo column runs to the viewport's right edge (no navy gutter, no seam);
+     text column is padded so its content still lines up with the 1180-centred bands below */
+  .hero .inner{max-width:none;padding:0;display:grid;grid-template-columns:1fr 520px;align-items:stretch;}
+  .hero-text{padding:92px 60px 96px calc((100vw - min(100vw, var(--maxw))) / 2 + var(--gutter));display:flex;flex-direction:column;justify-content:center;}
   .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:12px;margin-bottom:30px;}
   .eyebrow .rule{width:26px;height:1px;background:var(--orange);display:inline-block;flex:none;}
   .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,6vw,60px);line-height:1.03;letter-spacing:-.028em;color:var(--cream);max-width:12ch;margin-bottom:28px;}
@@ -89,8 +91,10 @@
 
   .hero-photo{position:relative;overflow:hidden;min-height:660px;}
   .hero-photo .img{position:absolute;inset:0;background-image:url('images/hero2-calm.jpg');background-size:cover;background-position:50% 10%;}
-  .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.98) 0%,rgba(30,42,58,.72) 6%,rgba(30,42,58,.22) 20%,rgba(30,42,58,0) 42%);}
-  .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.55),rgba(30,42,58,0) 34%),linear-gradient(180deg,rgba(30,42,58,.5),rgba(30,42,58,0) 15%);}
+  /* left blend into the text column, plus a soft right vignette so the wall doesn't glare at the screen edge */
+  .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.42) 0%,rgba(30,42,58,.10) 9%,rgba(30,42,58,0) 24%);}
+  /* top edge settles under the nav, bottom edge grounds the caption tag */
+  .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.55),rgba(30,42,58,0) 30%),linear-gradient(180deg,rgba(30,42,58,.6),rgba(30,42,58,0) 16%);}
   .caption-tag{position:absolute;left:28px;bottom:28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
   /* ── problem note ── */
@@ -199,8 +203,10 @@
   @media (max-width:1024px){
     .hero .inner{grid-template-columns:1fr;}
     .hero-text{padding:64px 40px 56px;}
-    /* text leads, photo follows; aspect close to the portrait so cover barely crops */
-    .hero-photo{min-height:0;aspect-ratio:5/6;max-height:76vh;}
+    /* text leads, photo follows. Explicit height, not aspect-ratio: as a grid item with only
+       absolutely-positioned children the row has 0 content height, and align-items:stretch (or a
+       browser without aspect-ratio support) collapsed the panel to nothing. */
+    .hero-photo{min-height:0;height:min(120vw,520px);align-self:start;}
     .hero-photo .img{background-position:50% 16%;}
     .hero-photo .scrim-x{background:linear-gradient(180deg,rgba(30,42,58,.92) 0%,rgba(30,42,58,.25) 20%,rgba(30,42,58,0) 44%);}
     .hero-photo .scrim-y{background:linear-gradient(0deg,rgba(30,42,58,.5) 0%,rgba(30,42,58,0) 24%);}
@@ -252,7 +258,7 @@
     </a>
     <nav class="nav-right">
       <a class="nav-link" href="#method">How it works</a>
-      <a class="nav-link" href="#exhibit">Exhibit A</a>
+      <a class="nav-link" href="#exhibit">Exhibits</a>
       <a class="nav-link" href="#intake">Intake</a>
       <a class="btn btn-primary" href="#intake">Request an intake call</a>
     </nav>
