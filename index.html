@@ -111,7 +111,9 @@
   .hero h1 em{font-style:normal;color:var(--orange);}
   .hero-sub{font-size:17.5px;line-height:1.7;color:var(--slate-lighter);max-width:46ch;margin-bottom:40px;}
   .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
-  .hero-ctas .btn{font-size:14.5px;font-weight:500;padding:15px 26px;}
+  /* flex:1 1 0 makes both CTAs settle to the same width when they share a row,
+     and each fill its own line once they wrap on narrow screens */
+  .hero-ctas .btn{flex:1 1 0;min-width:220px;text-align:center;white-space:nowrap;font-size:14.5px;font-weight:500;padding:15px 26px;}
   .btn-ghost{background:transparent;color:var(--cream);border:1px solid #4A5567;}
   .btn-ghost:hover{background:var(--navy-lift);color:var(--cream);}
 
@@ -123,6 +125,9 @@
      column), and matching fades on the right, top and bottom so there is no hard seam */
   .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.98) 0%,rgba(30,42,58,.88) 8%,rgba(30,42,58,.6) 16%,rgba(30,42,58,.28) 26%,rgba(30,42,58,.08) 38%,rgba(30,42,58,0) 52%);}
   .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.6),rgba(30,42,58,0) 28%),linear-gradient(180deg,rgba(30,42,58,.72),rgba(30,42,58,0) 18%);}
+  /* photo caption tag — pinned to the lower-left of the photo panel. Sibling of
+     .hero-photo (not inside the overflow-clipped box) so it can never be clipped. */
+  .caption-tag{position:absolute;left:28px;bottom:96px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
   /* ── problem note ── */
   .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
@@ -145,8 +150,10 @@
   /* ── exhibits: shared navy staging ── */
   .exhibit{background:var(--navy);}
   .exhibit .inner{padding-top:82px;padding-bottom:90px;}
-  .ex-head{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;margin-bottom:38px;}
+  .ex-head{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;margin-bottom:26px;}
   .ex-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  /* "Exhibit A" now sits under the section headline as the label for the first module below it */
+  .ex-lead{margin-bottom:16px;}
   .ex-eyebrow .rule{width:26px;height:1px;background:var(--orange);display:inline-block;flex:none;}
   .ex-title{font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-.025em;color:var(--cream);line-height:1.08;}
   .ex-meta{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--slate-light);white-space:nowrap;border-bottom:1px solid var(--navy-border);padding-bottom:10px;}
@@ -236,6 +243,8 @@
     .hero-photo-wrap{min-height:0;height:min(120vw,520px);align-self:start;}
     /* the confirmed mobile waist-up crop — cover, not the desktop zoom */
     .hero-photo .img{background-size:cover;background-position:50% 16%;}
+    /* no button to align with here — sit the tag back near the photo's bottom edge */
+    .caption-tag{bottom:20px;}
     .hero-photo .scrim-x{background:linear-gradient(180deg,rgba(30,42,58,.92) 0%,rgba(30,42,58,.25) 20%,rgba(30,42,58,0) 44%);}
     .hero-photo .scrim-y{background:linear-gradient(0deg,rgba(30,42,58,.5) 0%,rgba(30,42,58,0) 24%);}
   }
@@ -306,7 +315,7 @@
       <h1>Training that updates as fast as <em>your policies do.</em></h1>
       <p class="hero-sub">Scenario-based compliance modules for K-12 school systems — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
       <div class="hero-ctas">
-        <a href="#exhibit" class="btn btn-primary">See the live example</a>
+        <a href="#exhibit" class="btn btn-primary">See live examples</a>
         <a href="#intake" class="btn btn-ghost">Request an intake call</a>
       </div>
     </div>
@@ -316,6 +325,7 @@
         <div class="scrim-x"></div>
         <div class="scrim-y"></div>
       </div>
+      <span class="caption-tag">STAFF · FRONT OFFICE</span>
     </div>
   </div>
 </section>
@@ -362,12 +372,10 @@
 <section class="band exhibit" id="exhibit">
   <div class="inner">
     <div class="ex-head">
-      <div>
-        <div class="ex-eyebrow"><span class="rule"></span>Exhibit A</div>
-        <div class="ex-title">Live modules, not mockups</div>
-      </div>
+      <div class="ex-title">Live modules, not mockups</div>
       <span class="ex-meta">RUNS IN THE BROWSER · NO LOGIN</span>
     </div>
+    <div class="ex-eyebrow ex-lead"><span class="rule"></span>Exhibit A</div>
     <div class="ex-mount">
       <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
       <div class="module">
