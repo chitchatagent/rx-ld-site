@@ -98,8 +98,9 @@
   .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.98) 0%,rgba(30,42,58,.88) 8%,rgba(30,42,58,.6) 16%,rgba(30,42,58,.28) 26%,rgba(30,42,58,.08) 38%,rgba(30,42,58,0) 52%);}
   .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.6),rgba(30,42,58,0) 28%),linear-gradient(180deg,rgba(30,42,58,.72),rgba(30,42,58,0) 18%);}
   /* position:relative (in flow), not absolute — pinned to the bottom by the wrap's flex-end.
-     margin-bottom:96px matches .hero-text's padding-bottom so it lines up with the hero button */
-  .caption-tag{position:relative;z-index:1;align-self:flex-start;margin:0 0 96px 28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
+     margin-bottom:96px matches .hero-text's padding-bottom so it lines up with the hero button.
+     system mono, not the web font: rules out a font-swap double-render on iOS. */
+  .caption-tag{position:relative;z-index:1;align-self:flex-start;margin:0 0 96px 28px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
   /* ── problem note ── */
   .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
