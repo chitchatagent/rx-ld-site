@@ -5,204 +5,398 @@
 <title>RX·L&D — AI-Built Compliance Training</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F5F0;
-    --paper-raised:#FFFFFF;
-    --ink:#1C2B2A;
-    --ink-soft:#5A6270;
-    --scrub:#1E2A3A;
-    --scrub-hover:#16202D;
-    --scrub-tint:#E6E9EE;
-    --amber:#C97B3D;
-    --amber-tint:#F5E8DA;
-    --line:#D8D3C7;
+    --navy:#1E2A3A;
+    --navy-deep:#18222F;
+    --navy-lift:#26344A;
+    --navy-dash:#5A6678;
+    --navy-border:#3A465A;
+    --navy-hair:#33415A;
+    --orange:#C77440;
+    --orange-hover:#B0642F;
+    --cream:#F5F3EE;
+    --cream-alt:#EFECE4;
+    --white:#FFFFFF;
+    --charcoal:#1A1A1A;
+    --slate:#5A6270;
+    --slate-light:#8E97A5;
+    --slate-lighter:#B9C1CC;
+    --slate-lightest:#C3CAD4;
+    --border:#D8D3C7;
+    --maxw:1180px;
+    --gutter:56px;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:920px;margin:0 auto;padding:0 24px;}
-
-  /* header */
-  header{border-bottom:2px solid var(--ink);}
-  .chartbar{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px 0;}
-  .brandmark{display:flex;align-items:center;gap:13px;}
-  .brandmark .mark{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:4px 8px;border-radius:3px;}
-  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:20px;letter-spacing:-.01em;padding-left:13px;border-left:1px solid var(--line);}
-  .navtag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:500;color:var(--ink-soft);letter-spacing:.14em;text-transform:uppercase;border-left:2px solid var(--amber);padding-left:11px;}
-  @media (max-width:560px){
-    .chartbar{flex-wrap:wrap;gap:12px;padding:18px 0;}
-    .navtag{border-left:none;padding-left:0;flex-basis:100%;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
   }
+  a{color:inherit;text-decoration:none;}
+  h1,h2,h3,p{margin:0;text-wrap:pretty;}
 
-  /* hero */
-  .hero{padding:64px 0 48px;display:flex;gap:52px;align-items:center;justify-content:space-between;}
-  .hero-content{flex:1 1 480px;}
-  .hero-photo{flex:0 1 300px;align-self:stretch;display:flex;align-items:center;}
-  .hero-photo .frame{position:relative;width:100%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised);box-shadow:0 1px 2px rgba(28,43,42,.05);}
-  .hero-photo img{width:100%;height:400px;object-fit:cover;display:block;filter:grayscale(30%) contrast(1.05);}
-  .hero-photo .duotone{position:absolute;inset:0;background:linear-gradient(165deg, rgba(30,42,58,.38), rgba(28,43,42,.14));mix-blend-mode:multiply;pointer-events:none;}
-  .photo-tag{position:absolute;top:12px;left:12px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;background:var(--paper-raised);color:var(--ink);padding:4px 9px;border-radius:2px;border:1px solid var(--line);}
-  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--scrub);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
-  .eyebrow::before{content:'';width:16px;height:1px;background:var(--scrub);display:inline-block;}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:46px;line-height:1.08;letter-spacing:-.015em;margin:0 0 22px;max-width:11.5ch;}
-  h1 em{font-style:normal;color:var(--amber);}
-  .sub{font-size:17px;line-height:1.6;color:var(--ink-soft);max-width:52ch;margin:0 0 34px;}
+  .band{width:100%;}
+  .inner{max-width:var(--maxw);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter);}
+
+  /* ── wordmark ── */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wm-rx,.wm-dot{font-family:'Fraunces',serif;font-weight:680;line-height:1;}
+  .wm-rx{letter-spacing:-.035em;color:var(--cream);}
+  .wm-dot{color:var(--orange);padding:0 1px;}
+  .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;letter-spacing:.02em;line-height:1;color:var(--cream);}
+
+  /* ── utility strip ── */
+  .util{background:var(--navy-deep);}
+  .util .inner{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:8px;padding-bottom:8px;}
+  .util span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--slate-light);}
+  .util .u-left{letter-spacing:.2em;text-transform:uppercase;}
+  .util .u-right{letter-spacing:.12em;}
+
+  /* ── nav ── */
+  .nav{background:var(--navy);border-bottom:1px solid var(--navy-hair);}
+  .nav .inner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap;}
+  .nav .wordmark .wm-rx,.nav .wordmark .wm-dot{font-size:26px;}
+  .nav .wordmark .wm-ld{font-size:18px;}
+  .nav-right{display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .nav-link{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-lightest);transition:color .13s ease;}
+  .nav-link:hover{color:var(--cream);}
+  .btn{display:inline-block;font-family:'IBM Plex Sans',sans-serif;border-radius:3px;cursor:pointer;transition:background-color .13s ease,color .13s ease;border:1px solid transparent;}
+  .btn-primary{background:var(--orange);color:var(--cream);border-color:var(--orange);}
+  .btn-primary:hover{background:var(--orange-hover);border-color:var(--orange-hover);}
+  .nav .btn-primary{font-size:13.5px;font-weight:500;padding:11px 20px;}
+
+  /* ── hero ── */
+  .hero{background:var(--navy);}
+  .hero .inner{max-width:var(--maxw);padding:0;display:grid;grid-template-columns:1fr 520px;align-items:stretch;}
+  .hero-text{padding:92px 60px 96px 56px;display:flex;flex-direction:column;justify-content:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:12px;margin-bottom:30px;}
+  .eyebrow .rule{width:26px;height:1px;background:var(--orange);display:inline-block;flex:none;}
+  .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,6vw,60px);line-height:1.03;letter-spacing:-.028em;color:var(--cream);max-width:12ch;margin-bottom:28px;}
+  .hero h1 em{font-style:normal;color:var(--orange);}
+  .hero-sub{font-size:17.5px;line-height:1.7;color:var(--slate-lighter);max-width:46ch;margin-bottom:40px;}
   .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
-  .btn{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;font-weight:500;padding:13px 22px;border-radius:3px;cursor:pointer;border:1px solid var(--amber);text-decoration:none;display:inline-block;}
-  .btn-primary{background:var(--amber);color:var(--paper);border-color:var(--amber);}
-  .btn-primary:hover{background:#B06B30;border-color:#B06B30;}
-  .btn-ghost{background:transparent;color:var(--scrub);border-color:var(--scrub);}
-  .btn-ghost:hover{background:var(--scrub-hover);color:var(--paper);border-color:var(--scrub-hover);}
+  .hero-ctas .btn{font-size:14.5px;font-weight:500;padding:15px 26px;}
+  .btn-ghost{background:transparent;color:var(--cream);border:1px solid #4A5567;}
+  .btn-ghost:hover{background:var(--navy-lift);color:var(--cream);}
 
-  /* problem note */
-  .note{background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:3px;padding:22px 24px;margin:0 0 64px;}
-  .note .flag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:block;}
-  .note p{margin:0;font-size:15.5px;line-height:1.65;max-width:66ch;}
+  .hero-photo{position:relative;overflow:hidden;min-height:660px;}
+  .hero-photo .img{position:absolute;inset:0;background-image:url('images/hero2-calm.jpg');background-size:cover;background-position:50% 10%;}
+  .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%);}
+  .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.55),rgba(30,42,58,0) 34%);}
+  .caption-tag{position:absolute;left:28px;bottom:28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
-  /* timeline */
-  .section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
-  .section-title{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin:0 0 36px;}
+  /* ── problem note ── */
+  .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
+  .problem .inner{padding-top:60px;padding-bottom:62px;display:grid;grid-template-columns:220px 1fr;gap:60px;align-items:start;}
+  .problem .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);line-height:1.75;border-top:2px solid var(--orange);padding-top:12px;}
+  .problem p{font-family:'Fraunces',serif;font-size:25px;font-weight:500;line-height:1.52;color:var(--charcoal);max-width:46ch;}
 
-  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:70px;position:relative;}
-  .tl-item{position:relative;padding:0 18px 0 0;}
-  .tl-item:not(:last-child)::after{content:'';position:absolute;top:13px;right:-2px;width:calc(100% - 40px);height:1px;background:var(--line);}
-  .tl-num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--scrub);border:1px solid var(--scrub);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:var(--paper);position:relative;z-index:1;}
-  .tl-item h3{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;margin:0 0 8px;}
-  .tl-item p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+  /* ── case timeline ── */
+  .timeline .inner{padding-top:78px;padding-bottom:86px;}
+  .tl-head{display:flex;align-items:baseline;gap:18px;margin-bottom:38px;}
+  .tl-head .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);white-space:nowrap;}
+  .tl-head .n{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#9A9384;white-space:nowrap;}
+  .tl-head .rule{flex:1;height:1px;background:var(--border);}
+  .tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .tl-card{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);padding:28px 26px 30px;}
+  .tl-card .step{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--orange);margin-bottom:18px;}
+  .tl-card h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:11px;}
+  .tl-card p{font-size:13.5px;color:var(--slate);line-height:1.7;}
 
-  /* exhibit / demo embed */
-  .exhibit{margin-bottom:70px;}
-  .exhibit-frame{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--paper-raised);box-shadow:0 1px 2px rgba(28,43,42,.04);}
-  .exhibit-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--scrub-tint);}
-  .exhibit-dot{width:7px;height:7px;border-radius:50%;background:var(--scrub);}
-  .exhibit-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--ink);}
-  iframe{width:100%;height:640px;border:none;display:block;}
+  /* ── exhibits: shared navy staging ── */
+  .exhibit{background:var(--navy);}
+  .exhibit .inner{padding-top:82px;padding-bottom:90px;}
+  .ex-head{display:flex;align-items:flex-end;justify-content:space-between;gap:48px;margin-bottom:38px;}
+  .ex-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .ex-eyebrow .rule{width:26px;height:1px;background:var(--orange);display:inline-block;flex:none;}
+  .ex-title{font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-.025em;color:var(--cream);line-height:1.08;}
+  .ex-meta{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--slate-light);white-space:nowrap;border-bottom:1px solid var(--navy-border);padding-bottom:10px;}
 
-  /* intake form */
-  .intake{margin-bottom:80px;}
-  .intake-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:6px;padding:36px;max-width:560px;}
-  .intake-card .section-label{margin-bottom:6px;}
-  .intake-card h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:0 0 6px;}
-  .intake-card .sub{font-size:14.5px;margin-bottom:26px;}
-  form{display:flex;flex-direction:column;gap:16px;}
-  .field{display:flex;flex-direction:column;gap:6px;}
-  label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
-  input,textarea,select{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:11px 13px;border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);}
-  input:focus,textarea:focus,select:focus{outline:2px solid var(--scrub);outline-offset:1px;border-color:var(--scrub);}
-  textarea{resize:vertical;min-height:70px;font-family:'IBM Plex Sans',sans-serif;}
-  .submit-row{display:flex;align-items:center;gap:14px;margin-top:6px;}
-  .btn-submit{background:var(--amber);color:var(--paper);border:none;border-radius:3px;padding:13px 22px;font-size:14.5px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
-  .btn-submit:hover{background:#B06B30;}
-  .form-note{font-size:12px;color:var(--ink-soft);}
-  .confirm{display:none;padding:16px 18px;background:var(--scrub-tint);border:1px solid var(--scrub);border-radius:4px;font-size:14px;}
+  .ex-mount{position:relative;}
+  .tick{position:absolute;width:22px;height:22px;}
+  .tick.tl{top:-1px;left:-1px;border-top:1px solid var(--orange);border-left:1px solid var(--orange);margin:-14px 0 0 -14px;}
+  .tick.tr{top:-1px;right:-1px;border-top:1px solid var(--orange);border-right:1px solid var(--orange);margin:-14px -14px 0 0;}
+  .tick.bl{bottom:-1px;left:-1px;border-bottom:1px solid var(--orange);border-left:1px solid var(--orange);margin:0 0 -14px -14px;}
+  .tick.br{bottom:-1px;right:-1px;border-bottom:1px solid var(--orange);border-right:1px solid var(--orange);margin:0 -14px -14px 0;}
+
+  .module{background:var(--white);border-radius:4px;overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.40);}
+  .chrome{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#E6E9EE;border-bottom:1px solid #D2D7DF;}
+  .chrome .c-left{display:flex;align-items:center;gap:11px;}
+  .chrome .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);display:block;}
+  .chrome .c-name{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--navy);}
+  .chrome .c-state{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--slate);}
+  .module iframe{width:100%;height:620px;border:none;display:block;}
+
+  /* ── exhibit B ── */
+  .exhibit-b{background:var(--navy);border-top:1px solid var(--navy-border);}
+  .exhibit-b .inner{padding-top:78px;padding-bottom:84px;display:grid;grid-template-columns:1fr 620px;gap:64px;align-items:start;}
+  .exb-copy{padding-top:4px;}
+  .exb-copy .ex-title{font-size:38px;line-height:1.1;margin-bottom:20px;}
+  .exb-copy p{font-size:16px;line-height:1.72;color:var(--slate-lighter);max-width:44ch;margin-bottom:28px;}
+  .exb-foot{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-light);border-top:1px solid var(--navy-border);padding-top:16px;}
+
+  .exb-card-wrap{position:relative;}
+  .exb-matting{border:1px dashed var(--navy-dash);background:var(--navy-lift);padding:14px;}
+  .exb-card{background:#FDFCFA;border:1px solid var(--border);opacity:.78;filter:grayscale(28%);}
+  .exb-card .chrome .c-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;border:1px solid #9AA3B0;color:var(--slate);padding:4px 7px;border-radius:3px;}
+  .exb-card .chrome .c-name{color:var(--slate);}
+  .exb-card .chrome .c-state{color:#9AA3B0;}
+  .exb-body{padding:30px 30px 34px;}
+  .exb-modlabel{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#9AA3B0;margin-bottom:14px;}
+  .exb-prompt{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--slate);line-height:1.35;margin-bottom:26px;max-width:34ch;}
+  .exb-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
+  .exb-opt{border:1px solid #DCD8CE;background:#F3F1EC;padding:14px 16px;font-size:14px;color:#9AA3B0;display:flex;gap:12px;align-items:center;cursor:not-allowed;}
+  .exb-opt .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#B9B3A5;}
+  .exb-footrow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #E4E0D7;padding-top:20px;}
+  .exb-step{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#B9B3A5;}
+  .exb-submit{background:#D6D1C6;color:var(--cream);border:none;border-radius:3px;padding:12px 22px;font-size:14px;font-weight:500;cursor:not-allowed;font-family:'IBM Plex Sans',sans-serif;}
+  .exb-tab{position:absolute;top:-11px;right:22px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;background:var(--cream);color:var(--navy);padding:6px 12px;border-radius:2px;}
+
+  /* ── intake ── */
+  .intake .inner{padding-top:86px;padding-bottom:92px;display:grid;grid-template-columns:1fr 600px;gap:72px;align-items:start;}
+  .intake-copy{padding-top:6px;}
+  .intake-copy .eyebrow{color:var(--orange);letter-spacing:.18em;font-size:11px;margin-bottom:16px;}
+  .intake-copy h2{font-family:'Fraunces',serif;font-size:36px;font-weight:600;line-height:1.12;letter-spacing:-.025em;margin-bottom:16px;}
+  .intake-copy p{font-size:16px;line-height:1.7;color:var(--slate);max-width:34ch;margin-bottom:34px;}
+  .intake-contact{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:var(--slate);border-top:1px solid var(--border);padding-top:16px;line-height:2;}
+
+  .intake-card{background:var(--white);border:1px solid var(--navy);padding:40px;display:flex;flex-direction:column;gap:20px;}
+  #intake-form{display:flex;flex-direction:column;gap:20px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--slate);}
+  .field input,.field textarea{font-family:'IBM Plex Sans',sans-serif;font-size:14.5px;padding:13px;border:1px solid var(--border);border-radius:3px;background:var(--cream);color:var(--charcoal);width:100%;}
+  .field textarea{min-height:96px;resize:vertical;}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--navy);outline-offset:1px;border-color:var(--navy);}
+  .submit-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:6px;}
+  .btn-submit{background:var(--orange);color:var(--cream);border:none;border-radius:3px;padding:15px 26px;font-size:14.5px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background-color .13s ease;}
+  .btn-submit:hover{background:var(--orange-hover);}
+  .btn-submit:disabled{opacity:.7;cursor:default;}
+  .form-note{font-size:12.5px;color:var(--slate);}
+  .confirm{display:none;padding:14px 16px;background:var(--cream-alt);border:1px solid var(--navy);border-radius:3px;font-size:13.5px;color:var(--charcoal);}
   .confirm.show{display:block;}
 
-  footer{border-top:2px solid var(--ink);padding:26px 0 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-  footer .line{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.03em;}
+  /* ── footer ── */
+  .site-footer{background:var(--navy);}
+  .site-footer .inner{padding-top:34px;padding-bottom:34px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .site-footer .f-left{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .site-footer .wordmark .wm-rx,.site-footer .wordmark .wm-dot{font-size:24px;}
+  .site-footer .wordmark .wm-ld{font-size:16.5px;}
+  .f-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate-light);padding-left:16px;border-left:1px solid var(--navy-border);}
+  .f-links{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:#A8B0BC;display:flex;gap:10px;flex-wrap:wrap;}
+  .f-links a{color:#A8B0BC;transition:color .13s ease;}
+  .f-links a:hover{color:var(--orange);}
 
-  @media (max-width:760px){
-    h1{font-size:34px;}
-    .hero{flex-direction:column;gap:32px;padding:44px 0 36px;}
-    .hero-photo{flex:none;width:100%;}
-    .hero-photo img{height:260px;}
-    .timeline{grid-template-columns:1fr 1fr;row-gap:32px;}
-    .tl-item:nth-child(2)::after{display:none;}
-    iframe{height:560px;}
-    .intake-card{padding:26px;}
+  /* ── responsive ── */
+  @media (max-width:1024px){
+    .hero .inner{grid-template-columns:1fr;}
+    .hero-text{padding:64px 40px 56px;}
+    .hero-photo{min-height:360px;order:-1;}
+    .hero-photo .scrim-x{background:linear-gradient(0deg,rgba(30,42,58,.85) 0%,rgba(30,42,58,.2) 34%,rgba(30,42,58,0) 60%);}
   }
-  @media (prefers-reduced-motion: reduce){
-    *{scroll-behavior:auto !important;}
+  @media (max-width:900px){
+    .tl-grid{grid-template-columns:1fr 1fr;}
+    .exhibit-b .inner{grid-template-columns:1fr;gap:40px;}
+    .intake .inner{grid-template-columns:1fr;gap:44px;}
+    .exhibit-b .exb-card-wrap,.intake-card{width:100%;}
+    .exhibit-b .inner{--x:0;}
+  }
+  @media (max-width:760px){
+    :root{--gutter:24px;}
+    .hero h1{max-width:none;}
+    .ex-head{flex-direction:column;align-items:flex-start;gap:16px;}
+    .ex-title{font-size:32px;}
+    .exb-copy .ex-title{font-size:30px;}
+    .intake-copy h2{font-size:30px;}
+    .exhibit-b .inner{grid-template-columns:1fr;}
+    .exb-card-wrap{max-width:620px;}
+  }
+  @media (max-width:680px){
+    .util .u-right{display:none;}
+    .tl-grid{grid-template-columns:1fr;}
+    .problem .inner{grid-template-columns:1fr;gap:20px;}
+    .nav .inner{gap:14px;}
+    .nav-right{gap:18px;}
+    .f-tag{padding-left:0;border-left:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap chartbar">
-    <div class="brandmark">
-      <span class="mark">RX·L&D</span>
-      <span class="name">Case Intake</span>
-    </div>
-    <span class="navtag">AI COMPLIANCE TRAINING · EDUCATION</span>
+<div class="band util">
+  <div class="inner">
+    <span class="u-left">AI compliance training · education</span>
+    <span class="u-right">hello@rxldtraining.com · (470) 207-3594</span>
+  </div>
+</div>
+
+<header class="band nav">
+  <div class="inner">
+    <a class="wordmark" href="/" aria-label="RX·L&D — home">
+      <span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span>
+    </a>
+    <nav class="nav-right">
+      <a class="nav-link" href="#method">How it works</a>
+      <a class="nav-link" href="#exhibit">Exhibit A</a>
+      <a class="nav-link" href="#intake">Intake</a>
+      <a class="btn btn-primary" href="#intake">Request an intake call</a>
+    </nav>
   </div>
 </header>
 
-<div class="wrap">
-
-  <section class="hero">
-    <div class="hero-content">
-      <div class="eyebrow">AI-built compliance training</div>
+<section class="band hero">
+  <div class="inner">
+    <div class="hero-text">
+      <div class="eyebrow"><span class="rule"></span>AI-built compliance training · Education</div>
       <h1>Training that updates as fast as <em>your policies do.</em></h1>
-      <p class="sub">Scenario-based compliance modules — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
+      <p class="hero-sub">Scenario-based compliance modules for K-12 school systems — built, piloted, and refreshed in weeks instead of quarters, with an AI coaching layer your staff can question in the moment.</p>
       <div class="hero-ctas">
         <a href="#exhibit" class="btn btn-primary">See the live example</a>
         <a href="#intake" class="btn btn-ghost">Request an intake call</a>
       </div>
     </div>
     <div class="hero-photo">
-      <div class="frame">
-        <span class="photo-tag">CARE TEAM · 4 WEST</span>
-        <img src="images/hero-photo.jpg" alt="Healthcare worker reviewing patient care notes">
-        <div class="duotone"></div>
-      </div>
+      <div class="img" role="img" aria-label="Front office staff member at a school"></div>
+      <div class="scrim-x"></div>
+      <div class="scrim-y"></div>
+      <span class="caption-tag">STAFF · FRONT OFFICE</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="note">
-    <span class="flag">The pattern we keep seeing</span>
+<section class="band problem">
+  <div class="inner">
+    <div class="label">The pattern<br>we keep seeing</div>
     <p>Annual re-certification content is technically compliant but rarely current — policies shift, but the training built around them takes a quarter or more to catch up. That gap is where risk lives.</p>
   </div>
+</section>
 
-  <section class="timeline">
-    <div class="section-label" style="grid-column:1/-1;">Case Timeline</div>
-    <div class="tl-item">
-      <div class="tl-num">1</div>
-      <h3>Intake</h3>
-      <p>A short call to review your current training and where it's falling behind.</p>
+<section class="band timeline" id="method">
+  <div class="inner">
+    <div class="tl-head">
+      <span class="k">Case Timeline</span>
+      <span class="rule"></span>
+      <span class="n">04 STEPS</span>
     </div>
-    <div class="tl-item">
-      <div class="tl-num">2</div>
-      <h3>Diagnosis</h3>
-      <p>We identify the highest-risk, highest-staleness modules to rebuild first.</p>
-    </div>
-    <div class="tl-item">
-      <div class="tl-num">3</div>
-      <h3>Build</h3>
-      <p>A 2-week accelerator turns your policy documents into scenario-based modules.</p>
-    </div>
-    <div class="tl-item">
-      <div class="tl-num">4</div>
-      <h3>Handoff</h3>
-      <p>Your team owns the system, with a process for updating it as policy changes.</p>
-    </div>
-  </section>
-
-  <section class="exhibit" id="exhibit">
-    <div class="section-label">Exhibit A</div>
-    <div class="section-title">A live module, not a mockup</div>
-    <div class="exhibit-frame">
-      <div class="exhibit-bar">
-        <div class="exhibit-dot"></div>
-        <span class="exhibit-label">education_case_file_demo — Module 04</span>
+    <div class="tl-grid">
+      <div class="tl-card">
+        <div class="step">STEP 01</div>
+        <h3>Intake</h3>
+        <p>A short call to review your current training and where it's falling behind.</p>
       </div>
-      <iframe src="education_case_file_demo.html" title="Live compliance training module demo" loading="lazy"></iframe>
+      <div class="tl-card">
+        <div class="step">STEP 02</div>
+        <h3>Diagnosis</h3>
+        <p>We identify the highest-risk, highest-staleness modules to rebuild first.</p>
+      </div>
+      <div class="tl-card">
+        <div class="step">STEP 03</div>
+        <h3>Build</h3>
+        <p>A 2-week accelerator turns your policy documents into scenario-based modules.</p>
+      </div>
+      <div class="tl-card">
+        <div class="step">STEP 04</div>
+        <h3>Handoff</h3>
+        <p>Your team owns the system, with a process for updating it as policy changes.</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="intake" id="intake">
-    <div class="intake-card">
-      <div class="section-label">Request intake</div>
-      <h3>Tell us about your training</h3>
-      <p class="sub">15 minutes. No obligation — just a look at where AI-assisted content could help.</p>
-      <form id="intake-form">
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required>
+<section class="band exhibit" id="exhibit">
+  <div class="inner">
+    <div class="ex-head">
+      <div>
+        <div class="ex-eyebrow"><span class="rule"></span>Exhibit A</div>
+        <div class="ex-title">A live module, not a mockup</div>
+      </div>
+      <span class="ex-meta">RUNS IN THE BROWSER · NO LOGIN</span>
+    </div>
+    <div class="ex-mount">
+      <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+      <div class="module">
+        <div class="chrome">
+          <span class="c-left">
+            <span class="dot"></span>
+            <span class="c-name">education_case_file_demo — Module 04</span>
+          </span>
+          <span class="c-state">INTERACTIVE</span>
         </div>
-        <div class="field">
-          <label for="org">Organization</label>
-          <input type="text" id="org" name="org" required>
+        <iframe src="education_case_file_demo.html" title="Live compliance training module demo" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band exhibit-b" id="next">
+  <div class="inner">
+    <div class="exb-copy">
+      <div class="ex-eyebrow"><span class="rule"></span>Exhibit B</div>
+      <div class="ex-title">Building next</div>
+      <p>Districts are asking how to guide appropriate AI use for both staff and students. We're building a scenario-based module to answer that — using the same approach as Exhibit A.</p>
+      <div class="exb-foot">Preview · not yet interactive</div>
+    </div>
+    <div class="exb-card-wrap">
+      <div class="exb-matting">
+        <div class="exb-card">
+          <div class="chrome">
+            <span class="c-left">
+              <span class="c-badge">RX·L&amp;D</span>
+              <span class="c-name">Case File</span>
+            </span>
+            <span class="c-state">IN DEVELOPMENT</span>
+          </div>
+          <div class="exb-body">
+            <div class="exb-modlabel">AI Literacy &amp; Appropriate Use</div>
+            <div class="exb-prompt">A staff member drafts family communications with an AI assistant. What needs to be true before it sends?</div>
+            <div class="exb-opts">
+              <div class="exb-opt"><span class="m">A</span>Option pending</div>
+              <div class="exb-opt"><span class="m">B</span>Option pending</div>
+              <div class="exb-opt"><span class="m">C</span>Option pending</div>
+            </div>
+            <div class="exb-footrow">
+              <span class="exb-step">STEP 1 OF —</span>
+              <button type="button" class="exb-submit" disabled>Submit answer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="exb-tab">COMING NEXT</span>
+    </div>
+  </div>
+</section>
+
+<section class="band intake" id="intake">
+  <div class="inner">
+    <div class="intake-copy">
+      <div class="eyebrow">Request intake</div>
+      <h2>Tell us about your training</h2>
+      <p>15 minutes. No obligation — just a look at where AI-assisted content could help.</p>
+      <div class="intake-contact">hello@rxldtraining.com<br>(470) 207-3594</div>
+    </div>
+    <div class="intake-card">
+      <form id="intake-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="org">Organization</label>
+            <input type="text" id="org" name="org" required>
+          </div>
         </div>
         <div class="field">
           <label for="email">Work email</label>
@@ -219,14 +413,22 @@
       </form>
       <div class="confirm" id="confirm">Thanks — request received. We'll follow up within a business day.</div>
     </div>
-  </section>
+  </div>
+</section>
 
-</div>
-
-<footer>
-  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;width:100%;">
-    <span class="line">RX·L&D — AI-BUILT COMPLIANCE TRAINING</span>
-    <span class="line"><a href="mailto:hello@rxldtraining.com" style="color:inherit;">hello@rxldtraining.com</a> · <a href="tel:+14702073594" style="color:inherit;">(470) 207-3594</a> · <a href="https://www.linkedin.com/in/dorethacarter" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a></span>
+<footer class="band site-footer">
+  <div class="inner">
+    <span class="f-left">
+      <span class="wordmark"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span></span>
+      <span class="f-tag">AI-built compliance training · Education</span>
+    </span>
+    <span class="f-links">
+      <a href="mailto:hello@rxldtraining.com">hello@rxldtraining.com</a>
+      <span>·</span>
+      <a href="tel:+14702073594">(470) 207-3594</a>
+      <span>·</span>
+      <a href="https://www.linkedin.com/in/dorethacarter" target="_blank" rel="noopener">LinkedIn</a>
+    </span>
   </div>
 </footer>
 
