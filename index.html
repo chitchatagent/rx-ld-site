@@ -89,8 +89,8 @@
 
   .hero-photo{position:relative;overflow:hidden;min-height:660px;}
   .hero-photo .img{position:absolute;inset:0;background-image:url('images/hero2-calm.jpg');background-size:cover;background-position:50% 10%;}
-  .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%);}
-  .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.55),rgba(30,42,58,0) 34%);}
+  .hero-photo .scrim-x{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(270deg,rgba(30,42,58,.98) 0%,rgba(30,42,58,.72) 6%,rgba(30,42,58,.22) 20%,rgba(30,42,58,0) 42%);}
+  .hero-photo .scrim-y{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(30,42,58,.55),rgba(30,42,58,0) 34%),linear-gradient(180deg,rgba(30,42,58,.5),rgba(30,42,58,0) 15%);}
   .caption-tag{position:absolute;left:28px;bottom:28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
   /* ── problem note ── */
@@ -199,8 +199,11 @@
   @media (max-width:1024px){
     .hero .inner{grid-template-columns:1fr;}
     .hero-text{padding:64px 40px 56px;}
-    .hero-photo{min-height:360px;order:-1;}
-    .hero-photo .scrim-x{background:linear-gradient(0deg,rgba(30,42,58,.85) 0%,rgba(30,42,58,.2) 34%,rgba(30,42,58,0) 60%);}
+    /* text leads, photo follows; aspect close to the portrait so cover barely crops */
+    .hero-photo{min-height:0;aspect-ratio:5/6;max-height:76vh;}
+    .hero-photo .img{background-position:50% 16%;}
+    .hero-photo .scrim-x{background:linear-gradient(180deg,rgba(30,42,58,.92) 0%,rgba(30,42,58,.25) 20%,rgba(30,42,58,0) 44%);}
+    .hero-photo .scrim-y{background:linear-gradient(0deg,rgba(30,42,58,.5) 0%,rgba(30,42,58,0) 24%);}
   }
   @media (max-width:900px){
     .tl-grid{grid-template-columns:1fr 1fr;}
