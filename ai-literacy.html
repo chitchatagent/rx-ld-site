@@ -156,11 +156,20 @@
   /* ══ ai-literacy page ══ */
   /* hero */
   .lp-hero{background:var(--navy);}
-  .lp-hero .inner{padding-top:84px;padding-bottom:92px;}
+  .lp-hero .inner{padding-top:84px;padding-bottom:92px;display:grid;grid-template-columns:1fr 440px;gap:64px;align-items:center;}
   .lp-hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,5vw,52px);line-height:1.07;letter-spacing:-.028em;color:var(--cream);max-width:20ch;margin-bottom:26px;}
   .lp-hero h1 em{font-style:normal;color:var(--orange);}
-  .lp-hero .lp-sub{font-size:17px;line-height:1.72;color:var(--slate-lighter);max-width:62ch;margin-bottom:38px;}
+  .lp-hero .lp-sub{font-size:17px;line-height:1.72;color:var(--slate-lighter);max-width:56ch;margin-bottom:38px;}
   .lp-hero .hero-ctas{max-width:520px;}
+  .lp-hero .hero-ctas .btn{min-width:200px;}
+
+  /* graphic 5 — hero teaser map: condensed navy restatement of Fig. 01 */
+  .teaser{border:1px solid var(--navy-border);background:var(--navy-lift);padding:24px 26px 22px;margin:0;}
+  .teaser .cap{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate-light);border-bottom:1px solid var(--navy-border);padding-bottom:12px;margin-bottom:14px;}
+  .teaser .teaser-map{width:100%;height:auto;display:block;}
+  .teaser .stat{display:flex;align-items:center;gap:14px;border-top:1px solid var(--navy-border);margin-top:12px;padding-top:16px;}
+  .teaser .stat .n{font-family:'Fraunces',serif;font-size:54px;font-weight:680;line-height:.88;letter-spacing:-.035em;color:var(--orange);flex:none;}
+  .teaser .stat .k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-lighter);line-height:1.7;}
 
   /* generic content section */
   .sec .inner{padding-top:74px;padding-bottom:78px;}
@@ -272,6 +281,8 @@
 
   /* ── responsive ── */
   @media (max-width:1000px){
+    .lp-hero .inner{grid-template-columns:1fr;gap:44px;}
+    .teaser{max-width:440px;}
     .map-split{grid-template-columns:1fr;gap:36px;}
     .map-col .lead-out{max-width:44ch;}
     .ms-track{grid-template-columns:1fr 1fr;}
@@ -339,13 +350,23 @@
 
 <section class="band lp-hero">
   <div class="inner">
-    <div class="eyebrow"><span class="rule"></span>AI-built compliance training · Education</div>
-    <h1>Your state already told you to do this. <em>We'll help you actually do it.</em></h1>
-    <p class="lp-sub">27 states have active AI-in-education legislation this year. 5 are already signed into law. Districts are being handed frameworks and guidance documents — but a policy PDF isn't training. We turn state guidance into a module your staff will actually complete.</p>
-    <div class="hero-ctas">
-      <a href="#intake" class="btn btn-primary">Request an intake call</a>
-      <a href="/#exhibit" class="btn btn-ghost">See live examples</a>
+    <div>
+      <div class="eyebrow"><span class="rule"></span>AI-built compliance training · Education</div>
+      <h1>Your state already told you to do this. <em>We'll help you actually do it.</em></h1>
+      <p class="lp-sub">27 states have active AI-in-education legislation this year. 5 are already signed into law. Districts are being handed frameworks and guidance documents — but a policy PDF isn't training. We turn state guidance into a module your staff will actually complete.</p>
+      <div class="hero-ctas">
+        <a href="#intake" class="btn btn-primary">Request an intake call</a>
+        <a href="/#exhibit" class="btn btn-ghost">See live examples</a>
+      </div>
     </div>
+    <figure class="teaser">
+      <div class="cap">AI-in-education legislation · 2026</div>
+      <img class="teaser-map" src="images/legislation-map-teaser.svg" width="440" height="268" loading="lazy" decoding="async" alt="Map of the United States with the states that have active AI-in-education legislation in 2026 shaded.">
+      <div class="stat">
+        <span class="n">27</span>
+        <span class="k">States with active<br>legislation this year</span>
+      </div>
+    </figure>
   </div>
 </section>
 
