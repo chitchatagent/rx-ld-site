@@ -185,12 +185,77 @@
   .facts li::before{content:"";position:absolute;left:0;top:11px;width:10px;height:1px;background:var(--orange);}
   .sec-navy .facts li{color:var(--slate-lighter);}
 
-  /* two-column definition pair */
-  .pair{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:4px 0 26px;}
-  .pair .card{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);padding:26px 24px 28px;}
-  .pair .card .t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
-  .pair .card h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:9px;color:var(--charcoal);}
-  .pair .card p{font-size:14px;line-height:1.66;color:var(--slate);margin:0;}
+  /* ══ graphic 1 — legislative activity map ══ */
+  .map-split{display:grid;grid-template-columns:1fr 560px;gap:56px;align-items:start;}
+  .map-split .facts{max-width:46ch;}
+  .map-col .lead-out{margin-top:26px;max-width:34ch;padding-left:26px;}
+  .map-figure{border:1px solid var(--border);background:var(--cream);padding:22px 22px 18px;margin:0;}
+  .map-figure figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:6px;}
+  .map-figure figcaption .fig-n{color:var(--orange);flex:none;}
+  .map-figure .map-svg{width:100%;height:auto;display:block;}
+  .map-tally{display:flex;align-items:center;gap:16px;border-top:1px solid var(--border);margin-top:6px;padding-top:16px;}
+  .map-tally .n{font-family:'Fraunces',serif;font-size:52px;font-weight:680;line-height:.9;letter-spacing:-.035em;color:var(--orange);flex:none;}
+  .map-tally .k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);line-height:1.7;}
+  .map-legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
+  .map-legend span{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);}
+  .map-legend i{width:13px;height:13px;display:block;flex:none;border:1px solid rgba(30,42,58,.22);}
+  .map-source{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--slate);line-height:1.7;margin-top:14px;}
+
+  /* ══ graphic 2 — literacy / appropriate use pairing ══ */
+  .pairing{display:grid;grid-template-columns:1fr 78px 1fr;align-items:stretch;margin:10px 0 30px;}
+  .pairing .card{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);padding:30px 28px;display:flex;flex-direction:column;}
+  .pairing .card .mark{margin-bottom:22px;}
+  .pairing .card .t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
+  .pairing .card h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:10px;color:var(--charcoal);letter-spacing:-.015em;}
+  .pairing .card p{font-size:14.5px;line-height:1.66;color:var(--slate);margin:0;}
+  .pairing .card .q{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-light);margin-top:auto;padding-top:22px;}
+  .pair-join{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;}
+  .pair-join .ln{position:absolute;top:50%;left:0;right:0;height:1px;border-top:1px dashed var(--navy-dash);opacity:.55;}
+  .pair-join .chip{position:relative;background:var(--navy);color:var(--cream);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:7px 9px;border-radius:2px;writing-mode:vertical-rl;}
+  .sec>.inner>p.pairing-close{max-width:none;}
+
+  /* ══ graphic 4 — free tool training vs. what we build ══ */
+  .contrast{display:grid;grid-template-columns:1fr 78px 1fr;align-items:stretch;margin:26px 0 30px;}
+  .contrast .card{padding:28px 26px;display:flex;flex-direction:column;}
+  .contrast .generic{background:transparent;border:1px dashed var(--navy-dash);}
+  .contrast .ours{background:var(--navy-lift);border:1px solid var(--navy-border);border-top:3px solid var(--orange);}
+  .contrast .t{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;}
+  .contrast .generic .t{color:var(--slate-light);}
+  .contrast .ours .t{color:var(--orange);}
+  .contrast h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:20px;letter-spacing:-.015em;}
+  .contrast .generic h3{color:var(--slate-lighter);}
+  .contrast .ours h3{color:var(--cream);}
+  .contrast ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;}
+  .contrast li{position:relative;padding-left:24px;font-size:14.5px;line-height:1.6;}
+  .contrast .generic li{color:var(--slate-light);}
+  .contrast .ours li{color:var(--slate-lighter);}
+  .contrast .generic li::before{content:"";position:absolute;left:0;top:10px;width:10px;height:1px;background:var(--navy-dash);}
+  .contrast .ours li::before{content:"";position:absolute;left:0;top:10px;width:10px;height:1px;background:var(--orange);}
+  .contrast .q{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-light);margin-top:auto;padding-top:22px;}
+  .contrast-join{display:flex;align-items:center;justify-content:center;position:relative;}
+  .contrast-join .ln{position:absolute;top:50%;left:0;right:0;height:1px;border-top:1px dashed var(--navy-dash);opacity:.55;}
+  .contrast-join .chip{position:relative;background:var(--cream);color:var(--navy);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:7px 9px;border-radius:2px;writing-mode:vertical-rl;}
+  .sec-navy>.inner>p.contrast-intro,
+  .sec-navy>.inner>p.contrast-close{max-width:none;}
+
+  /* ══ graphic 3 — Mississippi timeline ══ */
+  .ms-head{display:flex;align-items:baseline;gap:18px;margin:34px 0 30px;}
+  .ms-head .lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate-light);white-space:nowrap;}
+  .ms-head .hr{flex:1;height:1px;background:var(--navy-border);}
+  .ms-head .cnt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--slate-light);white-space:nowrap;}
+  .ms-track{display:grid;grid-template-columns:repeat(3,1fr) 0.62fr;gap:20px;}
+  .ms-step{background:var(--navy-lift);border:1px solid var(--navy-border);border-top:3px solid var(--orange);padding:24px 24px 26px;display:flex;flex-direction:column;}
+  .ms-step .yr{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--orange);margin-bottom:16px;}
+  .ms-step h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--cream);margin-bottom:9px;letter-spacing:-.01em;}
+  .ms-step p{font-size:13.5px;line-height:1.68;color:var(--slate-lighter);margin:0;}
+  .ms-step .cite{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-light);margin-top:18px;padding-top:14px;border-top:1px solid var(--navy-border);}
+  .ms-gap{border:1px dashed var(--navy-dash);background:transparent;padding:24px 22px 26px;display:flex;flex-direction:column;}
+  .ms-gap .yr{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--slate-light);margin-bottom:16px;}
+  .ms-gap h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--slate-lighter);margin-bottom:9px;}
+  .ms-gap p{font-size:13.5px;line-height:1.68;color:var(--slate-light);margin:0;}
+  .ms-gap .tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);background:var(--cream);align-self:flex-start;padding:5px 8px;border-radius:2px;margin-top:auto;}
+  .sec-navy>.inner>p.ms-close,
+  .sec-navy .lead-out.ms-close{max-width:none;margin-top:32px;}
 
   /* numbered offer list */
   .offer{display:flex;flex-direction:column;margin-top:6px;}
@@ -206,6 +271,11 @@
   .intake.sec-navy .intake-copy p{color:var(--slate-lighter);}
 
   /* ── responsive ── */
+  @media (max-width:1000px){
+    .map-split{grid-template-columns:1fr;gap:36px;}
+    .map-col .lead-out{max-width:44ch;}
+    .ms-track{grid-template-columns:1fr 1fr;}
+  }
   @media (max-width:900px){
     .intake .inner{grid-template-columns:1fr;gap:44px;}
     .intake-card{width:100%;}
@@ -215,7 +285,16 @@
     .problem .inner{grid-template-columns:1fr;gap:20px;}
     .problem p{font-size:21px;}
     .problem p.small{font-size:17px;}
-    .pair{grid-template-columns:1fr;gap:14px;}
+    .pairing,.contrast{grid-template-columns:1fr;gap:14px;}
+    .pair-join,.contrast-join{padding:4px 0;}
+    .pair-join{flex-direction:row;}
+    .pair-join .ln,.contrast-join .ln{top:0;bottom:0;left:50%;right:auto;width:1px;height:auto;border-top:none;border-left:1px dashed var(--navy-dash);}
+    .pair-join .chip,.contrast-join .chip{writing-mode:horizontal-tb;}
+    .ms-track{grid-template-columns:1fr;}
+    .ms-head{flex-wrap:wrap;gap:6px 14px;}
+    .ms-head .hr{display:none;}
+    .map-tally{flex-wrap:wrap;}
+    .map-figure .map-svg{max-width:460px;margin:0 auto;}
     .intake-copy h2{font-size:30px;}
     .util span,.f-tag,.f-links{font-size:12px;}
   }
@@ -283,13 +362,31 @@
 <section class="band sec sec-white">
   <div class="inner">
     <div class="eyebrow"><span class="rule"></span>What's actually happening right now</div>
-    <ul class="facts">
-      <li><strong>37 states plus Puerto Rico</strong> now have some form of official AI guidance or policy framework for K-12 education.</li>
-      <li><strong>27 states</strong> have active AI-in-education legislation in 2026; <strong>5 are already signed into law.</strong></li>
-      <li>Maryland now requires every district to name a central-office AI coordinator. Oklahoma requires a written district AI policy with parental transparency. South Carolina is considering requiring written parental opt-in consent for AI tool use.</li>
-      <li>At the federal level, a bill in Congress (the K–12 AI Literacy and Readiness Act) would allow federal education funds to be used specifically for AI curricula and staff training.</li>
-    </ul>
-    <p class="lead-out">This isn't a future problem. It's a this-school-year problem.</p>
+    <div class="map-split">
+      <div class="map-col">
+        <ul class="facts">
+          <li><strong>37 states plus Puerto Rico</strong> now have some form of official AI guidance or policy framework for K-12 education.</li>
+          <li><strong>27 states</strong> have active AI-in-education legislation in 2026; <strong>5 are already signed into law.</strong></li>
+          <li>Maryland now requires every district to name a central-office AI coordinator. Oklahoma requires a written district AI policy with parental transparency. South Carolina is considering requiring written parental opt-in consent for AI tool use.</li>
+          <li>At the federal level, a bill in Congress (the K–12 AI Literacy and Readiness Act) would allow federal education funds to be used specifically for AI curricula and staff training.</li>
+        </ul>
+        <p class="lead-out">This isn't a future problem. It's a this-school-year problem.</p>
+      </div>
+      <figure class="map-figure">
+        <figcaption><span>States with active AI-in-education bills · 2026</span><span class="fig-n">Fig. 01</span></figcaption>
+        <img class="map-svg" src="images/legislation-map.svg" width="560" height="350" loading="lazy" decoding="async" alt="Map of the United States. The states with active AI-in-education legislation named in the 2026 FutureEd tracker are shaded; Mississippi is outlined as the page's case study.">
+        <div class="map-tally">
+          <div class="n">27</div>
+          <div class="k">States with active<br>AI-in-education legislation, 2026 session</div>
+        </div>
+        <div class="map-legend">
+          <span><i style="background:#C77440"></i>Active 2026 legislation</span>
+          <span><i style="background:#E2DED2"></i>None tracked</span>
+          <span><i style="background:#C77440;outline:1.5px solid #1E2A3A;outline-offset:1px"></i>Case study</span>
+        </div>
+        <div class="map-source">Source: FutureEd, “Legislative Tracker: 2026 State AI in Education Bills” — 77 bills across 27 states, updated 13 July 2026. Four of the 27 are not named individually in the tracker and so are not shaded. Bill status is not distinguished on the map.</div>
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -298,39 +395,132 @@
     <div class="eyebrow"><span class="rule"></span>Case study: Mississippi</div>
     <h2>A model worth following</h2>
     <p>Mississippi is further ahead than most states — and it shows exactly the gap districts are facing everywhere.</p>
-    <ul class="facts">
-      <li>The Mississippi Department of Education issued statewide AI classroom guidance as early as 2025.</li>
-      <li>SB 2429 established an AI in Education Task Force specifically charged with developing <strong>guidelines for training K-12 educators</strong> to use AI tools responsibly.</li>
-      <li>In April 2026, the Mississippi Artificial Intelligence Network published a governance <strong>template</strong> for districts to adapt locally — a planning document, not a finished training program.</li>
-    </ul>
-    <p class="lead-out">Mississippi did the policy work. What's still missing in most districts — Mississippi included — is the actual training delivery: a real module staff sit through, understand, and can apply. That's the gap we fill.</p>
+
+    <div class="ms-head">
+      <span class="lbl">Policy timeline</span>
+      <span class="hr"></span>
+      <span class="cnt">03 STEPS TAKEN · 01 OUTSTANDING</span>
+    </div>
+    <div class="ms-track">
+      <div class="ms-step">
+        <div class="yr">2025</div>
+        <h3>Statewide guidance</h3>
+        <p>The Mississippi Department of Education issued statewide AI classroom guidance as early as 2025.</p>
+        <div class="cite">MDE · Classroom guidance</div>
+      </div>
+      <div class="ms-step">
+        <div class="yr">2026</div>
+        <h3>Task force</h3>
+        <p>SB 2429 established an AI in Education Task Force charged with developing guidelines for training K-12 educators to use AI tools responsibly.</p>
+        <div class="cite">SB 2429 · Educator training</div>
+      </div>
+      <div class="ms-step">
+        <div class="yr">Apr 2026</div>
+        <h3>Governance template</h3>
+        <p>The Mississippi Artificial Intelligence Network published a governance template for districts to adapt locally — a planning document, not a finished training program.</p>
+        <div class="cite">MAIN · District template</div>
+      </div>
+      <div class="ms-gap">
+        <div class="yr">Not yet</div>
+        <h3>Training delivery</h3>
+        <p>A module staff sit through, understand, and can apply.</p>
+        <span class="tag">The gap we fill</span>
+      </div>
+    </div>
+
+    <p class="lead-out ms-close">Mississippi did the policy work. What's still missing in most districts — Mississippi included — is the actual training delivery: a real module staff sit through, understand, and can apply. That's the gap we fill.</p>
   </div>
 </section>
 
 <section class="band sec sec-cream">
   <div class="inner">
     <div class="eyebrow"><span class="rule"></span>AI literacy and appropriate use are not the same thing</div>
-    <div class="pair">
+
+    <div class="pairing">
       <div class="card">
+        <div class="mark">
+          <svg width="92" height="92" viewBox="0 0 92 92" role="img" aria-label="Diagram: an AI output being examined">
+            <rect x="6.5" y="14.5" width="52" height="52" fill="none" stroke="#1E2A3A" stroke-width="1.4"></rect>
+            <line x1="15" y1="27" x2="50" y2="27" stroke="#1E2A3A" stroke-width="1.4"></line>
+            <line x1="15" y1="36" x2="50" y2="36" stroke="#8E97A5" stroke-width="1.4"></line>
+            <line x1="15" y1="45" x2="41" y2="45" stroke="#8E97A5" stroke-width="1.4"></line>
+            <line x1="15" y1="54" x2="46" y2="54" stroke="#8E97A5" stroke-width="1.4"></line>
+            <circle cx="62" cy="55" r="20.5" fill="none" stroke="#C77440" stroke-width="1.6"></circle>
+            <circle cx="62" cy="55" r="9" fill="none" stroke="#C77440" stroke-width="1.6"></circle>
+            <line x1="76" y1="69" x2="86" y2="79" stroke="#C77440" stroke-width="1.6"></line>
+          </svg>
+        </div>
         <div class="t">Literacy</div>
         <h3>Understanding</h3>
         <p>Knowing what AI is, what it's good and bad at, and how to think critically about its output.</p>
+        <div class="q">Asks: is this output any good?</div>
       </div>
+
+      <div class="pair-join" aria-hidden="true">
+        <span class="ln"></span>
+        <span class="chip">Paired</span>
+      </div>
+
       <div class="card">
+        <div class="mark">
+          <svg width="92" height="92" viewBox="0 0 92 92" role="img" aria-label="Diagram: a permitted path and a prohibited path through a policy gate">
+            <line x1="46" y1="6" x2="46" y2="30" stroke="#1E2A3A" stroke-width="1.4"></line>
+            <rect x="24.5" y="30.5" width="43" height="14" fill="#1E2A3A"></rect>
+            <path d="M46 44.5 V56 H23" fill="none" stroke="#C77440" stroke-width="1.6"></path>
+            <path d="M46 44.5 V56 H69" fill="none" stroke="#8E97A5" stroke-width="1.6" stroke-dasharray="3 3"></path>
+            <path d="M15 70.5 l5 5 l9.5 -11" fill="none" stroke="#C77440" stroke-width="2"></path>
+            <line x1="63" y1="66" x2="75" y2="78" stroke="#8E97A5" stroke-width="2"></line>
+            <line x1="75" y1="66" x2="63" y2="78" stroke="#8E97A5" stroke-width="2"></line>
+          </svg>
+        </div>
         <div class="t">Appropriate use</div>
         <h3>Conduct</h3>
         <p>The actual rules for what staff and students are permitted to do with it — and the consequences when they don't.</p>
+        <div class="q">Asks: am I allowed to do this?</div>
       </div>
     </div>
-    <p>A staff member can understand AI well and still misuse it. A policy without literacy just produces confused compliance. Districts need both, paired — which is why we build both into one module, not two separate initiatives competing for the same training hour.</p>
+
+    <p class="pairing-close">A staff member can understand AI well and still misuse it. A policy without literacy just produces confused compliance. Districts need both, paired — which is why we build both into one module, not two separate initiatives competing for the same training hour.</p>
   </div>
 </section>
 
 <section class="band sec sec-navy">
   <div class="inner">
     <div class="eyebrow"><span class="rule"></span>This isn't tool training</div>
-    <p>Free AI literacy resources exist — and they're worth using. But they teach staff how to use a specific tool. They aren't built around your state's specific guidance, your district's actual policy language, or the liability your compliance team is accountable for.</p>
-    <p>That's the gap between “training exists” and “training matches what we're legally required to do.” We build the second one — scenario-based, compliance-framed, and mapped to your state's actual framework, not a generic course library.</p>
+    <p class="contrast-intro">Free AI literacy resources exist — and they're worth using. But they teach staff how to use a specific tool. They aren't built around your state's specific guidance, your district's actual policy language, or the liability your compliance team is accountable for.</p>
+
+    <div class="contrast">
+      <div class="card generic">
+        <div class="t">Free tool training</div>
+        <h3>One size, every district</h3>
+        <ul>
+          <li>Teaches a specific tool</li>
+          <li>Same content for every district</li>
+          <li>No compliance mapping</li>
+          <li>No completion or audit trail</li>
+        </ul>
+        <div class="q">Answers: how does this tool work?</div>
+      </div>
+
+      <div class="contrast-join" aria-hidden="true">
+        <span class="ln"></span>
+        <span class="chip">Versus</span>
+      </div>
+
+      <div class="card ours">
+        <div class="t">What we build</div>
+        <h3>Mapped to your policy</h3>
+        <ul>
+          <li>Scenario-based, compliance-framed</li>
+          <li>Mapped to your state's framework</li>
+          <li>Built around your district's actual policy language</li>
+          <li>SCORM delivery in your existing LMS</li>
+        </ul>
+        <div class="q">Answers: are we doing what we're required to?</div>
+      </div>
+    </div>
+
+    <p class="contrast-close">That's the gap between &ldquo;training exists&rdquo; and &ldquo;training matches what we're legally required to do.&rdquo; We build the second one.</p>
   </div>
 </section>
 
