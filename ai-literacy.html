@@ -144,8 +144,10 @@
 
   /* ── footer ── */
   .site-footer{background:var(--navy);}
-  .site-footer .inner{padding-top:34px;padding-bottom:34px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .site-footer .inner{padding-top:34px;padding-bottom:34px;}
+  .site-footer .f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
   .site-footer .f-left{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
+  .site-footer .f-legal{margin:22px 0 0;padding-top:18px;border-top:1px solid var(--navy-border);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--slate-light);}
   .site-footer .wordmark .wm-rx,.site-footer .wordmark .wm-dot{font-size:24px;}
   .site-footer .wordmark .wm-ld{font-size:16.5px;}
   .f-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate-light);padding-left:16px;border-left:1px solid var(--navy-border);}
@@ -662,17 +664,20 @@
 
 <footer class="band site-footer">
   <div class="inner">
-    <span class="f-left">
-      <a class="wordmark" href="/" aria-label="RX·L&D — home"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span></a>
-      <span class="f-tag">AI-built compliance training · Education</span>
-    </span>
-    <span class="f-links">
-      <a href="mailto:hello@rxldtraining.com">hello@rxldtraining.com</a>
-      <span>·</span>
-      <a href="tel:+14702073594">(470) 207-3594</a>
-      <span>·</span>
-      <a href="https://www.linkedin.com/in/dorethacarter" target="_blank" rel="noopener">LinkedIn</a>
-    </span>
+    <div class="f-row">
+      <span class="f-left">
+        <a class="wordmark" href="/" aria-label="RX·L&D — home"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span></a>
+        <span class="f-tag">AI-built compliance training · Education</span>
+      </span>
+      <span class="f-links">
+        <a href="mailto:hello@rxldtraining.com">hello@rxldtraining.com</a>
+        <span>·</span>
+        <a href="tel:+14702073594">(470) 207-3594</a>
+        <span>·</span>
+        <a href="https://www.linkedin.com/in/dorethacarter" target="_blank" rel="noopener">LinkedIn</a>
+      </span>
+    </div>
+    <p class="f-legal">&copy; 2026 RX&middot;L&amp;D</p>
   </div>
 </footer>
 
