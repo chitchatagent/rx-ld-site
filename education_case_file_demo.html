@@ -158,10 +158,10 @@
 
   .cta{
     margin-top:40px;border-top:2px solid var(--ink);padding-top:20px;
-    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
   }
   .cta .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;}
-  .cta .line{font-size:14px;color:var(--ink-soft);}
+  .cta .line{font-size:14px;color:var(--ink-soft);line-height:1.6;max-width:60ch;}
 
   @media (prefers-reduced-motion: reduce){
     .dot.current::after{animation:none;opacity:1;}
@@ -294,8 +294,8 @@
     </div>
 
     <div class="cta">
-      <span class="label">Prototype · built in Claude</span>
-      <span class="line">This is a 20-minute build. A full 12-module compliance track is a 2-week one.</span>
+      <span class="label">Prototype · Ask-the-Coach preview</span>
+      <span class="line">This shows the interaction pattern. In your deployed module, every response is generated live, tailored to your district's specific policies and your staff's exact question.</span>
     </div>
   </div>
 
