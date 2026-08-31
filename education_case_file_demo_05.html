@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File 05 — The Drafted Letter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#5A6270;
+    --scrub:#1E2A3A;
+    --scrub-hover:#16202D;
+    --scrub-tint:#E6E9EE;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --alert:#B84C3E;
+    --alert-tint:#F6E1DD;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+  /* header / chart tab bar */
+  .chartbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+  }
+  .brandmark{display:flex;align-items:baseline;gap:12px;}
+  /* 4C Split Lockup — matches the rxldtraining.com nav/footer wordmark */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wordmark .wm-rx,.wordmark .wm-dot{font-family:'Fraunces',serif;font-weight:680;font-size:21px;line-height:1;}
+  .wordmark .wm-rx{letter-spacing:-.035em;color:var(--ink);}
+  .wordmark .wm-dot{color:var(--amber);padding:0 1px;}
+  .wordmark .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14.5px;letter-spacing:.02em;line-height:1;color:var(--ink);}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);}
+  .casetag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;}
+
+  /* progress dots — real sequence, so numbering is earned */
+  .progress{display:flex;gap:6px;margin:18px 0 30px;}
+  .dot{height:4px;flex:1;background:var(--line);border-radius:2px;overflow:hidden;position:relative;}
+  .dot.done{background:var(--scrub);}
+  .dot.current::after{
+    content:'';position:absolute;inset:0;background:var(--scrub);
+    animation:fillDot 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes fillDot{from{opacity:.35;}to{opacity:1;}}
+
+  .stepline{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;
+  }
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 18px;letter-spacing:-.01em;
+  }
+
+  /* scenario chart note */
+  .note{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--scrub);
+    border-radius:3px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .note .meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .note p{margin:0 0 10px;line-height:1.62;font-size:15.5px;}
+  .note p:last-child{margin-bottom:0;}
+
+  .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .choice{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .choice:hover{border-color:var(--scrub);}
+  .choice:active{transform:scale(.995);}
+  .choice.locked{cursor:default;opacity:.55;}
+  .choice.locked:hover{border-color:var(--line);}
+
+  /* feedback */
+  .feedback{
+    display:none;margin-top:22px;border-radius:3px;padding:20px 22px;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--scrub-tint);border:1px solid var(--scrub);}
+  .feedback.caution{background:var(--amber-tint);border:1px solid var(--amber);}
+  .feedback .flag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:500;margin-bottom:8px;display:block;
+  }
+  .feedback.good .flag{color:var(--scrub);}
+  .feedback.caution .flag{color:var(--amber);}
+  .feedback p{margin:0 0 10px;font-size:14.5px;line-height:1.6;}
+  .cite{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:12px;
+  }
+
+  .continue{
+    display:none;margin-top:20px;background:var(--ink);color:var(--paper);
+    border:none;border-radius:3px;padding:12px 20px;font-size:14px;font-weight:500;
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .continue.show{display:inline-block;}
+  .continue:hover{background:var(--scrub);}
+
+  /* knowledge check */
+  .kc-result{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
+  }
+  .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
+
+  /* coach panel — signature element */
+  .coach{
+    margin-top:34px;border:1px solid var(--line);border-radius:6px;
+    background:var(--paper-raised);overflow:hidden;
+  }
+  .coach-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:var(--scrub-tint);
+  }
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;}
+  .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
+  .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
+  .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
+  .sugg{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--scrub);
+    background:transparent;border:1px solid var(--scrub);border-radius:20px;
+    padding:6px 12px;cursor:pointer;
+  }
+  .sugg:hover{background:var(--scrub);color:var(--paper);}
+  .sugg[disabled]{opacity:.35;cursor:default;}
+  .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+
+  .cta{
+    margin-top:40px;border-top:2px solid var(--ink);padding-top:20px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+  }
+  .cta .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;}
+  .cta .line{font-size:14px;color:var(--ink-soft);line-height:1.6;max-width:60ch;}
+
+  @media (prefers-reduced-motion: reduce){
+    .dot.current::after{animation:none;opacity:1;}
+    .feedback{animation:none;}
+  }
+  @media (max-width:520px){
+    h1{font-size:23px;}
+    .wrap{padding:22px 16px 60px;}
+    /* stack the header so "Case File" doesn't collide with the module label */
+    .chartbar{flex-direction:column;align-items:flex-start;gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chartbar">
+    <div class="brandmark">
+      <span class="wordmark"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&D</span></span>
+      <span class="name">Case File</span>
+    </div>
+    <span class="casetag">MODULE 05 · HUMAN REVIEW STANDARD</span>
+  </div>
+
+  <div class="progress">
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div id="stage-dp1">
+    <div class="stepline">Scenario</div>
+    <h1>The Drafted Letter</h1>
+    <div class="note">
+      <div class="meta">
+        <span>ROLE: FRONT OFFICE ADMINISTRATOR</span>
+        <span>TASK: FAMILY COMMUNICATION</span>
+      </div>
+      <p>A new district policy just changed how early-dismissal requests are handled. You need to notify all families by end of day. You open your AI assistant, paste in the old policy language, and ask it to draft an update explaining the new procedure.</p>
+      <p>The draft comes back in about ten seconds. It reads well — clear, professional, friendly. You have forty backlogged emails and a line at your desk.</p>
+    </div>
+
+    <div class="prompt">What do you do with the draft?</div>
+    <div class="choices" id="choices-1">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Sending without review skips the one step that actually matters here — AI-generated accuracy isn't guaranteed, and a family-facing policy communication needs a human check before it represents the district.">It reads fine — send it as-is. You've got other things to handle.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Tone isn't the risk that matters most in this scenario — factual accuracy of a policy explanation is. A tone-only skim can miss a substantive error.">Skim it quickly for tone, then send.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Human review against source material is the standard, not just a tone check.">Read it closely against the actual policy document, checking every specific detail — dates, procedures, who to contact.</button>
+    </div>
+
+    <div class="feedback" id="fb-1">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — AI-assisted communication gets a human review against the source before it represents the district.</div>
+    </div>
+
+    <button class="continue" id="next-1">Continue →</button>
+  </div>
+
+  <div id="stage-dp2" style="display:none;">
+    <div class="stepline">The Error</div>
+    <h1>A number that doesn't match</h1>
+    <div class="note">
+      <p>While checking, you notice the AI draft says early-dismissal requests now require <strong>48 hours' notice</strong>. The actual new policy says <strong>24 hours</strong>.</p>
+    </div>
+
+    <div class="prompt">What do you do?</div>
+    <div class="choices" id="choices-2">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A factual error in a district-wide policy communication isn't a rounding error — it directly misinforms every family and could cause real scheduling problems.">Close enough — 24 vs. 48 hours isn't a big difference. Send it.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Finding one error is a signal to check the rest carefully, not to stop looking — AI drafts can contain more than one factual issue.">Fix the number yourself and send it right away, without checking anything else.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="One error found means look for others, not just patch and move on.">Correct the number, then re-check the rest of the draft carefully for any other factual inconsistencies before proceeding.</button>
+    </div>
+
+    <div class="feedback" id="fb-2">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — one caught error is a prompt to re-verify the whole draft, not a green light.</div>
+    </div>
+
+    <button class="continue" id="next-2">Continue →</button>
+  </div>
+
+  <div id="stage-dp3" style="display:none;">
+    <div class="stepline">Before It Sends</div>
+    <h1>The final step</h1>
+    <div class="note">
+      <p>The draft is now accurate — the number is fixed and you've re-checked the rest against the policy.</p>
+    </div>
+
+    <div class="prompt">Before sending district-wide, what's the right final step?</div>
+    <div class="choices" id="choices-3">
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Accuracy isn't the only requirement. Many districts now require disclosure or a second-person review step for AI-assisted communications before they go out district-wide — skipping that may be a policy violation, not just a courtesy.">Send it immediately — it's accurate now, no reason to wait.</button>
+      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Transparency about AI involvement, paired with the human review you've already done, matches what several states now require or strongly encourage for family-facing AI-assisted communication.">Send it, and note in the email that AI helped draft it.</button>
+      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Not necessarily wrong, depending on your district's policy — but the standard here is disclosure plus verified accuracy. An extra approval layer may or may not be your district's actual requirement. Know your policy specifically.">Hold it and wait for a supervisor's sign-off before sending anything, even though you already verified it yourself.</button>
+    </div>
+
+    <div class="feedback" id="fb-3">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite">Standard — disclosure plus documented human review. Extra approval layers depend on your district's specific policy.</div>
+    </div>
+
+    <button class="continue" id="next-3">See results →</button>
+  </div>
+
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You held the human review standard cleanly at every step.</div>
+
+    <div class="note">
+      <p><strong>The takeaway.</strong> AI can draft fast. It can't verify itself. The standard is: check the draft against source material, catch and fully resolve factual errors — not just the first one you spot — and disclose AI involvement where your district's policy requires it.</p>
+      <p>Speed is the AI's job. Accuracy and transparency are still yours.</p>
+    </div>
+
+    <div class="coach">
+      <div class="coach-head">
+        <div class="coach-dot"></div>
+        <div class="coach-title">Ask the coach</div>
+      </div>
+      <div class="coach-body" id="coach-body">
+        <div class="bubble reply">Questions about this case? Tap a prompt below, or picture this as a live chat — in the real product, this reasoning is generated per-learner, per-scenario, in real time.</div>
+      </div>
+      <div class="coach-suggest" id="coach-suggest">
+        <button class="sugg" data-q="source">What if I don't have the policy document to check against?</button>
+        <button class="sugg" data-q="rewrote">Do I still disclose if I rewrote most of it?</button>
+        <button class="sugg" data-q="policy">What counts as my district's policy on this?</button>
+      </div>
+    </div>
+
+    <div class="cta">
+      <span class="label">Prototype · Ask-the-Coach preview</span>
+      <span class="line">This shows the interaction pattern. In your deployed module, every response is generated live, tailored to your district's specific policies and your staff's exact question.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let score = 0;
+  const dots = document.querySelectorAll('.dot');
+
+  function wireStage(n, fromStage, toStage, dotFrom, dotTo, isLast){
+    const choices = document.getElementById('choices-' + n);
+    const fb = document.getElementById('fb-' + n);
+    const next = document.getElementById('next-' + n);
+
+    choices.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.choice');
+      if(!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach(c=>c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if(correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      next.classList.add('show');
+    });
+
+    next.addEventListener('click', ()=>{
+      document.getElementById(fromStage).style.display = 'none';
+      document.getElementById(toStage).style.display = 'block';
+      dots[dotFrom].classList.remove('current');
+      dots[dotFrom].classList.add('done');
+      if(isLast){
+        dots[dotTo].classList.add('done');
+        document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+        document.getElementById('kc-sub').textContent = score === 3
+          ? "You held the human review standard cleanly — checked against source, resolved every error, disclosed the AI assist."
+          : "Revisit the flagged steps above. The standard is a short chain — check the draft against source material, fully resolve every factual error, and disclose AI involvement where policy requires it.";
+      } else {
+        dots[dotTo].classList.add('current');
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  wireStage(1, 'stage-dp1', 'stage-dp2', 0, 1, false);
+  wireStage(2, 'stage-dp2', 'stage-dp3', 1, 2, false);
+  wireStage(3, 'stage-dp3', 'stage-done', 2, 3, true);
+
+  const coachAnswers = {
+    source: "Then you're not ready to send. Human review means checking against the actual policy language — if you can't find it, get it from whoever issued the change before the communication goes out. A confident-sounding draft is not a source.",
+    rewrote: "Most districts that require disclosure base it on AI being used in the drafting process, not on how much of the wording survived your edits. If the assistant produced the first draft, disclose it and note that a person reviewed and corrected it.",
+    policy: "Check for an AI-use or acceptable-use policy from your district or state, plus any communications guidance from your office. If nothing addresses it yet, disclosure plus documented human review is the safe default — it's what several states now expect."
+  };
+
+  document.getElementById('coach-suggest').addEventListener('click',(e)=>{
+    const btn = e.target.closest('.sugg');
+    if(!btn) return;
+    const q = btn.dataset.q;
+    const body = document.getElementById('coach-body');
+    const ask = document.createElement('div');
+    ask.className = 'bubble ask';
+    ask.textContent = btn.textContent;
+    body.appendChild(ask);
+    btn.disabled = true;
+    setTimeout(()=>{
+      const reply = document.createElement('div');
+      reply.className = 'bubble reply';
+      reply.textContent = coachAnswers[q];
+      body.appendChild(reply);
+      body.scrollTop = body.scrollHeight;
+    }, 450);
+  });
+</script>
+</body>
+</html>

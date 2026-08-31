@@ -173,32 +173,8 @@
   .chrome .c-state{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--slate);}
   .module iframe{width:100%;height:620px;border:none;display:block;}
 
-  /* ── exhibit B ── */
-  .exhibit-b{background:var(--navy);border-top:1px solid var(--navy-border);}
-  .exhibit-b .inner{padding-top:78px;padding-bottom:84px;display:grid;grid-template-columns:1fr 620px;gap:64px;align-items:start;}
-  .exb-copy{padding-top:4px;}
-  .exb-copy .ex-title{font-size:38px;line-height:1.1;margin-bottom:20px;}
-  .exb-copy p{font-size:16px;line-height:1.72;color:var(--slate-lighter);max-width:44ch;margin-bottom:28px;}
-  .exb-foot{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-light);border-top:1px solid var(--navy-border);padding-top:16px;}
-  .exb-early{display:inline-block;margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);border-bottom:1px solid rgba(199,116,64,.4);padding-bottom:3px;transition:border-color .13s ease,color .13s ease;}
-  .exb-early:hover{border-color:var(--orange);color:var(--orange-hover);}
-
-  .exb-card-wrap{position:relative;}
-  .exb-matting{border:1px dashed var(--navy-dash);background:var(--navy-lift);padding:14px;}
-  .exb-card{background:#FDFCFA;border:1px solid var(--border);opacity:.78;filter:grayscale(28%);}
-  .exb-card .chrome .c-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;border:1px solid #9AA3B0;color:var(--slate);padding:4px 7px;border-radius:3px;}
-  .exb-card .chrome .c-name{color:var(--slate);}
-  .exb-card .chrome .c-state{color:#9AA3B0;}
-  .exb-body{padding:30px 30px 34px;}
-  .exb-modlabel{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#9AA3B0;margin-bottom:14px;}
-  .exb-prompt{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--slate);line-height:1.35;margin-bottom:26px;max-width:34ch;}
-  .exb-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
-  .exb-opt{border:1px solid #DCD8CE;background:#F3F1EC;padding:14px 16px;font-size:14px;color:#9AA3B0;display:flex;gap:12px;align-items:center;cursor:not-allowed;}
-  .exb-opt .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#B9B3A5;}
-  .exb-footrow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #E4E0D7;padding-top:20px;}
-  .exb-step{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#B9B3A5;}
-  .exb-submit{background:#D6D1C6;color:var(--cream);border:none;border-radius:3px;padding:12px 22px;font-size:14px;font-weight:500;cursor:not-allowed;font-family:'IBM Plex Sans',sans-serif;}
-  .exb-tab{position:absolute;top:-11px;right:22px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;background:var(--cream);color:var(--navy);padding:6px 12px;border-radius:2px;}
+  /* ── exhibit B — same staging as exhibit A, divider between the two ── */
+  .exhibit-b{border-top:1px solid var(--navy-border);}
 
   /* ── intake ── */
   .intake .inner{padding-top:86px;padding-bottom:92px;display:grid;grid-template-columns:1fr 600px;gap:72px;align-items:start;}
@@ -254,20 +230,15 @@
   }
   @media (max-width:900px){
     .tl-grid{grid-template-columns:1fr 1fr;}
-    .exhibit-b .inner{grid-template-columns:1fr;gap:40px;}
     .intake .inner{grid-template-columns:1fr;gap:44px;}
-    .exhibit-b .exb-card-wrap,.intake-card{width:100%;}
-    .exhibit-b .inner{--x:0;}
+    .intake-card{width:100%;}
   }
   @media (max-width:760px){
     :root{--gutter:24px;}
     .hero h1{max-width:none;}
     .ex-head{flex-direction:column;align-items:flex-start;gap:16px;}
     .ex-title{font-size:32px;}
-    .exb-copy .ex-title{font-size:30px;}
     .intake-copy h2{font-size:30px;}
-    .exhibit-b .inner{grid-template-columns:1fr;}
-    .exb-card-wrap{max-width:620px;}
     /* the small mono labels are hard to read on phones — raise the minimum */
     .util span,
     .problem .label,
@@ -380,7 +351,7 @@
       <div class="ex-title">Live modules, not mockups</div>
       <span class="ex-meta">RUNS IN THE BROWSER · NO LOGIN</span>
     </div>
-    <div class="ex-eyebrow ex-lead"><span class="rule"></span>Exhibit A</div>
+    <div class="ex-eyebrow ex-lead"><span class="rule"></span>Exhibit A · Reasonable suspicion standard</div>
     <div class="ex-mount">
       <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
       <div class="module">
@@ -397,41 +368,21 @@
   </div>
 </section>
 
-<section class="band exhibit-b" id="next">
+<section class="band exhibit exhibit-b" id="next">
   <div class="inner">
-    <div class="exb-copy">
-      <div class="ex-eyebrow"><span class="rule"></span>Exhibit B</div>
-      <div class="ex-title">Building next</div>
-      <p>Districts are asking how to guide appropriate AI use for both staff and students. We're building a scenario-based module to answer that — using the same approach as Exhibit A.</p>
-      <div class="exb-foot">Preview · not yet interactive</div>
-      <a class="exb-early" href="/ai-literacy">Get early access →</a>
-    </div>
-    <div class="exb-card-wrap">
-      <div class="exb-matting">
-        <div class="exb-card">
-          <div class="chrome">
-            <span class="c-left">
-              <span class="c-badge">RX·L&amp;D</span>
-              <span class="c-name">Case File</span>
-            </span>
-            <span class="c-state">IN DEVELOPMENT</span>
-          </div>
-          <div class="exb-body">
-            <div class="exb-modlabel">AI Literacy &amp; Appropriate Use</div>
-            <div class="exb-prompt">A staff member drafts family communications with an AI assistant. What needs to be true before it sends?</div>
-            <div class="exb-opts">
-              <div class="exb-opt"><span class="m">A</span>Option pending</div>
-              <div class="exb-opt"><span class="m">B</span>Option pending</div>
-              <div class="exb-opt"><span class="m">C</span>Option pending</div>
-            </div>
-            <div class="exb-footrow">
-              <span class="exb-step">STEP 1 OF —</span>
-              <button type="button" class="exb-submit" disabled>Submit answer</button>
-            </div>
-          </div>
+    <div class="ex-eyebrow ex-lead"><span class="rule"></span>Exhibit B · AI human-review standard</div>
+    <div class="ex-mount">
+      <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+      <div class="module">
+        <div class="chrome">
+          <span class="c-left">
+            <span class="dot"></span>
+            <span class="c-name">education_case_file_demo — Module 05</span>
+          </span>
+          <span class="c-state">INTERACTIVE</span>
         </div>
+        <iframe src="education_case_file_demo_05" title="Live AI human-review training module demo" loading="lazy"></iframe>
       </div>
-      <span class="exb-tab">COMING NEXT</span>
     </div>
   </div>
 </section>
