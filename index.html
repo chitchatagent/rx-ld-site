@@ -138,6 +138,19 @@
   .problem .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);line-height:1.75;border-top:2px solid var(--orange);padding-top:12px;}
   .problem p{font-family:'Fraunces',serif;font-size:25px;font-weight:500;line-height:1.52;color:var(--charcoal);max-width:46ch;}
 
+  /* ── where compliance lives — moments grid (same card treatment as /ai-literacy) ── */
+  .moments{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .moments .inner{padding-top:78px;padding-bottom:86px;}
+  .moments .eyebrow{margin-bottom:22px;}
+  .moments h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(25px,3.2vw,33px);line-height:1.16;letter-spacing:-.022em;color:var(--charcoal);margin-bottom:15px;max-width:24ch;}
+  .moments .m-intro{font-size:16px;line-height:1.72;color:var(--slate);max-width:60ch;margin-bottom:30px;}
+  .moments-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .moment-card{background:var(--white);border:1px solid var(--border);border-top:3px solid var(--navy);padding:26px 24px 28px;display:flex;flex-direction:column;}
+  .moment-card .m-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;line-height:1.5;color:var(--orange);margin-bottom:14px;}
+  .moment-card h3{font-family:'Fraunces',serif;font-size:18px;font-weight:600;line-height:1.3;color:var(--charcoal);margin-bottom:10px;}
+  .moment-card p{font-size:13.5px;color:var(--slate);line-height:1.7;}
+  .moments-note{margin:26px 0 0;font-size:13px;line-height:1.65;font-style:italic;color:var(--slate-light);max-width:58ch;}
+
   /* ── case timeline ── */
   .timeline .inner{padding-top:78px;padding-bottom:86px;}
   .tl-head{display:flex;align-items:baseline;gap:18px;margin-bottom:38px;}
@@ -234,7 +247,7 @@
     .hero-photo .scrim-y{background:linear-gradient(0deg,rgba(30,42,58,.5) 0%,rgba(30,42,58,0) 24%);}
   }
   @media (max-width:900px){
-    .tl-grid{grid-template-columns:1fr 1fr;}
+    .tl-grid,.moments-grid{grid-template-columns:1fr 1fr;}
     .intake .inner{grid-template-columns:1fr;gap:44px;}
     .intake-card{width:100%;}
   }
@@ -249,11 +262,12 @@
     .problem .label,
     .tl-head .k,.tl-head .n,
     .tl-card .step,
+    .moment-card .m-label,
     .f-tag,.f-links{font-size:12px;}
   }
   @media (max-width:680px){
     .util .u-right{display:none;}
-    .tl-grid{grid-template-columns:1fr;}
+    .tl-grid,.moments-grid{grid-template-columns:1fr;}
     .problem .inner{grid-template-columns:1fr;gap:20px;}
     .nav .inner{gap:14px;}
     .nav-right{gap:18px;}
@@ -318,6 +332,47 @@
   <div class="inner">
     <div class="label">The pattern<br>we keep seeing</div>
     <p>Annual re-certification content is technically compliant but rarely current — policies shift, but the training built around them takes a quarter or more to catch up. That gap is where risk lives.</p>
+  </div>
+</section>
+
+<section class="band moments">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>Where Compliance Actually Lives</div>
+    <h2>Compliance isn't one topic. It's dozens of moments like these.</h2>
+    <p class="m-intro">Every one of these becomes a real decision for a real staff member, on a real day. Here's a sample of the range.</p>
+    <div class="moments-grid">
+      <div class="moment-card">
+        <div class="m-label">Title IX / Harassment &amp; Discrimination</div>
+        <h3>A coach hears something in the locker room.</h3>
+        <p>A comment that's probably nothing — or the moment right before a report should've been made.</p>
+      </div>
+      <div class="moment-card">
+        <div class="m-label">FERPA / Student Data Privacy</div>
+        <h3>A quick email to keep parents in the loop.</h3>
+        <p>What's fine to include about a student's progress, and what crosses a line.</p>
+      </div>
+      <div class="moment-card">
+        <div class="m-label">Special Education (IDEA) Compliance</div>
+        <h3>An accommodation gets adjusted on instinct.</h3>
+        <p>A well-meaning change, made without looping in the IEP team.</p>
+      </div>
+      <div class="moment-card">
+        <div class="m-label">Employee Conduct &amp; Professional Boundaries</div>
+        <h3>A student sends a friend request.</h3>
+        <p>One click that quietly crosses a line nobody wrote down yet.</p>
+      </div>
+      <div class="moment-card">
+        <div class="m-label">Emergency Response &amp; Safety Protocols</div>
+        <h3>The drill reveals a gap.</h3>
+        <p>Everyone knows there's a plan. Not everyone knows their exact role in it.</p>
+      </div>
+      <div class="moment-card">
+        <div class="m-label">Records Retention &amp; Requests</div>
+        <h3>A formal records request lands on someone's desk.</h3>
+        <p>Handled by someone who's never actually processed one before.</p>
+      </div>
+    </div>
+    <p class="moments-note">These are examples of the kind of moment we build around — not a menu. Your rollout starts with mapping the decisions your staff actually face.</p>
   </div>
 </section>
 
