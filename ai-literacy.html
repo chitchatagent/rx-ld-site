@@ -208,8 +208,10 @@
   .tl-card .step{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--orange);margin-bottom:16px;}
   .tl-card h3{font-family:'Fraunces',serif;font-size:18px;font-weight:600;line-height:1.3;color:var(--charcoal);}
   .sec .inner p.std-note{margin:4px 0 16px;font-size:13px;line-height:1.65;font-style:italic;color:var(--slate-light);max-width:58ch;}
-  /* Beyond the legislation — prose runs to the full grid width, not reading-width */
+  /* Beyond the legislation — headline, prose, and std-note all run to the full grid width, not reading-width */
+  .beyond>.inner>h2{max-width:none;}
   .beyond>.inner>p{max-width:none;}
+  .beyond>.inner>p.std-note{max-width:none;}
 
   /* ══ graphic 1 — legislative activity map ══ */
   .map-split{display:grid;grid-template-columns:1fr 560px;gap:56px;align-items:start;}
