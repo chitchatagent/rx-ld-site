@@ -11,14 +11,16 @@ import {
   piiFlags,
   manipulationSuspected,
   roleplayAttempt,
-  extractionAttempt
+  extractionAttempt,
+  offTopicRedirect
 } from "../lib/coach/flags.js";
 import { logTurn } from "../lib/coach/log.js";
 
 const COACH_MODEL = "anthropic/claude-sonnet-5"; // decision D1 — start on Sonnet
 const MAX_OUTPUT_TOKENS = 600;                    // §7 — keep any coerced monologue small
 const TEMPERATURE = 0.3;
-const MAX_MESSAGES = 16;                          // 8 learner + 8 coach
+const MAX_MESSAGES = 16;                          // backstop for a well-formed thread (8 + 8)
+const HARD_MAX_MESSAGES = 60;                     // absolute guard before the validation loop
 const MAX_LEARNER_TURNS = 8;                      // hard cap per conversation
 const MAX_CHARS = 2000;                           // per message
 const RATE = { max: 8, windowMs: 60_000 };        // approximate; real limit is D6
@@ -87,7 +89,7 @@ export async function POST(request) {
 
   const raw = Array.isArray(body.messages) ? body.messages : [];
   if (raw.length === 0) return text("messages[] is required.", 400);
-  if (raw.length > MAX_MESSAGES) return text("This conversation is long enough — start a fresh one.", 400);
+  if (raw.length > HARD_MAX_MESSAGES) return text("Too many messages in one request.", 400);
 
   const messages = [];
   for (const m of raw) {
@@ -121,7 +123,9 @@ export async function POST(request) {
     uaFamily: uaFamily(request.headers.get("user-agent") || "")
   };
 
-  // over the per-conversation turn cap, or hammering the endpoint: fixed close-out
+  // Over the per-conversation turn cap, or hammering the endpoint: graceful
+  // close-out. Checked BEFORE the message-count backstop below so a 9th learner
+  // turn gets this 200 + rate_limited, not a blunt 400 (red-team H3).
   if (learnerTurns > MAX_LEARNER_TURNS || rateLimited(`${conversationId}:${ip}`)) {
     const msg =
       "That's as far as the coach goes in one sitting. If you still have a question about this scenario, start a fresh session — and for anything beyond it, your compliance officer is the right next stop.";
@@ -135,6 +139,12 @@ export async function POST(request) {
       flags: ["rate_limited"]
     });
     return text(msg, 200);
+  }
+
+  // Under the turn cap but the history is still longer than a clean 8 + 8
+  // thread (padded or non-alternating): decline plainly.
+  if (raw.length > MAX_MESSAGES) {
+    return text("This conversation is long enough — start a fresh one.", 400);
   }
 
   await logTurn({ ...commonLog, role: "learner", text: learnerText, flags: learnerFlags });
@@ -187,9 +197,7 @@ export async function POST(request) {
       ) {
         coachFlags.push("escalation_pointer");
       }
-      if (lc.includes("only help with this scenario") || lc.includes("can only help with")) {
-        coachFlags.push("off_topic_redirect");
-      }
+      if (offTopicRedirect(full)) coachFlags.push("off_topic_redirect");
       if (isRoleplay) coachFlags.push("roleplay_refused");
       if (isExtraction) coachFlags.push("extraction_refused");
       if (finishReason === "length") coachFlags.push("truncated");
