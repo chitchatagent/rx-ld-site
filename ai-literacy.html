@@ -216,6 +216,10 @@
   .beyond>.inner>h2{max-width:none;}
   .beyond>.inner>p{max-width:none;}
   .beyond>.inner>p.std-note{max-width:none;}
+  /* reciprocal cross-page link line — same treatment as .moments-note on the homepage */
+  .xlink-note{margin:28px 0 0;font-size:13px;line-height:1.65;font-style:italic;color:var(--slate-light);}
+  .xlink-note a{color:var(--orange);border-bottom:1px solid rgba(199,116,64,.4);transition:border-color .13s ease,color .13s ease;}
+  .xlink-note a:hover{border-color:var(--orange);color:var(--orange-hover);}
 
   /* ══ graphic 1 — legislative activity map ══ */
   .map-split{display:grid;grid-template-columns:1fr 560px;gap:56px;align-items:start;}
@@ -501,6 +505,7 @@
     </div>
     <p class="std-note">Behind each of these is a literacy layer — the why, not just the rule — which is where the real training happens.</p>
     <p>These aren't legal requirements in every state. They're what responsible use actually looks like — and legislation is still catching up to them, state by state. Staff readiness for AI shouldn't be contingent on which bill your legislature happened to pass this session.</p>
+    <p class="xlink-note">AI is one piece of a bigger picture — see the full range of compliance areas we cover on our <a href="/#compliance-areas">homepage →</a></p>
   </div>
 </section>
 
