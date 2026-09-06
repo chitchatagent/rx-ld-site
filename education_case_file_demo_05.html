@@ -142,8 +142,8 @@
   }
   .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
   .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
-  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;}
-  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;max-height:46vh;overflow-y:auto;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
   .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
   .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
   .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
@@ -155,6 +155,19 @@
   .sugg:hover{background:var(--scrub);color:var(--paper);}
   .sugg[disabled]{opacity:.35;cursor:default;}
   .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+  .coach-disclaim{margin:0;padding:0 18px 10px;font-size:11px;color:var(--scrub);}
+  .coach-compose{display:flex;gap:8px;padding:0 18px 18px;}
+  .coach-compose textarea{
+    flex:1;resize:none;min-height:38px;max-height:120px;font:inherit;font-size:13.5px;
+    line-height:1.5;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  }
+  .coach-compose textarea:focus{outline:2px solid var(--scrub);outline-offset:-1px;}
+  .coach-compose button{
+    align-self:flex-end;font:inherit;font-size:13px;cursor:pointer;color:var(--paper);
+    background:var(--ink);border:0;border-radius:8px;padding:9px 16px;
+  }
+  .coach-compose button:disabled{opacity:.4;cursor:default;}
 
   .cta{
     margin-top:40px;border-top:2px solid var(--ink);padding-top:20px;
@@ -283,12 +296,17 @@
         <div class="coach-title">Ask the coach</div>
       </div>
       <div class="coach-body" id="coach-body">
-        <div class="bubble reply">Questions about this case? Tap a prompt below, or picture this as a live chat — in the real product, this reasoning is generated per-learner, per-scenario, in real time.</div>
+        <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
       </div>
       <div class="coach-suggest" id="coach-suggest">
         <button class="sugg" data-q="source">What if I don't have the policy document to check against?</button>
         <button class="sugg" data-q="rewrote">Do I still disclose if I rewrote most of it?</button>
         <button class="sugg" data-q="policy">What counts as my district's policy on this?</button>
+      </div>
+      <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
+      <div class="coach-compose">
+        <textarea id="coach-input" rows="1" placeholder="Ask about this case…" aria-label="Ask the coach"></textarea>
+        <button id="coach-send" type="button">Send</button>
       </div>
     </div>
 
@@ -345,30 +363,89 @@
   wireStage(2, 'stage-dp2', 'stage-dp3', 1, 2, false);
   wireStage(3, 'stage-dp3', 'stage-done', 2, 3, true);
 
-  const coachAnswers = {
-    source: "Then you're not ready to send. Human review means checking against the actual policy language — if you can't find it, get it from whoever issued the change before the communication goes out. A confident-sounding draft is not a source.",
-    rewrote: "Most districts that require disclosure base it on AI being used in the drafting process, not on how much of the wording survived your edits. If the assistant produced the first draft, disclose it and note that a person reviewed and corrected it.",
-    policy: "Check for an AI-use or acceptable-use policy from your district or state, plus any communications guidance from your office. If nothing addresses it yet, disclosure plus documented human review is the safe default — it's what several states now expect."
-  };
+  /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
+     Public embed path: no lab token, so the D6 per-embed rate limit applies. */
+  (function(){
+    const MODULE_ID = "05";
+    const body    = document.getElementById('coach-body');
+    const input   = document.getElementById('coach-input');
+    const send    = document.getElementById('coach-send');
+    const suggest = document.getElementById('coach-suggest');
+    let conversationId = (crypto.randomUUID
+      ? crypto.randomUUID()
+      : 'c-' + Date.now() + Math.random().toString(16).slice(2));
+    let messages = [];   // {role:'user'|'assistant', content}
+    let busy = false;
 
-  document.getElementById('coach-suggest').addEventListener('click',(e)=>{
-    const btn = e.target.closest('.sugg');
-    if(!btn) return;
-    const q = btn.dataset.q;
-    const body = document.getElementById('coach-body');
-    const ask = document.createElement('div');
-    ask.className = 'bubble ask';
-    ask.textContent = btn.textContent;
-    body.appendChild(ask);
-    btn.disabled = true;
-    setTimeout(()=>{
-      const reply = document.createElement('div');
-      reply.className = 'bubble reply';
-      reply.textContent = coachAnswers[q];
-      body.appendChild(reply);
+    function bubble(cls, text){
+      const el = document.createElement('div');
+      el.className = 'bubble ' + cls;
+      el.textContent = text;
+      body.appendChild(el);
       body.scrollTop = body.scrollHeight;
-    }, 450);
-  });
+      return el;
+    }
+    function autosize(){
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+    input.addEventListener('input', autosize);
+
+    // Chips prefill the composer now — they no longer trigger a canned reply.
+    suggest.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.sugg');
+      if(!btn) return;
+      input.value = btn.textContent;
+      input.focus();
+      autosize();
+    });
+
+    async function ask(){
+      const q = input.value.trim();
+      if(!q || busy) return;
+      busy = true; send.disabled = true;
+      bubble('ask', q);
+      input.value = ''; autosize();
+      messages.push({ role:'user', content:q });
+      const reply = bubble('reply', '…');
+      let acc = '';
+      try {
+        const res = await fetch('/api/coach', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ moduleId: MODULE_ID, conversationId, messages })
+        });
+        if (!res.ok) {
+          const t = (await res.text()).trim();
+          reply.textContent = t || ('Something went wrong (' + res.status + ').');
+          messages.pop();
+          return;
+        }
+        const rd = res.body.getReader();
+        const dec = new TextDecoder();
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          acc += dec.decode(value, { stream:true });
+          reply.textContent = acc || '…';
+          body.scrollTop = body.scrollHeight;
+        }
+        acc = acc.trim();
+        reply.textContent = acc || 'No response — please try again.';
+        if (acc) messages.push({ role:'assistant', content:acc });
+      } catch (err) {
+        reply.textContent = 'Couldn’t reach the coach. Please try again.';
+        messages.pop();
+      } finally {
+        busy = false; send.disabled = false; input.focus();
+      }
+    }
+
+    send.addEventListener('click', ask);
+    input.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); ask(); }
+    });
+  })();
 </script>
 </body>
 </html>
