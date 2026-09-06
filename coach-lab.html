@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--
+  Ask-the-Coach LAB PAGE.
+  Not linked from anywhere, not in any sitemap. Reached only at:
+      /coach-lab?token=<COACH_LAB_TOKEN>
+  Do NOT add a link to this page from the demo modules or the marketing site.
+  Purpose: run the real widget + /api/coach against a chosen scenario for the
+  red-team pass (see red-team.md) before anything touches the live demos.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ask-the-Coach — Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E2A3A; --navy-deep:#18222F; --navy-lift:#26344A; --navy-border:#3A465A;
+    --orange:#C77440; --cream:#F5F3EE; --cream-alt:#EFECE4;
+    --ink:#1A1A1A; --slate:#5A6270; --slate-light:#8E97A5; --border:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--cream);color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 80px;}
+  header.bar{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+  .wm-rx{font-family:'Fraunces',serif;font-weight:680;letter-spacing:-.035em;font-size:20px;}
+  .wm-dot{color:var(--orange);padding:0 2px;font-family:'Fraunces',serif;font-weight:680;font-size:20px;}
+  .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);border:1px solid var(--orange);border-radius:3px;padding:2px 7px;}
+  h1{font-family:'Fraunces',serif;font-weight:680;font-size:26px;margin:14px 0 4px;}
+  .sub{color:var(--slate);font-size:13.5px;margin-bottom:20px;}
+
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+  .controls label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);}
+  select,button{font:inherit;}
+  select{padding:7px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;}
+  .btn{padding:7px 12px;border:1px solid var(--navy-border);background:var(--navy);color:var(--cream);border-radius:6px;cursor:pointer;}
+  .btn.ghost{background:transparent;color:var(--slate);border-color:var(--border);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .gate{border:1px solid var(--orange);background:#fbf1e9;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#7a3f1e;margin-bottom:18px;}
+  .gate code{font-family:'IBM Plex Mono',monospace;}
+
+  .coach{border:1px solid var(--border);border-radius:8px;background:#fff;overflow:hidden;}
+  .coach-head{display:flex;align-items:center;gap:9px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--cream-alt);}
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;}
+  .coach-body{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:120px;max-height:52vh;overflow-y:auto;}
+  .bubble{max-width:88%;padding:10px 13px;border-radius:11px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
+  .bubble.ask{align-self:flex-end;background:var(--navy);color:var(--cream);border-bottom-right-radius:3px;}
+  .bubble.reply{align-self:flex-start;background:var(--cream-alt);color:var(--ink);border-bottom-left-radius:3px;}
+  .bubble.sys{align-self:center;background:transparent;color:var(--slate);font-size:12px;font-style:italic;max-width:100%;}
+
+  .disclaim{font-size:11.5px;color:var(--slate);padding:8px 16px 0;}
+  .compose{display:flex;gap:8px;padding:12px 16px 16px;border-top:1px solid var(--border);}
+  .compose textarea{
+    flex:1;resize:none;min-height:42px;max-height:140px;padding:10px 12px;
+    border:1px solid var(--border);border-radius:8px;font:inherit;line-height:1.5;
+  }
+  .compose .btn{align-self:flex-end;}
+  .suggest{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 14px;}
+  .sugg{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--orange);background:transparent;border:1px solid var(--orange);border-radius:16px;padding:5px 10px;cursor:pointer;}
+
+  .debug{margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--slate);border:1px dashed var(--border);border-radius:6px;padding:10px 12px;white-space:pre-wrap;word-break:break-word;}
+  .debug b{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <span><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&amp;D</span></span>
+    <span class="tag">Coach lab</span>
+  </header>
+  <h1>Ask-the-Coach — lab harness</h1>
+  <p class="sub">The real widget and <code>/api/coach</code>, against one scenario at a time. Unlinked, token-gated, preview only. For the red-team pass in <code>red-team.md</code>.</p>
+
+  <div id="gate" class="gate" hidden>
+    Add <code>?token=&lt;COACH_LAB_TOKEN&gt;</code> to the URL to use this page. The token is set in the Vercel project (Preview scope) and in <code>.env.local</code>.
+  </div>
+
+  <div class="controls">
+    <label for="module">Scenario</label>
+    <select id="module">
+      <option value="04">Module 04 — reasonable-suspicion standard</option>
+      <option value="05">Module 05 — human-review standard</option>
+    </select>
+    <button class="btn ghost" id="reset" type="button">Reset conversation</button>
+  </div>
+
+  <div class="coach">
+    <div class="coach-head"><span class="coach-dot"></span><span class="coach-title">Ask the coach</span></div>
+    <div class="coach-body" id="body">
+      <div class="bubble reply" id="opening">Ask a question about this scenario, or tap one below.</div>
+    </div>
+    <div class="suggest" id="suggest"></div>
+    <div class="disclaim">A training aid. Don't enter student names or personal details.</div>
+    <div class="compose">
+      <textarea id="input" placeholder="Ask about this scenario…" rows="1"></textarea>
+      <button class="btn" id="send" type="button">Send</button>
+    </div>
+  </div>
+
+  <div class="debug" id="debug"><b>debug</b>  waiting for first turn…</div>
+</div>
+
+<script type="module">
+  const params = new URLSearchParams(location.search);
+  const TOKEN = params.get("token") || "";
+  const $ = (id) => document.getElementById(id);
+  const body = $("body"), input = $("input"), send = $("send"), dbg = $("debug");
+
+  if (!TOKEN) $("gate").hidden = false;
+
+  const SUGGESTIONS = {
+    "04": [
+      "What if she'd seemed upset instead of resigned?",
+      "Should I tell the student I'm reporting?",
+      "What if I'm not sure it clears the bar?"
+    ],
+    "05": [
+      "What if I don't have the policy document to check against?",
+      "Do I still disclose if I rewrote most of it?",
+      "What counts as my district's policy on this?"
+    ]
+  };
+
+  let moduleId = $("module").value;
+  let conversationId = crypto.randomUUID();
+  let messages = []; // {role:'user'|'assistant', content}
+  let streaming = false;
+
+  function renderSuggestions() {
+    const box = $("suggest");
+    box.innerHTML = "";
+    for (const q of SUGGESTIONS[moduleId]) {
+      const b = document.createElement("button");
+      b.className = "sugg";
+      b.type = "button";
+      b.textContent = q;
+      b.addEventListener("click", () => { input.value = q; input.focus(); autosize(); });
+      box.appendChild(b);
+    }
+  }
+  function addBubble(cls, textContent) {
+    const el = document.createElement("div");
+    el.className = "bubble " + cls;
+    el.textContent = textContent;
+    body.appendChild(el);
+    body.scrollTop = body.scrollHeight;
+    return el;
+  }
+  function autosize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 140) + "px";
+  }
+  input.addEventListener("input", autosize);
+
+  function resetConversation() {
+    conversationId = crypto.randomUUID();
+    messages = [];
+    body.innerHTML = "";
+    addBubble("reply", "Ask a question about this scenario, or tap one below.");
+    dbg.innerHTML = "<b>debug</b>  conversation " + conversationId.slice(0, 8) + "  ·  module " + moduleId;
+  }
+
+  $("module").addEventListener("change", (e) => {
+    moduleId = e.target.value;
+    renderSuggestions();
+    resetConversation();
+  });
+  $("reset").addEventListener("click", resetConversation);
+
+  async function submit() {
+    const q = input.value.trim();
+    if (!q || streaming) return;
+    if (!TOKEN) { $("gate").hidden = false; return; }
+
+    streaming = true;
+    send.disabled = true;
+    addBubble("ask", q);
+    input.value = "";
+    autosize();
+    messages.push({ role: "user", content: q });
+
+    const reply = addBubble("reply", "…");
+    let acc = "";
+    const t0 = performance.now();
+
+    try {
+      const res = await fetch("/api/coach", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-coach-lab-token": TOKEN },
+        body: JSON.stringify({ moduleId, conversationId, messages })
+      });
+
+      const hdr = {
+        model: res.headers.get("x-coach-model"),
+        prompt: res.headers.get("x-coach-prompt-version"),
+        conv: res.headers.get("x-coach-conversation"),
+        reqFlags: res.headers.get("x-coach-req-flags")
+      };
+
+      if (!res.ok) {
+        const errText = await res.text();
+        reply.textContent = "[" + res.status + "] " + errText;
+        dbg.innerHTML = "<b>debug</b>  HTTP " + res.status + "  ·  " + errText;
+        messages.pop();
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, { stream: true });
+        reply.textContent = acc || "…";
+        body.scrollTop = body.scrollHeight;
+      }
+      acc = acc.trim();
+      reply.textContent = acc || "(empty response — check `vercel logs`; is AI Gateway auth set?)";
+      if (acc) messages.push({ role: "assistant", content: acc });
+
+      const ms = Math.round(performance.now() - t0);
+      dbg.innerHTML =
+        "<b>debug</b>  " + ms + " ms  ·  model " + (hdr.model || "?") +
+        "  ·  prompt " + (hdr.prompt || "?") +
+        "  ·  conv " + (hdr.conv || conversationId).slice(0, 8) +
+        "  ·  req-flags " + (hdr.reqFlags || "none") +
+        "\n(response-side flags — escalation_pointer / off_topic_redirect / *_refused — are in the server log for this turn)";
+    } catch (err) {
+      reply.textContent = "request failed: " + err;
+      dbg.innerHTML = "<b>debug</b>  " + err;
+      messages.pop();
+    } finally {
+      streaming = false;
+      send.disabled = false;
+      input.focus();
+    }
+  }
+
+  send.addEventListener("click", submit);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); }
+  });
+
+  renderSuggestions();
+  resetConversation();
+</script>
+</body>
+</html>

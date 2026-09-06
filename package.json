@@ -1,0 +1,15 @@
+{
+  "name": "rx-ld-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "RX·L&D marketing site + Ask-the-Coach lab (unlinked, preview only)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chitchatagent/rx-ld-site.git"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ai": "^7.0.93"
+  }
+}
