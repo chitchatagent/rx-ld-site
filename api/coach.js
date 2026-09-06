@@ -17,7 +17,12 @@ import {
 import { logTurn } from "../lib/coach/log.js";
 
 const COACH_MODEL = "anthropic/claude-sonnet-5"; // decision D1 — start on Sonnet
-const MAX_OUTPUT_TOKENS = 600;                    // §7 — keep any coerced monologue small
+// §7 — keep any coerced monologue small. 600 was too tight: when the model
+// reasons, the reasoning tokens count against this cap and can consume it
+// entirely, leaving an empty `truncated` reply (red-team C1). Disable extended
+// thinking for this call and give the answer text a real budget.
+const MAX_OUTPUT_TOKENS = 1000;
+const PROVIDER_OPTIONS = { anthropic: { thinking: { type: "disabled" } } };
 const TEMPERATURE = 0.3;
 const MAX_MESSAGES = 16;                          // backstop for a well-formed thread (8 + 8)
 const HARD_MAX_MESSAGES = 60;                     // absolute guard before the validation loop
@@ -158,6 +163,7 @@ export async function POST(request) {
     messages,
     maxOutputTokens: MAX_OUTPUT_TOKENS,
     temperature: TEMPERATURE,
+    providerOptions: PROVIDER_OPTIONS,
     abortSignal: request.signal,
     onError({ error }) {
       // streamText suppresses errors into the stream; surface them in the logs
