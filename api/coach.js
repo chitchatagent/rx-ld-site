@@ -1,8 +1,12 @@
 // POST /api/coach  — the Ask-the-Coach endpoint (design doc §4).
 //
-// LAB STATUS: gated by a shared secret (COACH_LAB_TOKEN). No tools, no browsing,
-// tight output cap, scenario context assembled server-side. Turn logging goes to
-// stdout for now (see lib/coach/log.js). Not wired into the demo modules.
+// Two callers:
+//   - the lab (`coach-lab.html`): sends a valid COACH_LAB_TOKEN → no per-scope
+//     rate limit, only the per-conversation turn cap.
+//   - a public embed (demo modules, after step 4): no token → subject to the
+//     D6 per-embed rate limit (lib/coach/ratelimit.js, Neon-backed).
+// No tools, no browsing, tight output cap, scenario context assembled
+// server-side. Turn logging goes to stdout for now (see lib/coach/log.js).
 
 import { streamText } from "ai";
 import { getScenario } from "../lib/coach/scenarios.js";
@@ -15,6 +19,7 @@ import {
   offTopicRedirect
 } from "../lib/coach/flags.js";
 import { logTurn } from "../lib/coach/log.js";
+import { scopeKey, checkRateLimit } from "../lib/coach/ratelimit.js";
 
 const COACH_MODEL = "anthropic/claude-sonnet-5"; // decision D1 — start on Sonnet
 // §7 — keep any coerced monologue small. 600 was too tight: when the model
@@ -28,18 +33,10 @@ const MAX_MESSAGES = 16;                          // backstop for a well-formed 
 const HARD_MAX_MESSAGES = 60;                     // absolute guard before the validation loop
 const MAX_LEARNER_TURNS = 8;                      // hard cap per conversation
 const MAX_CHARS = 2000;                           // per message
-const RATE = { max: 8, windowMs: 60_000 };        // approximate; real limit is D6
 
-// Best-effort in-memory rate limit. Fluid Compute reuses instances so this
-// mostly holds; it is not a guarantee and resets on cold start.
-const hits = new Map();
-function rateLimited(key) {
-  const now = Date.now();
-  const arr = (hits.get(key) ?? []).filter((t) => now - t < RATE.windowMs);
-  arr.push(now);
-  hits.set(key, arr);
-  return arr.length > RATE.max;
-}
+// Per-request rate limiting for the tokenless embed path is D6 — cross-instance,
+// Neon-backed (lib/coach/ratelimit.js). The old best-effort in-memory Map was
+// removed with it; the only in-process cap left is MAX_LEARNER_TURNS below.
 
 function uaFamily(ua = "") {
   if (/edg\//i.test(ua)) return "Edge";
@@ -57,10 +54,10 @@ function referrerHostPath(ref) {
     return null;
   }
 }
-function text(body, status = 200) {
+function text(body, status = 200, extraHeaders) {
   return new Response(body, {
     status,
-    headers: { "content-type": "text/plain; charset=utf-8" }
+    headers: { "content-type": "text/plain; charset=utf-8", ...extraHeaders }
   });
 }
 
@@ -68,14 +65,15 @@ function text(body, status = 200) {
 // deployment route this through the Web handler path — a real `Request` in,
 // a `Response` out. Other methods get an automatic 405.
 export async function POST(request) {
-  // lab-only shared-secret gate (goes away / changes for the real embed)
   // `request.url` is absolute on a Vercel deployment but path-only under
   // `vercel dev` — the base makes `new URL` accept both; only searchParams is read.
   const url = new URL(request.url, "http://localhost");
   const token = request.headers.get("x-coach-lab-token") || url.searchParams.get("token");
-  const expected = process.env.COACH_LAB_TOKEN;
-  if (!expected) return text("COACH_LAB_TOKEN is not set on the server.", 500);
-  if (token !== expected) return text("Not authorised for the coach lab.", 401);
+  const labToken = process.env.COACH_LAB_TOKEN;
+  // A valid lab token is the "authenticated, higher-limit" path: it skips the
+  // D6 per-scope rate limit (still bound by the per-conversation turn cap).
+  // No token is allowed — that is the public embed path, which D6 governs.
+  const authed = Boolean(labToken) && token === labToken;
 
   let body;
   try {
@@ -128,10 +126,41 @@ export async function POST(request) {
     uaFamily: uaFamily(request.headers.get("user-agent") || "")
   };
 
-  // Over the per-conversation turn cap, or hammering the endpoint: graceful
-  // close-out. Checked BEFORE the message-count backstop below so a 9th learner
-  // turn gets this 200 + rate_limited, not a blunt 400 (red-team H3).
-  if (learnerTurns > MAX_LEARNER_TURNS || rateLimited(`${conversationId}:${ip}`)) {
+  // D6 — per-embed rate limit (public path only). Checked after validation so a
+  // 400 doesn't consume quota, and before the model call. Honest 429 + Retry-
+  // After, never disguised as the turn-cap close-out. Fails CLOSED: if the
+  // limiter can't run (Neon unreachable), refuse rather than serve unlimited —
+  // a brief "unavailable" beats "no limit at all" for a compliance product.
+  if (!authed) {
+    let rl;
+    try {
+      rl = await checkRateLimit(scopeKey(ip, commonLog.embedReferrer));
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("COACH_RATELIMIT_ERROR " + JSON.stringify({ err: String(err) }));
+      return text(
+        "The coach is briefly unavailable. Please try again in a minute.",
+        429,
+        { "retry-after": "60" }
+      );
+    }
+    if (rl.limited) {
+      // eslint-disable-next-line no-console
+      console.log("COACH_RATELIMIT " + JSON.stringify({
+        window: rl.window,
+        retry_after: rl.retryAfter,
+        embed_referrer: commonLog.embedReferrer,
+        ua_family: commonLog.uaFamily
+      }));
+      return text(rl.message, 429, { "retry-after": String(rl.retryAfter) });
+    }
+  }
+
+  // Over the per-conversation turn cap: graceful close-out. Checked BEFORE the
+  // message-count backstop below so a 9th learner turn gets this 200, not a
+  // blunt 400 (red-team H3). The `rate_limited` flag name is historical — this
+  // is the conversation-length cap, not the D6 request-rate limit above.
+  if (learnerTurns > MAX_LEARNER_TURNS) {
     const msg =
       "That's as far as the coach goes in one sitting. If you still have a question about this scenario, start a fresh session — and for anything beyond it, your compliance officer is the right next stop.";
     await logTurn({ ...commonLog, role: "learner", text: learnerText, flags: [...learnerFlags, "rate_limited"] });
