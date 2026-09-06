@@ -328,7 +328,7 @@ gate. `E4` / `I6` first turn use markdown (`**bold**`, `-` bullets) which the
 plain-text demo widget would render literally — address at cutover.
 
 Owner review of transcript batch: __________  ·  date: __________
-Sign-off to wire into the demo modules: __________
+Sign-off to wire into the demo modules: Doretha Carter — 2026-09-06
 
 ---
 
