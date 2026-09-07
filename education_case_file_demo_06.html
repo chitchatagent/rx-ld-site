@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File 06 — The Quick Summary</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#5A6270;
+    --scrub:#1E2A3A;
+    --scrub-hover:#16202D;
+    --scrub-tint:#E6E9EE;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --alert:#B84C3E;
+    --alert-tint:#F6E1DD;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+  /* header / chart tab bar */
+  .chartbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+  }
+  .brandmark{display:flex;align-items:baseline;gap:12px;}
+  /* 4C Split Lockup — matches the rxldtraining.com nav/footer wordmark */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wordmark .wm-rx,.wordmark .wm-dot{font-family:'Fraunces',serif;font-weight:680;font-size:21px;line-height:1;}
+  .wordmark .wm-rx{letter-spacing:-.035em;color:var(--ink);}
+  .wordmark .wm-dot{color:var(--amber);padding:0 1px;}
+  .wordmark .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14.5px;letter-spacing:.02em;line-height:1;color:var(--ink);}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);}
+  .casetag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;}
+
+  /* progress dots — real sequence, so numbering is earned */
+  .progress{display:flex;gap:6px;margin:18px 0 30px;}
+  .dot{height:4px;flex:1;background:var(--line);border-radius:2px;overflow:hidden;position:relative;}
+  .dot.done{background:var(--scrub);}
+  .dot.current::after{
+    content:'';position:absolute;inset:0;background:var(--scrub);
+    animation:fillDot 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes fillDot{from{opacity:.35;}to{opacity:1;}}
+
+  .stepline{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;
+  }
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 18px;letter-spacing:-.01em;
+  }
+
+  .lead-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 22px;max-width:62ch;}
+
+  /* scenario chart note */
+  .note{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--scrub);
+    border-radius:3px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .note .meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .note p{margin:0 0 10px;line-height:1.62;font-size:15.5px;}
+  .note p:last-child{margin-bottom:0;}
+
+  .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  /* role picker */
+  .roles{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .role{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:15px 16px;font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .role:hover{border-color:var(--scrub);}
+  .role:active{transform:scale(.995);}
+  .role .r-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;display:block;margin-bottom:3px;}
+  .role .r-task{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .choice{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .choice:hover{border-color:var(--scrub);}
+  .choice:active{transform:scale(.995);}
+  .choice.locked{cursor:default;opacity:.55;}
+  .choice.locked:hover{border-color:var(--line);}
+
+  /* feedback */
+  .feedback{
+    display:none;margin-top:22px;border-radius:3px;padding:20px 22px;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--scrub-tint);border:1px solid var(--scrub);}
+  .feedback.caution{background:var(--amber-tint);border:1px solid var(--amber);}
+  .feedback .flag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:500;margin-bottom:8px;display:block;
+  }
+  .feedback.good .flag{color:var(--scrub);}
+  .feedback.caution .flag{color:var(--amber);}
+  .feedback p{margin:0 0 10px;font-size:14.5px;line-height:1.6;}
+  .cite{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:12px;
+  }
+
+  .continue{
+    display:none;margin-top:20px;background:var(--ink);color:var(--paper);
+    border:none;border-radius:3px;padding:12px 20px;font-size:14px;font-weight:500;
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .continue.show{display:inline-block;}
+  .continue:hover{background:var(--scrub);}
+
+  /* closing checkpoint — three quick checks, stacked */
+  .kc-intro{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0 0 26px;}
+  .kc-q{border-top:1px solid var(--line);padding-top:22px;margin-bottom:26px;}
+  .kc-q .prompt{margin-top:0;}
+  .kc-q .quote{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:3px;padding:14px 16px;margin:0 0 14px;font-size:14.5px;line-height:1.58;font-style:italic;
+  }
+
+  /* knowledge check result */
+  .kc-result{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
+  }
+  .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
+
+  /* coach panel — signature element */
+  .coach{
+    margin-top:34px;border:1px solid var(--line);border-radius:6px;
+    background:var(--paper-raised);overflow:hidden;
+  }
+  .coach-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:var(--scrub-tint);
+  }
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;max-height:46vh;overflow-y:auto;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
+  .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
+  .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
+  .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
+  .sugg{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--scrub);
+    background:transparent;border:1px solid var(--scrub);border-radius:20px;
+    padding:6px 12px;cursor:pointer;
+  }
+  .sugg:hover{background:var(--scrub);color:var(--paper);}
+  .sugg[disabled]{opacity:.35;cursor:default;}
+  .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+  .coach-disclaim{margin:0;padding:0 18px 10px;font-size:11px;color:var(--scrub);}
+  .coach-compose{display:flex;gap:8px;padding:0 18px 18px;}
+  .coach-compose textarea{
+    flex:1;resize:none;min-height:38px;max-height:120px;font:inherit;font-size:13.5px;
+    line-height:1.5;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  }
+  .coach-compose textarea:focus{outline:2px solid var(--scrub);outline-offset:-1px;}
+  .coach-compose button{
+    align-self:flex-end;font:inherit;font-size:13px;cursor:pointer;color:var(--paper);
+    background:var(--ink);border:0;border-radius:8px;padding:9px 16px;
+  }
+  .coach-compose button:disabled{opacity:.4;cursor:default;}
+
+  @media (prefers-reduced-motion: reduce){
+    .dot.current::after{animation:none;opacity:1;}
+    .feedback{animation:none;}
+  }
+  @media (max-width:520px){
+    h1{font-size:23px;}
+    .wrap{padding:22px 16px 60px;}
+    /* stack the header so "Case File" doesn't collide with the module label */
+    .chartbar{flex-direction:column;align-items:flex-start;gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chartbar">
+    <div class="brandmark">
+      <span class="wordmark"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&D</span></span>
+      <span class="name">Case File</span>
+    </div>
+    <span class="casetag">MODULE 06 · VETTED TOOLS &amp; DATA PRIVACY</span>
+  </div>
+
+  <div class="progress">
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- ── Stage 1: role selection ── -->
+  <div id="stage-role">
+    <div class="stepline">Your Role</div>
+    <h1>The Quick Summary</h1>
+    <p class="lead-p">This one plays out differently depending on where you sit — but the standard underneath is the same in every version. Pick the seat closest to yours.</p>
+    <div class="roles" id="roles">
+      <button class="role" data-role="teacher">
+        <span class="r-name">Classroom Teacher</span>
+        <span class="r-task">Report-card comments due tomorrow morning</span>
+      </button>
+      <button class="role" data-role="counselor">
+        <span class="r-name">School Counselor</span>
+        <span class="r-task">A parent progress summary at 2 pm</span>
+      </button>
+      <button class="role" data-role="lead">
+        <span class="r-name">Grade-Level Lead Teacher</span>
+        <span class="r-task">A family-update template for the whole team</span>
+      </button>
+      <button class="role" data-role="office">
+        <span class="r-name">Front Office / Administrative Staff</span>
+        <span class="r-task">Schedule-change notices to ~200 families</span>
+      </button>
+      <button class="role" data-role="admin">
+        <span class="r-name">School Administrator</span>
+        <span class="r-task">A discipline-referral summary for staff</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stage 2: three decisions (re-rendered from the chosen role) ── -->
+  <div id="stage-decision" style="display:none;">
+    <div class="stepline" id="dec-stepline">Decision 1</div>
+    <h1>The Quick Summary</h1>
+    <div class="note">
+      <div class="meta" id="dec-meta"></div>
+      <div id="dec-body"></div>
+    </div>
+
+    <div class="prompt" id="dec-prompt"></div>
+    <div class="choices" id="dec-choices"></div>
+
+    <div class="feedback" id="dec-fb">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite"></div>
+    </div>
+
+    <button class="continue" id="dec-next">Continue →</button>
+  </div>
+
+  <!-- ── Stage 3: shared takeaway + Ask the Coach ── -->
+  <div id="stage-takeaway" style="display:none;">
+    <div class="stepline">Takeaway</div>
+    <h1>The Quick Summary</h1>
+    <div class="note">
+      <p id="takeaway-body"></p>
+    </div>
+
+    <div class="coach">
+      <div class="coach-head">
+        <div class="coach-dot"></div>
+        <div class="coach-title">Ask the coach</div>
+      </div>
+      <div class="coach-body" id="coach-body">
+        <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
+      </div>
+      <div class="coach-suggest" id="coach-suggest">
+        <button class="sugg">What if the tool is approved for some things but not this?</button>
+        <button class="sugg">Isn't removing names enough if the class is large?</button>
+        <button class="sugg">Who actually decides whether a tool is approved?</button>
+      </div>
+      <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
+      <div class="coach-compose">
+        <textarea id="coach-input" rows="1" placeholder="Ask about this case…" aria-label="Ask the coach"></textarea>
+        <button id="coach-send" type="button">Send</button>
+      </div>
+    </div>
+
+    <button class="continue show" id="take-next">Continue to the checkpoint →</button>
+  </div>
+
+  <!-- ── Stage 4: closing checkpoint (shared across all five variants) ── -->
+  <div id="stage-check" style="display:none;">
+    <div class="stepline">Closing Checkpoint</div>
+    <h1>Before you're done</h1>
+    <p class="kc-intro">Three quick checks. These are the same whichever seat you picked — the standard doesn't change with the role.</p>
+
+    <div class="kc-q" id="kcq-1">
+      <div class="prompt">Agree or disagree — and why, in one line to yourself?</div>
+      <p class="quote">"I always double-check that the AI tool is one people around here already use — if my team trusts it, that's basically the same as it being approved."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="The standard here is narrower: approved means your district reviewed the tool and cleared it for this kind of use. Familiarity among colleagues isn't that review — a tool can be widely used and still never have been checked for how it stores student data or who it shares it with.">Agree</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Widespread use isn't a district review. A tool 'everyone uses' may never have been checked for where student data lands, how long it's held, or whether it trains a model — and 'my team trusts it' is exactly how an unvetted tool spreads.">Disagree</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-2">
+      <div class="prompt">True or false?</div>
+      <p class="quote">"Removing a student's name from information before pasting it into an AI tool is always enough to make that information safe to use."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A name is only one identifier. In a class of eighteen or a single caseload, a specific date, a described situation, or a pattern can still point to one student — the name being gone doesn't change that. And de-identifying the data doesn't make an unvetted tool safe to use.">True</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="De-identification lowers the risk; it doesn't remove it. Small populations re-identify easily, and stripping a name is not a substitute for checking whether the tool is approved for the data in the first place.">False</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-3">
+      <div class="prompt">Pick one. A staff member wants to use a new AI tool to help organize a list of student accommodation notes for an upcoming meeting. What's the right first move?</div>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="An internal meeting doesn't change what the data is. Accommodation notes are sensitive student records, and the tool is new — 'just for us' isn't a clearance.">Proceed — it's just for an internal meeting.</button>
+        <button class="choice" data-correct="true" data-flag="Correct" data-fb="Accommodation notes are student data and a new tool hasn't been reviewed. Checking whether it's approved for this use is the first move — before the data goes in, not after.">Check whether the tool is vetted first.</button>
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Escalation is right when the answer isn't clear or the use is expanding — but the first step here is simply to check whether the tool is approved. Not every question needs a supervisor; this one needs a lookup.">Escalate to a supervisor before anything else.</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <button class="continue" id="next-check">See results →</button>
+  </div>
+
+  <!-- ── Stage 5: results ── -->
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You held the vetted-tools and data-privacy standard cleanly at every step.</div>
+  </div>
+
+</div>
+
+<script>
+  /* ---- variant content: five roles, one shared decision shape ----
+     Each role carries Decision 1 (meta/body/prompt/choices/cite) plus
+     d2 and d3 — the shared beats, phrased for that seat. */
+  const VARIANTS = {
+    teacher: {
+      meta: ["ROLE: CLASSROOM TEACHER", "TASK: REPORT-CARD COMMENTS", "TIME: 9:40 PM"],
+      body: [
+        "It's 9:40pm. Report cards are due tomorrow morning, and you still have six narrative comments left to write — the kind that are supposed to reflect each student's actual growth, not a template.",
+        "You remember a colleague mentioning an AI tool that “basically writes them for you” if you paste in the student's grades and a few notes. You open it. It's not on your district's approved list — you're not actually sure if there is one, honestly. You paste in the student's name, their quarter grades, and two of your own notes about their participation this term.",
+        "The tool generates six warm, specific-sounding paragraphs in about ten seconds. They're better than what you would've written this tired. Your cursor is sitting on the “copy” button."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Copy it in — it's late, this is fine, and the tool didn't ask for anything sensitive.",
+          fb:"The comments go out. Nobody notices anything wrong — until you think about it later. You didn't just write faster tonight; you sent a student's name and grades to a tool nobody at your district has ever reviewed. You don't know where that data goes, how long it's kept, or whether it trains the next version of the tool." },
+        { correct:true, flag:"Correct path",
+          text:"Stop and check whether this tool is actually approved before using it with student names.",
+          fb:"You send a quick message to your IT or curriculum contact: “Is this tool approved for use with student info?” You don't get an answer tonight — but you also don't send anything you can't take back. Report cards go out a few hours late. Nobody remembers that by Monday." },
+        { correct:false, flag:"Middle path",
+          text:"Use it, but strip out the student's name and grades first, then add those back in yourself afterward.",
+          fb:"Good instinct — but look again at your own notes: “struggled after the family situation changed this fall, but really turned it around.” Even with the name and grades removed, is this student still identifiable to anyone who knows your class of eighteen? De-identification isn't the same as safe, and the tool still hasn't been vetted." }
+      ],
+      cite: "Standard — student data goes only into tools your district has vetted for that use, and removing a name is not the same as making the information safe.",
+      d2: {
+        body: [
+          "The next morning, a colleague overhears you mention the tool in the workroom. “Oh, I use that one all the time — it's fine, nobody's ever said anything.” She asks if you want her to send you the link."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Take the link — if it's fine for her, it's fine for you.",
+            fb:"A colleague's habit isn't a clearance, and “nobody's ever said anything” only means no one has noticed yet. You already knew that last night — that's why you stopped. Taking the link now is quietly deciding the question you were right to leave open." },
+          { correct:true, flag:"Correct path",
+            text:"Ask her the same question you were just wrestling with yourself — has anyone actually confirmed it's cleared?",
+            fb:"Same standard, pointed outward. If she's been using it for months on the strength of “nobody's said anything,” your question is worth more than the link — it's the difference between a tool people use and a tool someone checked." },
+          { correct:false, flag:"Middle path",
+            text:"Say nothing, and move on with whatever you already decided.",
+            fb:"You keep your own footing, which is something. But a colleague just told you she's routing student data through an unvetted tool “all the time,” and letting that pass is how it stays normal. The check isn't only yours to do." }
+        ],
+        cite: "Standard — a tool in common use among colleagues has not, for that reason, been vetted. Confirming clearance comes first, and it's worth raising when someone else has skipped it."
+      },
+      d3: {
+        body: [
+          "That afternoon, your IT contact finally replies: the tool isn't on the approved list, but there's a similar one that is — slightly slower, no free trial, a bit more setup to get started."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:true, flag:"Correct path",
+            text:"Switch to the approved one going forward, even though it's more friction.",
+            fb:"This is the answer. “Approved” is the whole reason you asked — the friction is the cost of using a tool someone actually reviewed for where student data goes. Set it up once and it's done." },
+          { correct:false, flag:"Consequence",
+            text:"Keep using the faster one — it's basically the same thing.",
+            fb:"“Basically the same” is exactly the judgment the review exists to make instead of you. You asked the question and got a clear answer; overriding it because the approved tool is slower puts you back where you started, now without the excuse of not knowing." },
+          { correct:false, flag:"Middle path",
+            text:"Use the approved one for real submissions, keep the other for “just drafting ideas.”",
+            fb:"Drafting with real student notes is still putting real student notes into an unvetted tool — the output being a “draft” doesn't change what went in. If the approved tool is the standard, it's the standard for the rough version too." }
+        ],
+        cite: "Standard — once a tool is confirmed unapproved and an approved alternative exists, the alternative is the tool, including for drafts. Extra friction isn't a reason to go back."
+      },
+      takeaway: "Fast and well-liked isn't the same as approved. A colleague's habit, a tool's speed, even good intentions — none of that substitutes for actually knowing a tool is cleared for student data. The friction of doing it right is smaller than it feels at 9:40pm."
+    },
+
+    counselor: {
+      meta: ["ROLE: SCHOOL COUNSELOR", "TASK: PARENT PROGRESS SUMMARY", "TIME: 8 MIN TO MEETING"],
+      body: [
+        "It's between back-to-back sessions, and you're behind on case notes. A parent is coming in at 2pm asking for a summary of their child's progress this semester — attendance patterns, a few behavioral notes, how counseling sessions have been going.",
+        "You've heard a colleague mention an AI notetaking tool that “cleans up your session notes into something shareable” in seconds. You open it, paste in your raw notes — attendance dates, a behavioral incident from October, a sensitive detail the student shared in confidence about a situation at home.",
+        "The tool produces a clean, parent-ready summary in under a minute. The 2pm meeting is in eight minutes."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it as generated — you're out of time, and it reads well.",
+          fb:"The summary reads well and the meeting goes fine. But a detail the student told you in confidence — and the rest of a counseling record — just went into a tool no one at your district has reviewed. Counseling notes are among the most sensitive student data there is, and you can't un-send them." },
+        { correct:false, flag:"Middle path",
+          text:"Stop and manually remove the confidential home-situation detail before using any of this — tool or not.",
+          fb:"Right instinct on the detail — a confidence the student shared may not belong in a parent summary at all, whatever tool you use. But the rest of the counseling record is still going into an unreviewed tool, and you still don't know whether it's cleared for this." },
+        { correct:true, flag:"Correct path",
+          text:"Check whether this tool is approved for counseling records specifically — not just general student data.",
+          fb:"This is the move. Approval is scoped: a tool cleared for routine student data may not be cleared for counseling records. Checking first costs a few minutes; the meeting can start with what you already have written." }
+      ],
+      cite: "Standard — approval is specific to the kind of data. Counseling records aren't covered by a general clearance, and the check comes before the data goes in.",
+      d2: {
+        body: [
+          "A week later, the same parent emails again for a “quick update.” In the workroom, a colleague mentions she's started using the same tool “for basically everything now.”"
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Use it again — nothing went wrong last time.",
+            fb:"“Nothing went wrong” means nothing you've seen yet. The tool still hasn't been checked for counseling records, and a second use with a second family's information doesn't build a track record — it doubles the exposure." },
+          { correct:true, flag:"Correct path",
+            text:"Ask your colleague whether she's checked if the tool is cleared for counseling records specifically.",
+            fb:"The right question, and the right person to ask it. “For basically everything now” is how one person's shortcut becomes a department norm — and counseling records are exactly the category a general clearance wouldn't cover." },
+          { correct:false, flag:"Middle path",
+            text:"Skip the tool this time, but say nothing to your colleague.",
+            fb:"You protect this record, which matters. But a colleague just told you she's running counseling-adjacent notes through an unvetted tool constantly, and silence lets that keep going. The standard is worth saying out loud." }
+        ],
+        cite: "Standard — a prior use with no visible problem isn't clearance, and general student-data approval doesn't extend to counseling records. Raise it when a colleague's use is widening."
+      },
+      d3: {
+        body: [
+          "Your department gets a district email listing approved AI tools. The one you've been using isn't on it — but a similar one is, described as “reviewed for confidential student records.”"
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:true, flag:"Correct path",
+            text:"Switch to the approved tool going forward.",
+            fb:"Straightforward. The district did the review and named the tool that passed it, specifically for confidential records — that's the one that touches counseling notes from here on." },
+          { correct:false, flag:"Consequence",
+            text:"Keep using the one you're used to — it's basically the same.",
+            fb:"The district's list just told you it isn't the same in the one way that counts: yours wasn't reviewed for this, and the other one was. Familiarity isn't a clearance you can grant yourself." },
+          { correct:false, flag:"Middle path",
+            text:"Ask your supervisor directly why the difference matters.",
+            fb:"Fair to want the reasoning, and worth asking later — but the list already gives you the action. Switch first; you don't need to understand every line of a review to follow its result." }
+        ],
+        cite: "Standard — when the district publishes an approved list, the named tool is the one to use, especially where it's scoped to confidential records. Wanting the rationale doesn't delay the switch."
+      },
+      takeaway: "Confidential information doesn't get less sensitive the second time you're less rushed. If a tool wasn't right for one student's disclosure, it wasn't right the first time either — the deadline pressure just made that easier to miss."
+    },
+
+    lead: {
+      meta: ["ROLE: GRADE-LEVEL LEAD", "TASK: TEAM UPDATE TEMPLATE", "SCOPE: 6TH-GRADE TEAM"],
+      body: [
+        "Your principal asks you, as team lead, to draft a template the whole 6th-grade team can use for family updates this quarter — something other teachers can personalize and send.",
+        "You find an AI tool that generates a strong, warm template in minutes. To make it feel concrete rather than generic, you paste in one real student's actual data as an example, planning to swap it out before sharing the template with your team.",
+        "You get pulled into a hallway conversation. You come back ten minutes later, template still open, still showing that student's real information, and copy-paste the message into your team's shared drive to review later."
+      ],
+      prompt: "What do you do now?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"It's fine — you were always going to remove it before final sharing.",
+          fb:"Intent doesn't undo exposure. The real student's data is now sitting in a shared drive your whole team can open, and it went through an AI tool nobody vetted. “I meant to take it out” isn't a control." },
+        { correct:false, flag:"Middle path",
+          text:"Go back and scrub the real student data out of the shared drive before anyone else opens it.",
+          fb:"Necessary — do that immediately. But on its own it treats a team-wide tool rollout as a personal cleanup. The tool still isn't vetted, and it's about to be used by every teacher on your team." },
+        { correct:true, flag:"Correct path",
+          text:"Escalate to your principal or IT before this template goes anywhere — it's now team-wide, not just yours.",
+          fb:"Right. The use just expanded from one person to a whole team, and real student data was already exposed. That's the point to stop, get the tool checked, and say what happened — not to quietly fix it and move on." }
+      ],
+      cite: "Standard — when the use expands to a team, or data has already been exposed, the move is to check the tool and escalate, not to clean up quietly.",
+      d2: {
+        body: [
+          "You flag it to your principal, per the standard. She thanks you, says IT will check who accessed the drive, and asks you to finish the template with a fictional example instead."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:true, flag:"Correct path",
+            text:"Finish it that way — fictional example, no real data.",
+            fb:"This is the fix. The exposure was the real data sitting in a shared drive, not the drafting help — a fictional example keeps the “make it concrete” value with nothing at risk, and it's exactly what your principal asked for." },
+          { correct:false, flag:"Middle path",
+            text:"Skip the AI tool for this project entirely, write it from scratch.",
+            fb:"Your call if you'd rather write it cold — but the tool wasn't the problem, the real data was. With a fictional example, using the tool as intended is fine, and you don't have to take the slower road to be safe." },
+          { correct:false, flag:"Middle path",
+            text:"Ask if the whole team should get a reminder before the template goes out.",
+            fb:"A team-wide reminder is a good addition — this template will be used by every teacher on the team, so the safeguard should be too. But it's an add-on to the ask, not the answer to it: the immediate move is to finish the template with a fictional example, as your principal said." }
+        ],
+        cite: "Standard — after escalating, rebuild without real data. A fictional example is the fix; sizing the reminder to the whole team is a good add-on, not a substitute."
+      },
+      d3: {
+        body: [
+          "Two other grade-level leads ask if it's fine to paste in real student examples for their own templates, as long as they remember to delete it after."
+        ],
+        prompt: "What do you tell them?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Tell them it's fine if they're careful.",
+            fb:"“Careful” is what you were being when you got pulled into the hallway with real data still on screen. The plan to delete it later is the exact failure you just lived — passing it along as advice spreads it." },
+          { correct:true, flag:"Correct path",
+            text:"Tell them no, and explain why “remember to delete it” isn't the same as never putting it there.",
+            fb:"This is the lesson from your own near-miss, stated plainly. Once real student data goes into an unvetted tool or a shared space, deleting it afterward doesn't un-expose it — the only reliable control is not putting it there." },
+          { correct:false, flag:"Middle path",
+            text:"Tell them to ask the principal directly, like you did.",
+            fb:"Not a bad instinct to route it up — but you already know the answer to this one, and you're the person who just learned it the hard way. Pointing them to the principal skips the part where you say what you know." }
+        ],
+        cite: "Standard — “delete it afterward” is not a control; real student data shouldn't enter an unvetted tool at all. When you know the answer, say it rather than defer it."
+      },
+      takeaway: "Once something's shared with a team, it's not just your judgment call anymore. Escalating wasn't about assigning blame — it was about making sure the same mistake doesn't quietly repeat itself down the hall."
+    },
+
+    office: {
+      meta: ["ROLE: FRONT OFFICE STAFF", "TASK: SCHEDULE-CHANGE NOTICES", "SCALE: ~200 FAMILIES"],
+      body: [
+        "It's the week before a big schedule change goes into effect, and you need to notify around 200 families — a mix of updated bus routes, new pickup times, and a few students with individualized transportation plans mixed into the same list.",
+        "Typing 200 personalized notes by hand isn't happening today. You find an AI tool that says it can merge a spreadsheet of family names and details into personalized messages in one pass. You upload the spreadsheet — names, addresses, and for a handful of students, a note about their individualized transportation plan.",
+        "The tool processes it and returns 200 ready-to-send messages in under a minute, each one correctly personalized. The “send all” button is right there."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send them — the messages are accurate and this saved hours.",
+          fb:"The messages go out clean. But names and addresses for 200 families — plus individualized transportation plans, which are special-education data — just passed through a tool no one at your district has reviewed. The hours saved don't come back if that data is mishandled." },
+        { correct:true, flag:"Correct path",
+          text:"Check whether this tool is approved for a full family and student dataset, not just single messages.",
+          fb:"This is the move. Approval scales with what you feed in: a tool someone cleared for a one-off note is not automatically cleared for a 200-row export with addresses and special-education notes. Confirm the scope before the file goes up." },
+        { correct:false, flag:"Middle path",
+          text:"Use the tool, but strip out the individualized-transportation-plan notes first, since that's a more sensitive category.",
+          fb:"Good — pulling the most sensitive category out is the right instinct. But 200 families' names and addresses still go into an unreviewed tool, and at that scale a bulk export is its own kind of exposure. The tool still needs to be cleared." }
+      ],
+      cite: "Standard — clearance is scoped to the data and the scale. A bulk export of names, addresses, and special-education notes needs its own check.",
+      d2: {
+        body: [
+          "A month later, a different bulk task comes up — 150 families, a fee-schedule update, no sensitive notes this time."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Use the same tool without a second thought.",
+            fb:"The notes being routine doesn't make the tool approved — that question never got answered last time. 150 families' names and contact details are still a bulk export of student and family data going into something no one reviewed." },
+          { correct:true, flag:"Correct path",
+            text:"Still check whether this tool is cleared for any bulk family data, not just sensitive kinds.",
+            fb:"Right line. Clearance is about the tool and the scale, not only whether a given field feels sensitive — a 150-row family export needs the same check whether or not there's a transportation plan in it." },
+          { correct:false, flag:"Middle path",
+            text:"Ask a colleague what they usually do.",
+            fb:"A colleague's habit tells you what's common, not what's approved. If they've been using it too, you've confirmed the tool is popular — not that anyone checked it." }
+        ],
+        cite: "Standard — approval attaches to the tool and the scale of data, not to whether the contents look sensitive. Bulk family data gets the check every time."
+      },
+      d3: {
+        body: [
+          "Your supervisor asks you to train a new hire on “how we handle mail-merge tasks like this.” She asks: “So is it fine to just use whatever tool gets it done fastest?”"
+        ],
+        prompt: "What do you tell her?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Tell her yes, as long as it's accurate.",
+            fb:"Accuracy isn't the risk here — where the data lands is. “Whatever's fastest” is how an unvetted tool becomes the office default, and you'd be teaching that on day one." },
+          { correct:true, flag:"Correct path",
+            text:"Walk her through checking whether a tool's approved before using it with student/family data.",
+            fb:"This is the thing to pass on. The new hire's first version of “how we do it here” should include the check — it's a two-minute lookup that decides whether a bulk export is safe to run." },
+          { correct:false, flag:"Middle path",
+            text:"Tell her you're not totally sure yourself, but you'll find out together.",
+            fb:"Honest, and better than guessing — but you're the one training her, and “use whatever's fastest” needs a clear no now, not later. Find out the specifics together; don't leave the principle open." }
+        ],
+        cite: "Standard — the approval check is part of the procedure being taught, not an optional extra. Speed isn't the deciding factor when student or family data is involved."
+      },
+      takeaway: "“Simple” data still deserves the same check as sensitive data — the habit of checking first is what protects you, not your read on how risky any one file looks. What you teach a new hire is the standard that actually sticks."
+    },
+
+    admin: {
+      meta: ["ROLE: SCHOOL ADMINISTRATOR", "TASK: DISCIPLINE-DATA SUMMARY", "AUDIENCE: STAFF MEETING"],
+      body: [
+        "You're preparing for tomorrow's staff meeting and want to show a clear picture of discipline referrals this semester — which grade levels, which times of day, any patterns worth discussing.",
+        "You've got the raw referral data in a spreadsheet: student names, incident types, dates, and the disciplinary action taken for each. An AI tool you've seen colleagues use for “quick data summaries” could turn this into clean charts and a summary in minutes instead of the hour it would take you in a spreadsheet program.",
+        "You're the administrator — nobody's going to ask you which tool you used. You start uploading the file."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Go ahead — you're the one who'll present it, and it's just for an internal staff meeting.",
+          fb:"“Nobody will ask” isn't a control, and being the administrator isn't the same as the tool being approved. Named discipline records — one of the most sensitive student data categories — just went into a tool your district never reviewed." },
+        { correct:false, flag:"Middle path",
+          text:"Stop and strip all student names from the file first, keeping only the aggregate categories the pattern analysis needs.",
+          fb:"Good instinct — the pattern analysis genuinely doesn't need names. But small cells still re-identify: “one 7th-grade referral at 7:50am” can be a single known student. And the tool itself still isn't cleared for discipline data." },
+        { correct:true, flag:"Correct path",
+          text:"Check whether this specific tool has been vetted for any use involving discipline records.",
+          fb:"This is the move. Discipline data is a sensitive category with its own handling rules; a tool colleagues use for general summaries may not be cleared for it. Your seniority is a reason to model the check, not to skip it." }
+      ],
+      cite: "Standard — seniority isn't vetting, and aggregate-looking data can still identify a student. Check the tool against the data category first.",
+      d2: {
+        body: [
+          "A teacher privately asks to use the same tool for her own classroom behavior tracking, since she saw it work in your presentation."
+        ],
+        prompt: "What do you tell her?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Tell her sure, it clearly works.",
+            fb:"“It works” was never the question. She watched you use it, so your yes carries weight — and you'd be clearing a tool for ongoing behavior records without knowing whether anyone reviewed it." },
+          { correct:true, flag:"Correct path",
+            text:"Tell her you're not actually certain it's approved for that use, and you should both check first.",
+            fb:"The honest answer, and the one that models the standard. Your presentation already put this tool in front of staff; saying “I need to confirm that” out loud resets what they took from it." },
+          { correct:false, flag:"Consequence",
+            text:"Tell her to ask IT directly, without mentioning you used it yourself.",
+            fb:"Sending her to IT is fine; leaving out that you already used it in a staff presentation is not. If the answer comes back no, your own use is the thing that needs surfacing, not hiding." }
+        ],
+        cite: "Standard — demonstrating a tool to staff is a form of endorsing it. Correcting course means checking approval openly, including naming your own prior use."
+      },
+      d3: {
+        body: [
+          "A district-level administrator asks for a copy of the discipline-pattern summary “for the record.” You still have the AI-generated version."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Forward it as-is.",
+            fb:"The version in your hands came from named discipline records run through an unvetted tool. Forwarding it “for the record” makes that version semi-official and moves the same data again with no second look." },
+          { correct:true, flag:"Correct path",
+            text:"Check whether it still contains identifiable student information before forwarding.",
+            fb:"The right pause. A “pattern summary” can still contain small cells that point to one student, and once it's filed “for the record” it gets read and forwarded further. Confirm what's actually in it before it moves." },
+          { correct:false, flag:"Middle path",
+            text:"Ask whether “for the record” means it needs a more formal reporting process instead.",
+            fb:"Worth asking — “for the record” may mean this belongs in a formal reporting channel with its own rules. But that's the second question; the first is whether the version in your hands still names students." }
+        ],
+        cite: "Standard — before forwarding, confirm the document holds no identifiable student data; then clarify whether an official request needs a formal process."
+      },
+      takeaway: "Authority doesn't exempt anyone from the standard — if anything, it raises the stakes, since staff watch what leadership does more than what any handbook says. “For the record” means it's worth getting exactly right."
+    }
+  };
+
+  let score = 0;
+  let currentRole = null;
+  let decisionStep = 1;
+  const dots = document.querySelectorAll('.dot');
+
+  function setDot(i) {
+    dots.forEach((d, j) => {
+      d.classList.toggle('done', j < i);
+      d.classList.toggle('current', j === i);
+    });
+  }
+
+  /* ---- Stage 1 -> Stage 2: pick a role, render Decision 1 ---- */
+  document.getElementById('roles').addEventListener('click', (e) => {
+    const btn = e.target.closest('.role');
+    if (!btn) return;
+    currentRole = btn.dataset.role;
+    renderDecision(1);
+    document.getElementById('stage-role').style.display = 'none';
+    document.getElementById('stage-decision').style.display = 'block';
+    setDot(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderDecision(step) {
+    decisionStep = step;
+    const v = VARIANTS[currentRole];
+    const d = step === 1 ? v : (step === 2 ? v.d2 : v.d3);
+
+    document.getElementById('dec-stepline').textContent = 'Decision ' + step;
+
+    const meta = document.getElementById('dec-meta');
+    meta.innerHTML = '';
+    if (step === 1) {
+      meta.style.display = 'flex';
+      v.meta.forEach((m) => {
+        const s = document.createElement('span');
+        s.textContent = m;
+        meta.appendChild(s);
+      });
+    } else {
+      meta.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('dec-body');
+    bodyEl.innerHTML = '';
+    d.body.forEach((p) => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      bodyEl.appendChild(el);
+    });
+
+    document.getElementById('dec-prompt').textContent = d.prompt;
+
+    const cbox = document.getElementById('dec-choices');
+    cbox.className = 'choices';
+    cbox.innerHTML = '';
+    d.choices.forEach((c) => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = c.text;
+      b.dataset.correct = c.correct ? 'true' : 'false';
+      b.dataset.flag = c.flag;
+      b.dataset.fb = c.fb;
+      cbox.appendChild(b);
+    });
+
+    const fb = document.getElementById('dec-fb');
+    fb.className = 'feedback';
+    fb.querySelector('.flag').textContent = '';
+    fb.querySelector('.fb-text').textContent = '';
+    fb.querySelector('.cite').textContent = d.cite;
+
+    document.getElementById('dec-next').classList.remove('show');
+  }
+
+  /* ---- Stage 2: three decisions in sequence ---- */
+  const decChoices = document.getElementById('dec-choices');
+  const decFb = document.getElementById('dec-fb');
+  const decNext = document.getElementById('dec-next');
+
+  decChoices.addEventListener('click', (e) => {
+    const btn = e.target.closest('.choice');
+    if (!btn || decChoices.classList.contains('answered')) return;
+    decChoices.classList.add('answered');
+    [...decChoices.children].forEach((c) => c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    // Decisions are practice, not part of the scored result — only the
+    // closing checkpoint counts. Keep `correct` for feedback styling only.
+    const correct = btn.dataset.correct === 'true';
+    decFb.querySelector('.flag').textContent = btn.dataset.flag;
+    decFb.querySelector('.fb-text').textContent = btn.dataset.fb;
+    decFb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+    decNext.classList.add('show');
+  });
+
+  decNext.addEventListener('click', () => {
+    if (decisionStep < 3) {
+      const next = decisionStep + 1;
+      renderDecision(next);
+      setDot(next - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('takeaway-body').textContent = VARIANTS[currentRole].takeaway;
+      document.getElementById('stage-decision').style.display = 'none';
+      document.getElementById('stage-takeaway').style.display = 'block';
+      setDot(3);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  /* ---- Stage 3 -> Stage 4: takeaway + coach, then on to the checkpoint ---- */
+  document.getElementById('take-next').addEventListener('click', () => {
+    document.getElementById('stage-takeaway').style.display = 'none';
+    document.getElementById('stage-check').style.display = 'block';
+    setDot(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Stage 4: closing checkpoint — three independent checks ---- */
+  let checkAnswered = 0;
+  const nextCheck = document.getElementById('next-check');
+
+  document.querySelectorAll('.kc-q').forEach((q) => {
+    const choices = q.querySelector('.choices');
+    const fb = q.querySelector('.feedback');
+    choices.addEventListener('click', (e) => {
+      const btn = e.target.closest('.choice');
+      if (!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach((c) => c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if (correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      checkAnswered++;
+      if (checkAnswered === 3) nextCheck.classList.add('show');
+    });
+  });
+
+  nextCheck.addEventListener('click', () => {
+    document.getElementById('stage-check').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots.forEach((d) => { d.classList.add('done'); d.classList.remove('current'); });
+    document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 3
+      ? "All three checks held — you didn't treat a familiar or faster tool as an approved one, and you didn't treat a stripped name as safe."
+      : "Revisit the checks above. The standard is short — student data goes only into tools your district has vetted for that use; a familiar or faster tool isn't automatically an approved one, and removing a name isn't the same as making it safe.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
+     Public embed path: no lab token, so the D6 per-embed rate limit applies. */
+  (function () {
+    const MODULE_ID = "06";
+    const body    = document.getElementById('coach-body');
+    const input   = document.getElementById('coach-input');
+    const send    = document.getElementById('coach-send');
+    const suggest = document.getElementById('coach-suggest');
+    let conversationId = (crypto.randomUUID
+      ? crypto.randomUUID()
+      : 'c-' + Date.now() + Math.random().toString(16).slice(2));
+    let messages = [];   // {role:'user'|'assistant', content}
+    let busy = false;
+
+    function bubble(cls, text) {
+      const el = document.createElement('div');
+      el.className = 'bubble ' + cls;
+      el.textContent = text;
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+      return el;
+    }
+    function autosize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+    input.addEventListener('input', autosize);
+
+    // Chips prefill the composer — they don't trigger a canned reply.
+    suggest.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sugg');
+      if (!btn) return;
+      input.value = btn.textContent;
+      input.focus();
+      autosize();
+    });
+
+    async function ask() {
+      const q = input.value.trim();
+      if (!q || busy) return;
+      busy = true; send.disabled = true;
+      bubble('ask', q);
+      input.value = ''; autosize();
+      messages.push({ role: 'user', content: q });
+      const reply = bubble('reply', '…');
+      let acc = '';
+      try {
+        const res = await fetch('/api/coach', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ moduleId: MODULE_ID, conversationId, messages })
+        });
+        if (!res.ok) {
+          const t = (await res.text()).trim();
+          reply.textContent = t || ('Something went wrong (' + res.status + ').');
+          messages.pop();
+          return;
+        }
+        const rd = res.body.getReader();
+        const dec = new TextDecoder();
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          acc += dec.decode(value, { stream: true });
+          reply.textContent = acc || '…';
+          body.scrollTop = body.scrollHeight;
+        }
+        acc = acc.trim();
+        reply.textContent = acc || 'No response — please try again.';
+        if (acc) messages.push({ role: 'assistant', content: acc });
+      } catch (err) {
+        reply.textContent = 'Couldn’t reach the coach. Please try again.';
+        messages.pop();
+      } finally {
+        busy = false; send.disabled = false; input.focus();
+      }
+    }
+
+    send.addEventListener('click', ask);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+    });
+  })();
+</script>
+</body>
+</html>
