@@ -169,13 +169,6 @@
   }
   .coach-compose button:disabled{opacity:.4;cursor:default;}
 
-  .cta{
-    margin-top:40px;border-top:2px solid var(--ink);padding-top:20px;
-    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
-  }
-  .cta .label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;}
-  .cta .line{font-size:14px;color:var(--ink-soft);line-height:1.6;}
-
   @media (prefers-reduced-motion: reduce){
     .dot.current::after{animation:none;opacity:1;}
     .feedback{animation:none;}
@@ -308,11 +301,6 @@
         <textarea id="coach-input" rows="1" placeholder="Ask about this case…" aria-label="Ask the coach"></textarea>
         <button id="coach-send" type="button">Send</button>
       </div>
-    </div>
-
-    <div class="cta">
-      <span class="label">Prototype · Ask-the-Coach preview</span>
-      <span class="line">This shows the interaction pattern. In your deployed module, every response is generated live, tailored to your district's specific policies and your staff's exact question.</span>
     </div>
   </div>
 
