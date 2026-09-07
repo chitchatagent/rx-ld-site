@@ -68,6 +68,8 @@
     margin:0 0 18px;letter-spacing:-.01em;
   }
 
+  .lead-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 22px;max-width:62ch;}
+
   /* scenario chart note */
   .note{
     background:var(--paper-raised);
@@ -85,6 +87,18 @@
   .note p:last-child{margin-bottom:0;}
 
   .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  /* role picker */
+  .roles{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .role{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:15px 16px;font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .role:hover{border-color:var(--scrub);}
+  .role:active{transform:scale(.995);}
+  .role .r-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;display:block;margin-bottom:3px;}
+  .role .r-task{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);}
 
   .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
   .choice{
@@ -126,7 +140,16 @@
   .continue.show{display:inline-block;}
   .continue:hover{background:var(--scrub);}
 
-  /* knowledge check */
+  /* closing checkpoint — three quick checks, stacked */
+  .kc-intro{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0 0 26px;}
+  .kc-q{border-top:1px solid var(--line);padding-top:22px;margin-bottom:26px;}
+  .kc-q .prompt{margin-top:0;}
+  .kc-q .quote{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:3px;padding:14px 16px;margin:0 0 14px;font-size:14.5px;line-height:1.58;font-style:italic;
+  }
+
+  /* knowledge check result */
   .kc-result{
     font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
   }
@@ -198,91 +221,65 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
 
-  <div id="stage-dp1">
-    <div class="stepline">Scenario</div>
+  <!-- ── Stage 1: role selection ── -->
+  <div id="stage-role">
+    <div class="stepline">Your Role</div>
+    <h1>The Overheard Conversation</h1>
+    <p class="lead-p">A fragment of a conversation, not enough to be sure of anything — and a choice about what to do with it. Where you're standing when you hear it changes the details, not the standard. Pick the seat closest to yours.</p>
+    <div class="roles" id="roles">
+      <button class="role" data-role="teacher">
+        <span class="r-name">Classroom Teacher</span>
+        <span class="r-task">A fragment overheard during independent work</span>
+      </button>
+      <button class="role" data-role="coach">
+        <span class="r-name">Coach / Athletics Staff</span>
+        <span class="r-task">A remark caught during locker-room cleanup</span>
+      </button>
+      <button class="role" data-role="counselor">
+        <span class="r-name">School Counselor</span>
+        <span class="r-task">An aside during an unrelated drop-in</span>
+      </button>
+      <button class="role" data-role="office">
+        <span class="r-name">Front Office / Support Staff</span>
+        <span class="r-task">A comment while printing a late slip</span>
+      </button>
+      <button class="role" data-role="admin">
+        <span class="r-name">School Administrator</span>
+        <span class="r-task">A teacher's hedged, secondhand flag</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stage 2: three segments (re-rendered from the chosen role) ── -->
+  <div id="stage-decision" style="display:none;">
+    <div class="stepline" id="dec-stepline">Scenario</div>
     <h1>The Overheard Conversation</h1>
     <div class="note">
-      <div class="meta">
-        <span>ROOM: 204</span>
-        <span>PERIOD: 3</span>
-        <span>ROLE: HOMEROOM TEACHER</span>
-      </div>
-      <p>You're circulating during independent work time. Two students near the back are talking quietly — not disruptive, just quieter than usual. As you pass, you catch a fragment: one student says something like "…he does that every time, it's not a big deal," and the other goes quiet when she notices you.</p>
-      <p>You don't have the full conversation. You don't know if "he" is a parent, a sibling, another student, or someone else. The tone wasn't panicked — more resigned than upset.</p>
+      <div class="meta" id="dec-meta"></div>
+      <div id="dec-body"></div>
     </div>
 
-    <div class="prompt">What do you do in the next 60 seconds?</div>
-    <div class="choices" id="choices-1">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Reasonable suspicion isn't about certainty — it's about noticing a pattern worth a private follow-up. Moving on without any note risks losing the moment.">Keep circulating. It's out of context and probably nothing.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Public questioning can shut a student down fast, and it puts her in a position of explaining herself in front of peers before she's chosen to disclose anything.">Ask the student directly, in front of the class, what she meant.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Low-pressure and private — it doesn't force disclosure, but it keeps the door open.">Make a mental note, and find a private, low-pressure moment later in the period to check in with her one-on-one.</button>
-    </div>
+    <div class="prompt" id="dec-prompt"></div>
+    <div class="choices" id="dec-choices"></div>
 
-    <div class="feedback" id="fb-1">
+    <div class="feedback" id="dec-fb">
       <span class="flag"></span>
       <p class="fb-text"></p>
-      <div class="cite">Standard — reasonable suspicion is a pattern worth a private follow-up, not a conclusion you have to reach first.</div>
+      <div class="cite"></div>
     </div>
 
-    <button class="continue" id="next-1">Continue →</button>
+    <button class="continue" id="dec-next">Continue →</button>
   </div>
 
-  <div id="stage-dp2" style="display:none;">
-    <div class="stepline">The Private Check-In</div>
-    <h1>The check-in</h1>
+  <!-- ── Stage 3: role-specific takeaway + Ask the Coach ── -->
+  <div id="stage-takeaway" style="display:none;">
+    <div class="stepline">Takeaway</div>
+    <h1>The Overheard Conversation</h1>
     <div class="note">
-      <p>Later in the period, you find a quiet moment and check in with her one-on-one. She says: <strong>"It's fine, I don't want to talk about it."</strong></p>
-    </div>
-
-    <div class="prompt">Where do you take it from here?</div>
-    <div class="choices" id="choices-2">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A student declining to elaborate doesn't end a mandated reporter's responsibility when reasonable suspicion already exists based on what was overheard.">Respect that and drop it entirely — she said she's fine.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="You're not required to investigate or confirm — that isn't a teacher's role, and pressing can feel coercive.">Press for more detail so you have "enough" to report.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Respects the student, is honest about the process, and doesn't over-promise confidentiality.">Let her know gently that you're glad she told you what she did, and that you need to loop in the counselor — not because she's in trouble, but because that's what you're required to do.</button>
-    </div>
-
-    <div class="feedback" id="fb-2">
-      <span class="flag"></span>
-      <p class="fb-text"></p>
-      <div class="cite">Standard — a reluctant student doesn't cancel a reporting obligation that already exists.</div>
-    </div>
-
-    <button class="continue" id="next-2">Continue →</button>
-  </div>
-
-  <div id="stage-dp3" style="display:none;">
-    <div class="stepline">Closing The Loop</div>
-    <h1>Closing the loop</h1>
-    <div class="note">
-      <p>You now have what you need — what you overheard, and what the student told you in the check-in. The next step is how you record it and route it.</p>
-    </div>
-
-    <div class="prompt">How do you close the loop?</div>
-    <div class="choices" id="choices-3">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Undocumented &quot;informal&quot; reports create liability and leave no record that the standard was met.">Handle it informally with the counselor over lunch, no documentation.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Timely, factual, non-editorialized documentation is the actual compliance requirement.">File a written report through the official channel the same day — exact time, what was overheard (as close to verbatim as possible), and what was said in the private check-in.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Reasonable suspicion triggers reporting obligations promptly — waiting to gather more evidence is not the standard, and the delay itself can be a compliance failure.">Wait until the end of the week to see if anything else comes up before reporting.</button>
-    </div>
-
-    <div class="feedback" id="fb-3">
-      <span class="flag"></span>
-      <p class="fb-text"></p>
-      <div class="cite">Standard — prompt, factual, documented. Investigation and confirmation are not the teacher's role.</div>
-    </div>
-
-    <button class="continue" id="next-3">See results →</button>
-  </div>
-
-  <div id="stage-done" style="display:none;">
-    <div class="stepline">Complete</div>
-    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
-    <div class="kc-sub" id="kc-sub">You applied the reasonable suspicion standard cleanly at every step.</div>
-
-    <div class="note">
-      <p><strong>The takeaway.</strong> Reasonable suspicion ≠ certainty. The standard is met by what you observed and were told — not by a full picture.</p>
-      <p>The teacher's job is notice → private check-in → prompt, factual documentation → handoff to the right channel. Not investigation. Not confirmation. Not silence.</p>
+      <p id="takeaway-body"></p>
     </div>
 
     <div class="coach">
@@ -294,9 +291,9 @@
         <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
       </div>
       <div class="coach-suggest" id="coach-suggest">
-        <button class="sugg" data-q="tone">What if she'd seemed upset, not resigned?</button>
-        <button class="sugg" data-q="tell">Should I tell the student I'm reporting?</button>
-        <button class="sugg" data-q="threshold">What if I'm not sure it clears the bar?</button>
+        <button class="sugg">What if she'd seemed upset, not resigned?</button>
+        <button class="sugg">Should I tell the student I'm reporting?</button>
+        <button class="sugg">What if I'm not sure it clears the bar?</button>
       </div>
       <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
       <div class="coach-compose">
@@ -304,58 +301,517 @@
         <button id="coach-send" type="button">Send</button>
       </div>
     </div>
+
+    <button class="continue show" id="take-next">Continue to the checkpoint →</button>
+  </div>
+
+  <!-- ── Stage 4: closing checkpoint (shared across all five variants) ── -->
+  <div id="stage-check" style="display:none;">
+    <div class="stepline">Closing Checkpoint</div>
+    <h1>Before you're done</h1>
+    <p class="kc-intro">Three quick checks. These are the same whichever seat you picked — the standard doesn't change with the role.</p>
+
+    <div class="kc-q" id="kcq-1">
+      <div class="prompt">Agree or disagree — and why, in one line to yourself?</div>
+      <p class="quote">A colleague says: "If you're not sure something really happened, it's better to wait and see before you report it."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Reasonable suspicion is a lower bar than certainty by design. Waiting for confirmation — or trying to gather it yourself — isn't the standard, and the delay itself can be a compliance failure. The obligation is triggered by what you already noticed and were told.">Agree</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="The standard is 'reasonable suspicion,' not proof. Once what you observed and were told meets that bar, waiting for more isn't caution — it's a gap in the obligation, and investigating to be 'sure' isn't your role.">Disagree</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-2">
+      <div class="prompt">True or false?</div>
+      <p class="quote">"If a student says they're fine and doesn't want to talk about it, that ends a mandated reporter's obligation to report what they already noticed."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A student declining to elaborate doesn't cancel an obligation that already exists. Reasonable suspicion is met by what was overheard or disclosed — not by whether the student wants to say more. You report what you have; you don't need their permission or a fuller account.">True</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Once the bar is met, a reluctant or reassuring student doesn't unwind the obligation. You can be honest that you have to loop in the right person, and still report.">False</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-3">
+      <div class="prompt">Pick one. You overhear a vague comment that raises a concern, but later that day the student seems completely normal — laughing with friends, nothing visibly wrong. What's the right next step?</div>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="How a student seems afterward isn't evidence the concern wasn't real; it's just what happened next. Reasonable suspicion was met earlier by what you heard, and that doesn't expire because a later moment looked normal.">Let it go — they clearly seem fine now.</button>
+        <button class="choice" data-correct="true" data-flag="Correct" data-fb="The obligation attaches to what you noticed and were told at the time. A calm hallway an hour later doesn't change what met the bar.">Report what you observed through the proper channel, regardless of how they seem now.</button>
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Waiting for a second instance isn't the standard — reasonable suspicion from a single observation is enough, and prompt reporting is part of the requirement. The delay can itself be a failure.">Wait to see if the concern comes up again before doing anything.</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <button class="continue" id="next-check">See results →</button>
+  </div>
+
+  <!-- ── Stage 5: results ── -->
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You applied the reasonable suspicion standard cleanly at every step.</div>
   </div>
 
 </div>
 
 <script>
+  /* ---- variant content: five roles, one shared three-segment shape ----
+     Each role carries Segment 1 (meta/body/prompt/choices/cite) plus
+     d2 (The Follow-Up) and d3, phrased for that seat, its own steplines,
+     and its own takeaway. The three segments are practice — only the
+     closing checkpoint scores. */
+  const VARIANTS = {
+    teacher: {
+      steplines: ["Scenario", "The Private Check-In", "Closing The Loop"],
+      meta: ["ROOM: 204", "PERIOD: 3", "ROLE: HOMEROOM TEACHER"],
+      body: [
+        "You're circulating during independent work time. Two students near the back are talking quietly — not disruptive, just quieter than usual. As you pass, you catch a fragment: one student says something like \"…he does that every time, it's not a big deal,\" and the other goes quiet when she notices you.",
+        "You don't have the full conversation. You don't know if \"he\" is a parent, a sibling, another student, or someone else. The tone wasn't panicked — more resigned than upset."
+      ],
+      prompt: "What do you do in the next 60 seconds?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Keep circulating. It's out of context and probably nothing.",
+          fb:"Reasonable suspicion isn't about certainty — it's about noticing a pattern worth a private follow-up. Moving on without any note risks losing the moment." },
+        { correct:false, flag:"Consequence",
+          text:"Ask the student directly, in front of the class, what she meant.",
+          fb:"Public questioning can shut a student down fast, and it puts her in a position of explaining herself in front of peers before she's chosen to disclose anything." },
+        { correct:true, flag:"Correct path",
+          text:"Make a mental note, and find a private, low-pressure moment later in the period to check in with her one-on-one.",
+          fb:"Low-pressure and private — it doesn't force disclosure, but it keeps the door open." }
+      ],
+      cite: "Standard — reasonable suspicion is a pattern worth a private follow-up, not a conclusion you have to reach first.",
+      d2: {
+        body: [
+          "Later in the period, you find a quiet moment and check in with her one-on-one. She says: \"It's fine, I don't want to talk about it.\""
+        ],
+        prompt: "Where do you take it from here?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Respect that and drop it entirely — she said she's fine.",
+            fb:"A student declining to elaborate doesn't end a mandated reporter's responsibility when reasonable suspicion already exists based on what was overheard." },
+          { correct:false, flag:"Consequence",
+            text:"Press for more detail so you have \"enough\" to report.",
+            fb:"You're not required to investigate or confirm — that isn't a teacher's role, and pressing can feel coercive." },
+          { correct:true, flag:"Correct path",
+            text:"Let her know gently that you're glad she told you what she did, and that you need to loop in the counselor — not because she's in trouble, but because that's what you're required to do.",
+            fb:"Respects the student, is honest about the process, and doesn't over-promise confidentiality." }
+        ],
+        cite: "Standard — a reluctant student doesn't cancel a reporting obligation that already exists."
+      },
+      d3: {
+        body: [
+          "You now have what you need — what you overheard, and what the student told you in the check-in. The next step is how you record it and route it."
+        ],
+        prompt: "How do you close the loop?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Handle it informally with the counselor over lunch, no documentation.",
+            fb:"Undocumented \"informal\" reports create liability and leave no record that the standard was met." },
+          { correct:true, flag:"Correct path",
+            text:"File a written report through the official channel the same day — exact time, what was overheard (as close to verbatim as possible), and what was said in the private check-in.",
+            fb:"Timely, factual, non-editorialized documentation is the actual compliance requirement." },
+          { correct:false, flag:"Consequence",
+            text:"Wait until the end of the week to see if anything else comes up before reporting.",
+            fb:"Reasonable suspicion triggers reporting obligations promptly — waiting to gather more evidence is not the standard, and the delay itself can be a compliance failure." }
+        ],
+        cite: "Standard — prompt, factual, documented. Investigation and confirmation are not the teacher's role."
+      },
+      takeaway: "Reasonable suspicion ≠ certainty. The standard is met by what you observed and were told — not by a full picture. The teacher's job is notice → private check-in → prompt, factual documentation → handoff to the right channel. Not investigation. Not confirmation. Not silence."
+    },
+
+    coach: {
+      steplines: ["Scenario", "The Follow-Up", "Before You Leave for the Day"],
+      meta: ["SETTING: LOCKER ROOM", "AFTER PRACTICE", "ROLE: COACH / ATHLETICS STAFF"],
+      body: [
+        "You're wrapping up an after-practice stretch in the locker room. Two students are talking quietly near the back — not loud, not visibly upset. You catch a fragment: \"...he does that every time, it's not a big deal,\" and the other one goes quiet when he notices you're nearby.",
+        "You don't know who \"he\" is — a teammate, a family member, someone else. The tone wasn't panicked, more resigned."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Keep wrapping up practice — it's out of context and probably nothing.",
+          fb:"Reasonable suspicion isn't about certainty — it's about noticing something worth a closer look. Moving on with no note risks losing the one detail you actually have." },
+        { correct:false, flag:"Consequence",
+          text:"Ask the student directly, right there in front of the team, what he meant.",
+          fb:"Questioning him in front of teammates can shut the conversation down fast, and it puts him on the spot to explain himself before he's chosen to say anything." },
+        { correct:true, flag:"Correct path",
+          text:"Note what you heard and find a private moment to check in — or report through the district's channel if that's not possible before you leave.",
+          fb:"Low-pressure and private keeps the door open; and if there's no chance for that today, what you already heard is enough to route through the channel." }
+      ],
+      cite: "Standard — a locker room is still a mandated-reporter setting. Notice, a private check-in if you can, and the reporting channel if you can't.",
+      d2: {
+        body: [
+          "Practice ends. The student who spoke seems normal at pickup — same as any other day. You have a tournament to plan for and a stack of forms due tomorrow."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"He seemed fine at pickup — let it go.",
+            fb:"How he seems at pickup isn't evidence the concern wasn't real — it's just what happened afterward. Reasonable suspicion was met by what you heard, and a normal-looking pickup doesn't unwind it." },
+          { correct:false, flag:"Consequence",
+            text:"Mention it casually to an assistant coach, just to see if they've noticed anything.",
+            fb:"Comparing notes with a colleague isn't the same as reporting, and it can turn into a reason to keep waiting. If the bar was met, the channel is the move — not an informal poll." },
+          { correct:true, flag:"Correct path",
+            text:"Report it through the district's channel today, even though nothing else stood out.",
+            fb:"Nothing else needs to stand out. What you overheard already met the bar, and prompt reporting is part of the standard." }
+        ],
+        cite: "Standard — reasonable suspicion is met by what you observed, not by how a student seems later. Report promptly; don't wait for a second sign."
+      },
+      d3: {
+        body: [
+          "You're locking up the equipment room, mentally running through tomorrow's tournament logistics."
+        ],
+        prompt: "What's the last thing to do before you leave?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Don't file anything — it was probably nothing.",
+            fb:"\"Probably nothing\" is the judgment the report exists to hand off, not one to make on your own. Reasonable suspicion doesn't require you to be right — it requires you to file." },
+          { correct:false, flag:"Consequence",
+            text:"Bring it up informally with the athletic director next time you see them.",
+            fb:"An informal mention, whenever you happen to see them, isn't a report — it leaves no record and no timeline. The standard is a written report through the channel, promptly." },
+          { correct:true, flag:"Correct path",
+            text:"File it through the proper channel before you leave, in writing, even without more information.",
+            fb:"Timely, factual, in writing, through the official channel — you don't need a name or a fuller picture to meet the standard." }
+        ],
+        cite: "Standard — prompt, factual, documented, through the official channel. Investigation and certainty are not the reporter's job."
+      },
+      takeaway: "A locker room or a practice field is still a place where the reporting standard applies — informal settings don't lower the bar. Reasonable suspicion is met by what you observed and were told, not by a full picture, and not by how a student seems later. 'He seemed fine at pickup' isn't evidence the concern wasn't real; it's just what happened afterward. The obligation is the same whether you're in a classroom or on a practice field."
+    },
+
+    counselor: {
+      steplines: ["Scenario", "The Follow-Up", "End of Day"],
+      meta: ["SETTING: COUNSELING OFFICE", "DROP-IN", "ROLE: SCHOOL COUNSELOR"],
+      body: [
+        "A student comes in for an unrelated reason — a scheduling question — but mentions, almost in passing, \"things have been kind of a lot at home lately, but it's whatever, I'm used to it.\"",
+        "She doesn't elaborate, and when you gently ask if she wants to talk more, she says she's fine and needs to get to class."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"She said she's fine — respect that and let the moment pass.",
+          fb:"\"It's whatever, I'm used to it\" is exactly the kind of thing the standard exists to catch. Letting it pass with no note means the one detail you have is gone." },
+        { correct:false, flag:"Consequence",
+          text:"Press further right now, even though she's said she doesn't want to talk about it.",
+          fb:"Pushing after she's declined can feel coercive, and confirming what happened isn't your role. You already have what you need to act." },
+        { correct:true, flag:"Correct path",
+          text:"Let her go to class, but document what she said and consult with a supervisor or report through the district's channel today.",
+          fb:"She doesn't have to say more for the bar to be met. Write down what she said, and route it — consult or report — the same day." }
+      ],
+      cite: "Standard — a student minimizing what they shared doesn't lower the bar. Document what you were told and route it promptly.",
+      d2: {
+        body: [
+          "Later that week, you see her in the hallway. She seems normal — laughing with friends, nothing visibly different."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"She clearly seems fine now — no need to do anything further.",
+            fb:"How she seems days later isn't evidence the concern wasn't real. Reasonable suspicion was met when she spoke to you; a good afternoon doesn't retract it." },
+          { correct:false, flag:"Consequence",
+            text:"Check in with her teacher informally to see if they've noticed anything.",
+            fb:"Gathering corroboration isn't your role, and an informal check-in isn't a report. If the bar was met, the report stands on what she told you." },
+          { correct:true, flag:"Correct path",
+            text:"Follow up on the report or documentation you already started, regardless of how she seems today.",
+            fb:"Finish what you started — the obligation is anchored to what she said, not to how she looks in the hallway now." }
+        ],
+        cite: "Standard — reasonable suspicion is met by what you were told, not by how the student seems afterward."
+      },
+      d3: {
+        body: [
+          "You're closing out your caseload notes for the day."
+        ],
+        prompt: "How do you close it out?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Leave it out of your notes — she said she was fine.",
+            fb:"Her reassurance doesn't erase what she disclosed. Leaving it undocumented removes the record that the standard was met." },
+          { correct:false, flag:"Consequence",
+            text:"Note it briefly, but don't take it further unless something else comes up.",
+            fb:"Waiting for a second sign isn't the standard — reasonable suspicion from what she already told you is enough, and prompt reporting is part of the requirement." },
+          { correct:true, flag:"Correct path",
+            text:"Document it fully and confirm it's been reported through the proper channel, even without more detail from her.",
+            fb:"Full documentation, confirmed through the official channel, today — no fuller account from her required." }
+        ],
+        cite: "Standard — prompt, factual, documented, through the official channel. Confirmation and further detail are not prerequisites."
+      },
+      takeaway: "A student minimizing what they shared — 'it's whatever,' 'I'm used to it' — doesn't lower the reporting standard; if anything, that language is exactly the kind of detail the standard exists to catch. Reasonable suspicion is met by what you were told, not by whether the student wants to say more, and not by how they seem afterward. Documentation and the official channel matter even when nothing about the moment felt dramatic."
+    },
+
+    office: {
+      steplines: ["Scenario", "The Follow-Up", "End of Day"],
+      meta: ["SETTING: FRONT OFFICE", "MORNING", "ROLE: FRONT OFFICE / SUPPORT STAFF"],
+      body: [
+        "A student is waiting in the office for a late slip. While you're printing it, she mentions, almost to herself, \"I didn't want to come in today anyway... it's fine, this happens.\"",
+        "She doesn't say why. The bell rings and she heads to class before you can ask anything."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"It was a passing comment — let it go.",
+          fb:"A passing comment is still something you were told. Reasonable suspicion doesn't require a full explanation, and letting it go means the detail is lost." },
+        { correct:false, flag:"Consequence",
+          text:"Follow her to class and ask what she meant, in front of her classmates.",
+          fb:"Catching up with her in front of classmates puts her on the spot to explain herself, and pressing for detail isn't your role. You already have enough to pass it on." },
+        { correct:true, flag:"Correct path",
+          text:"Note what she said and report it through the district's channel, even without more context.",
+          fb:"Write down what she said, as close to her words as you can, and route it through the channel — no follow-up conversation needed." }
+      ],
+      cite: "Standard — the front office is a mandated-reporter setting too. Note what you were told and route it, without needing more context.",
+      d2: {
+        body: [
+          "Later that afternoon, the same student comes back through the office to pick up a form for another class. She seems completely normal — chatting, smiling with a friend who's with her."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"She clearly seems fine now — probably nothing to it.",
+            fb:"How she seems in the afternoon isn't evidence the morning comment wasn't real — it's just what happened next. The bar was met earlier, and it doesn't reset." },
+          { correct:false, flag:"Consequence",
+            text:"Mention it to a colleague at the front desk, just to see if they've noticed anything.",
+            fb:"Comparing notes isn't reporting, and it can become a reason to keep waiting. If what you heard met the bar, the channel is the step." },
+          { correct:true, flag:"Correct path",
+            text:"Report what she said this morning through the district's channel, regardless of how she seems now.",
+            fb:"Report what she said this morning. A normal-looking afternoon doesn't change what met the standard." }
+        ],
+        cite: "Standard — reasonable suspicion is met by what you were told in the moment, not by how the student seems later."
+      },
+      d3: {
+        body: [
+          "You're closing out the sign-in log before heading home."
+        ],
+        prompt: "What's the last step before you leave?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Don't note it anywhere — she seemed fine later.",
+            fb:"Her seeming fine later doesn't undo the comment. Leaving it unrecorded means there's no trace the standard was met." },
+          { correct:false, flag:"Consequence",
+            text:"Mention it informally to the assistant principal if you happen to see them.",
+            fb:"An informal mention, if you happen to cross paths, isn't a report — no record, no timeline. The standard is a written report through the channel, promptly." },
+          { correct:true, flag:"Correct path",
+            text:"File it through the proper channel today, in writing, even without more to go on.",
+            fb:"In writing, through the official channel, today — you don't need a name or a fuller picture to meet the standard." }
+        ],
+        cite: "Standard — prompt, factual, documented, through the official channel. A fuller picture is not a prerequisite."
+      },
+      takeaway: "A quick comment on the way to a late slip is easy to file away as nothing — especially when the student seems completely fine an hour later. But reasonable suspicion is met by what you were told in that moment, not by how someone seems afterward. You don't need a follow-up conversation, a name, or a clearer picture to have enough to report. The front office is often the first place a student passes through on a hard day — the standard applies there just as much as it does in a classroom."
+    },
+
+    admin: {
+      steplines: ["Scenario", "The Follow-Up", "End of Day"],
+      meta: ["SETTING: MAIN OFFICE", "BETWEEN CLASSES", "ROLE: SCHOOL ADMINISTRATOR"],
+      body: [
+        "A teacher stops by your office between classes. \"I probably don't need to bother you with this, but a student said something a little off to me this morning — I'm not even sure it's anything.\"",
+        "She recounts it in under a minute: vague, secondhand, no name attached to the \"he\" the student mentioned. She seems unsure whether she's overreacting."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Thank her for flagging it — since it's vague and she's unsure, there's probably nothing more to do right now.",
+          fb:"Vagueness and the teacher's uncertainty don't lower the bar. What she was told is enough to report — treating it as \"probably nothing\" makes her hesitation your decision." },
+        { correct:false, flag:"Consequence",
+          text:"Ask her a few follow-up questions to decide yourself whether it's worth reporting.",
+          fb:"Screening it yourself turns a report into a judgment call. You're not the one who decides whether it clears the bar by investigating — what she was told already meets it." },
+        { correct:true, flag:"Correct path",
+          text:"Tell her this is exactly the kind of thing that gets reported regardless of how certain either of you feels, and confirm it's been filed through the proper channel today.",
+          fb:"Name the standard for her, and make sure it's filed today. Certainty isn't the trigger — what was observed and reported is." }
+      ],
+      cite: "Standard — reasonable suspicion is met by what was observed and reported, not by how certain the person reporting feels.",
+      d2: {
+        body: [
+          "An hour later, the teacher pokes her head back in. \"Actually — don't worry about what I said. I talked to the student again and I think it was nothing. I probably overreacted.\""
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"That settles it — no need to file anything now.",
+            fb:"A second conversation and a changed impression don't unwind an obligation that was already triggered. The bar was met the first time she told you." },
+          { correct:false, flag:"Consequence",
+            text:"Take her word for it, but keep a private note in case something else comes up later.",
+            fb:"A private note isn't a report, and \"in case something else comes up\" is the wait-and-see the standard rules out. What was already reported to you needs to go through the channel." },
+          { correct:true, flag:"Correct path",
+            text:"Thank her for the update, but explain that a report already made doesn't get withdrawn based on a second impression — the standard was met the first time.",
+            fb:"Acknowledge the update, and be clear that it doesn't retract anything. The obligation attached when she first described it." }
+        ],
+        cite: "Standard — a report isn't withdrawn because someone later has second thoughts. The obligation attaches when the bar is first met."
+      },
+      d3: {
+        body: [
+          "You're reviewing the day's incident log before heading home."
+        ],
+        prompt: "How do you close out the log?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Leave it off the log — the teacher said it was probably nothing.",
+            fb:"Leaving it off means there's no record the standard was met, and the teacher's later read isn't the one that governs. It belongs on the log." },
+          { correct:false, flag:"Consequence",
+            text:"Note it informally, without treating it as a formal report.",
+            fb:"An informal note isn't the standard — what was reported to you gets handled as a report, with the same documentation and routing as any other." },
+          { correct:true, flag:"Correct path",
+            text:"Confirm it's logged and reported through the proper channel, exactly as it would be for any other report you received today.",
+            fb:"Same handling as any other report — logged, routed through the official channel, today. The source's uncertainty doesn't change the process." }
+        ],
+        cite: "Standard — what's reported to you is handled as a report: promptly, factually, documented, through the official channel."
+      },
+      takeaway: "When someone brings you something vague and hedged — 'I probably don't need to bother you,' 'I think I overreacted' — your job isn't to decide whether their uncertainty was justified. Reasonable suspicion is met by what was observed and reported, not by how confident the person reporting it feels, and a report doesn't get unwound because someone later has second thoughts. As the person receiving these moments all day, the standard you hold matters more than any one staff member's certainty — because you're often the last checkpoint before something does, or doesn't, get filed."
+    }
+  };
+
   let score = 0;
+  let currentRole = null;
+  let segmentStep = 1;
   const dots = document.querySelectorAll('.dot');
 
-  function wireStage(n, fromStage, toStage, dotFrom, dotTo, isLast){
-    const choices = document.getElementById('choices-' + n);
-    const fb = document.getElementById('fb-' + n);
-    const next = document.getElementById('next-' + n);
-
-    choices.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.choice');
-      if(!btn || choices.classList.contains('answered')) return;
-      choices.classList.add('answered');
-      [...choices.children].forEach(c=>c.classList.add('locked'));
-      btn.style.borderColor = 'var(--ink)';
-      const correct = btn.dataset.correct === 'true';
-      if(correct) score++;
-      fb.querySelector('.flag').textContent = btn.dataset.flag;
-      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
-      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
-      next.classList.add('show');
-    });
-
-    next.addEventListener('click', ()=>{
-      document.getElementById(fromStage).style.display = 'none';
-      document.getElementById(toStage).style.display = 'block';
-      dots[dotFrom].classList.remove('current');
-      dots[dotFrom].classList.add('done');
-      if(isLast){
-        dots[dotTo].classList.add('done');
-        document.getElementById('kc-result').textContent = score + '/3 — Case closed';
-        document.getElementById('kc-sub').textContent = score === 3
-          ? "You applied the reasonable suspicion standard cleanly at every step — notice, private check-in, prompt documentation, handoff."
-          : "Revisit the flagged steps above. The standard is a short chain — notice, private check-in, prompt factual documentation, handoff — not investigation, and not silence.";
-      } else {
-        dots[dotTo].classList.add('current');
-      }
-      window.scrollTo({top:0, behavior:'smooth'});
+  function setDot(i) {
+    dots.forEach((d, j) => {
+      d.classList.toggle('done', j < i);
+      d.classList.toggle('current', j === i);
     });
   }
 
-  wireStage(1, 'stage-dp1', 'stage-dp2', 0, 1, false);
-  wireStage(2, 'stage-dp2', 'stage-dp3', 1, 2, false);
-  wireStage(3, 'stage-dp3', 'stage-done', 2, 3, true);
+  /* ---- Stage 1 -> Stage 2: pick a role, render Segment 1 ---- */
+  document.getElementById('roles').addEventListener('click', (e) => {
+    const btn = e.target.closest('.role');
+    if (!btn) return;
+    currentRole = btn.dataset.role;
+    renderSegment(1);
+    document.getElementById('stage-role').style.display = 'none';
+    document.getElementById('stage-decision').style.display = 'block';
+    setDot(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderSegment(step) {
+    segmentStep = step;
+    const v = VARIANTS[currentRole];
+    const d = step === 1 ? v : (step === 2 ? v.d2 : v.d3);
+
+    document.getElementById('dec-stepline').textContent = v.steplines[step - 1];
+
+    const meta = document.getElementById('dec-meta');
+    meta.innerHTML = '';
+    if (step === 1) {
+      meta.style.display = 'flex';
+      v.meta.forEach((m) => {
+        const s = document.createElement('span');
+        s.textContent = m;
+        meta.appendChild(s);
+      });
+    } else {
+      meta.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('dec-body');
+    bodyEl.innerHTML = '';
+    d.body.forEach((p) => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      bodyEl.appendChild(el);
+    });
+
+    document.getElementById('dec-prompt').textContent = d.prompt;
+
+    const cbox = document.getElementById('dec-choices');
+    cbox.className = 'choices';
+    cbox.innerHTML = '';
+    d.choices.forEach((c) => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = c.text;
+      b.dataset.correct = c.correct ? 'true' : 'false';
+      b.dataset.flag = c.flag;
+      b.dataset.fb = c.fb;
+      cbox.appendChild(b);
+    });
+
+    const fb = document.getElementById('dec-fb');
+    fb.className = 'feedback';
+    fb.querySelector('.flag').textContent = '';
+    fb.querySelector('.fb-text').textContent = '';
+    fb.querySelector('.cite').textContent = d.cite;
+
+    document.getElementById('dec-next').classList.remove('show');
+  }
+
+  /* ---- Stage 2: three segments in sequence ---- */
+  const decChoices = document.getElementById('dec-choices');
+  const decFb = document.getElementById('dec-fb');
+  const decNext = document.getElementById('dec-next');
+
+  decChoices.addEventListener('click', (e) => {
+    const btn = e.target.closest('.choice');
+    if (!btn || decChoices.classList.contains('answered')) return;
+    decChoices.classList.add('answered');
+    [...decChoices.children].forEach((c) => c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    // Segments are practice, not part of the scored result — only the
+    // closing checkpoint counts. Keep `correct` for feedback styling only.
+    const correct = btn.dataset.correct === 'true';
+    decFb.querySelector('.flag').textContent = btn.dataset.flag;
+    decFb.querySelector('.fb-text').textContent = btn.dataset.fb;
+    decFb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+    decNext.classList.add('show');
+  });
+
+  decNext.addEventListener('click', () => {
+    if (segmentStep < 3) {
+      const next = segmentStep + 1;
+      renderSegment(next);
+      setDot(next - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('takeaway-body').textContent = VARIANTS[currentRole].takeaway;
+      document.getElementById('stage-decision').style.display = 'none';
+      document.getElementById('stage-takeaway').style.display = 'block';
+      setDot(3);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  /* ---- Stage 3 -> Stage 4: takeaway + coach, then on to the checkpoint ---- */
+  document.getElementById('take-next').addEventListener('click', () => {
+    document.getElementById('stage-takeaway').style.display = 'none';
+    document.getElementById('stage-check').style.display = 'block';
+    setDot(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Stage 4: closing checkpoint — three independent checks ---- */
+  let checkAnswered = 0;
+  const nextCheck = document.getElementById('next-check');
+
+  document.querySelectorAll('.kc-q').forEach((q) => {
+    const choices = q.querySelector('.choices');
+    const fb = q.querySelector('.feedback');
+    choices.addEventListener('click', (e) => {
+      const btn = e.target.closest('.choice');
+      if (!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach((c) => c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if (correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      checkAnswered++;
+      if (checkAnswered === 3) nextCheck.classList.add('show');
+    });
+  });
+
+  nextCheck.addEventListener('click', () => {
+    document.getElementById('stage-check').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots.forEach((d) => { d.classList.add('done'); d.classList.remove('current'); });
+    document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 3
+      ? "All three checks held — you didn't wait for certainty, and you didn't treat a student's reassurance or a calm afternoon as the end of the obligation."
+      : "Revisit the checks above. The standard is a short chain — reasonable suspicion is not proof; a reluctant student doesn't cancel it; and how someone seems afterward doesn't either.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
      Public embed path: no lab token, so the D6 per-embed rate limit applies. */
-  (function(){
+  (function () {
     const MODULE_ID = "04";
     const body    = document.getElementById('coach-body');
     const input   = document.getElementById('coach-input');
@@ -367,7 +823,7 @@
     let messages = [];   // {role:'user'|'assistant', content}
     let busy = false;
 
-    function bubble(cls, text){
+    function bubble(cls, text) {
       const el = document.createElement('div');
       el.className = 'bubble ' + cls;
       el.textContent = text;
@@ -375,28 +831,28 @@
       body.scrollTop = body.scrollHeight;
       return el;
     }
-    function autosize(){
+    function autosize() {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 120) + 'px';
     }
     input.addEventListener('input', autosize);
 
-    // Chips prefill the composer now — they no longer trigger a canned reply.
-    suggest.addEventListener('click', (e)=>{
+    // Chips prefill the composer — they don't trigger a canned reply.
+    suggest.addEventListener('click', (e) => {
       const btn = e.target.closest('.sugg');
-      if(!btn) return;
+      if (!btn) return;
       input.value = btn.textContent;
       input.focus();
       autosize();
     });
 
-    async function ask(){
+    async function ask() {
       const q = input.value.trim();
-      if(!q || busy) return;
+      if (!q || busy) return;
       busy = true; send.disabled = true;
       bubble('ask', q);
       input.value = ''; autosize();
-      messages.push({ role:'user', content:q });
+      messages.push({ role: 'user', content: q });
       const reply = bubble('reply', '…');
       let acc = '';
       try {
@@ -416,13 +872,13 @@
         for (;;) {
           const { done, value } = await rd.read();
           if (done) break;
-          acc += dec.decode(value, { stream:true });
+          acc += dec.decode(value, { stream: true });
           reply.textContent = acc || '…';
           body.scrollTop = body.scrollHeight;
         }
         acc = acc.trim();
         reply.textContent = acc || 'No response — please try again.';
-        if (acc) messages.push({ role:'assistant', content:acc });
+        if (acc) messages.push({ role: 'assistant', content: acc });
       } catch (err) {
         reply.textContent = 'Couldn’t reach the coach. Please try again.';
         messages.pop();
@@ -432,8 +888,8 @@
     }
 
     send.addEventListener('click', ask);
-    input.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); ask(); }
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
     });
   })();
 </script>
