@@ -77,6 +77,8 @@
 
   .band{width:100%;}
   .inner{max-width:var(--maxw);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter);}
+  /* sticky-nav offset: in-page anchor jumps clear the pinned header instead of tucking under it */
+  section[id]{scroll-margin-top:90px;}
 
   /* ── wordmark ── */
   .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
@@ -93,7 +95,7 @@
   .util .u-right{letter-spacing:.12em;}
 
   /* ── nav ── */
-  .nav{background:var(--navy);border-bottom:1px solid var(--navy-hair);}
+  .nav{background:var(--navy);border-bottom:1px solid var(--navy-hair);position:sticky;top:0;z-index:100;}
   .nav .inner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap;}
   .nav .wordmark .wm-rx,.nav .wordmark .wm-dot{font-size:26px;}
   .nav .wordmark .wm-ld{font-size:18px;}
