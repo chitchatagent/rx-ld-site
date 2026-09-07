@@ -184,6 +184,19 @@
   .tl-card h3{font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:11px;}
   .tl-card p{font-size:13.5px;color:var(--slate);line-height:1.7;}
 
+  /* ── the offer — numbered list, same treatment as /ai-literacy "What we build" ── */
+  .offer-sec{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .offer-sec .inner{padding-top:78px;padding-bottom:86px;display:grid;grid-template-columns:220px 1fr;gap:60px;align-items:start;}
+  .offer-sec .eyebrow{margin-bottom:0;}
+  .offer-sec h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(25px,3.2vw,33px);line-height:1.16;letter-spacing:-.022em;color:var(--charcoal);margin-bottom:18px;}
+  .offer{display:flex;flex-direction:column;margin-top:6px;}
+  .offer .row{display:grid;grid-template-columns:60px 1fr;gap:24px;padding:26px 0;border-top:1px solid var(--border);}
+  .offer .row:last-child{border-bottom:1px solid var(--border);}
+  .offer .num{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--orange);padding-top:5px;}
+  .offer h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-bottom:9px;color:var(--charcoal);}
+  .offer .badge{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);border:1px solid var(--orange);border-radius:3px;padding:3px 7px;margin-left:10px;vertical-align:middle;white-space:nowrap;}
+  .offer p{font-size:15px;line-height:1.68;color:var(--slate);margin:0;max-width:62ch;}
+
   /* ── exhibits: shared navy staging ── */
   .exhibit{background:var(--navy);}
   .exhibit .inner{padding-top:82px;padding-bottom:90px;}
@@ -289,7 +302,8 @@
   @media (max-width:680px){
     .util .u-right{display:none;}
     .tl-grid,.moments-grid{grid-template-columns:1fr;}
-    .problem .inner{grid-template-columns:1fr;gap:20px;}
+    .problem .inner,.offer-sec .inner{grid-template-columns:1fr;gap:24px;}
+    .offer .row{grid-template-columns:1fr;gap:8px;}
     .nav .inner{gap:14px;}
     .nav-right{gap:18px;}
     .f-tag{padding-left:0;border-left:none;}
@@ -471,6 +485,38 @@
   </div>
 </section>
 
+<section class="band offer-sec" id="offer">
+  <div class="inner">
+    <div class="eyebrow"><span class="rule"></span>The offer</div>
+    <div class="offer-body">
+      <h2>What we build</h2>
+      <div class="offer">
+        <div class="row">
+          <div class="num">01</div>
+          <div>
+            <h3>Scenario-Based Compliance Modules</h3>
+            <p>Built the same way as our live exhibits — real decisions, real consequences, built around whichever compliance area matters most for your staff. Delivered as a SCORM package that runs inside your existing LMS, so your compliance team gets the same completion tracking and audit trail you already rely on for other required training.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="num">02</div>
+          <div>
+            <h3>District Customization</h3>
+            <p>Every district's policies are different. We adapt each module's scenarios, terminology, and standards references to match your actual policy — so staff are trained on your policy, not a generic one.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="num">03</div>
+          <div>
+            <h3>Professional Development Sessions <span class="badge">Premium add-on</span></h3>
+            <p>For districts who want more than a self-paced module, we offer live-facilitated PD sessions — a higher-touch layer on top of the core training, for kickoff sessions, administrator briefings, or deeper staff workshops.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="band exhibit" id="exhibit">
   <div class="inner">
     <div class="ex-head">
@@ -520,7 +566,6 @@
       <div class="eyebrow">Request intake</div>
       <h2>Tell us about your training</h2>
       <p>15 minutes. No obligation — just a look at where AI-assisted content could help.</p>
-      <p>No certificates to chase down or forward yourself — each module reports a documented completion straight into your existing system, ready when your compliance file needs it.</p>
       <div class="intake-contact">hello@rxldtraining.com<br>(470) 207-3594</div>
     </div>
     <div class="intake-card">
