@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<!-- Unlisted: not linked from anywhere and kept out of search until this
+     module joins Anchors 2 and 4 as the full AI Literacy program. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File 07 — The Suggested Grade</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#5A6270;
+    --scrub:#1E2A3A;
+    --scrub-hover:#16202D;
+    --scrub-tint:#E6E9EE;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --alert:#B84C3E;
+    --alert-tint:#F6E1DD;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+  /* header / chart tab bar */
+  .chartbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+  }
+  .brandmark{display:flex;align-items:baseline;gap:12px;}
+  /* 4C Split Lockup — matches the rxldtraining.com nav/footer wordmark */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wordmark .wm-rx,.wordmark .wm-dot{font-family:'Fraunces',serif;font-weight:680;font-size:21px;line-height:1;}
+  .wordmark .wm-rx{letter-spacing:-.035em;color:var(--ink);}
+  .wordmark .wm-dot{color:var(--amber);padding:0 1px;}
+  .wordmark .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14.5px;letter-spacing:.02em;line-height:1;color:var(--ink);}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);}
+  .casetag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;}
+
+  /* progress dots — real sequence, so numbering is earned */
+  .progress{display:flex;gap:6px;margin:18px 0 30px;}
+  .dot{height:4px;flex:1;background:var(--line);border-radius:2px;overflow:hidden;position:relative;}
+  .dot.done{background:var(--scrub);}
+  .dot.current::after{
+    content:'';position:absolute;inset:0;background:var(--scrub);
+    animation:fillDot 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes fillDot{from{opacity:.35;}to{opacity:1;}}
+
+  .stepline{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;
+  }
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 18px;letter-spacing:-.01em;
+  }
+
+  .lead-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 22px;max-width:62ch;}
+
+  /* scenario chart note */
+  .note{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--scrub);
+    border-radius:3px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .note .meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .note p{margin:0 0 10px;line-height:1.62;font-size:15.5px;}
+  .note p:last-child{margin-bottom:0;}
+
+  .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  /* role picker */
+  .roles{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .role{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:15px 16px;font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .role:hover{border-color:var(--scrub);}
+  .role:active{transform:scale(.995);}
+  .role .r-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;display:block;margin-bottom:3px;}
+  .role .r-task{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .choice{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .choice:hover{border-color:var(--scrub);}
+  .choice:active{transform:scale(.995);}
+  .choice.locked{cursor:default;opacity:.55;}
+  .choice.locked:hover{border-color:var(--line);}
+
+  /* feedback */
+  .feedback{
+    display:none;margin-top:22px;border-radius:3px;padding:20px 22px;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--scrub-tint);border:1px solid var(--scrub);}
+  .feedback.caution{background:var(--amber-tint);border:1px solid var(--amber);}
+  .feedback .flag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:500;margin-bottom:8px;display:block;
+  }
+  .feedback.good .flag{color:var(--scrub);}
+  .feedback.caution .flag{color:var(--amber);}
+  .feedback p{margin:0 0 10px;font-size:14.5px;line-height:1.6;}
+  .cite{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:12px;
+  }
+
+  .continue{
+    display:none;margin-top:20px;background:var(--ink);color:var(--paper);
+    border:none;border-radius:3px;padding:12px 20px;font-size:14px;font-weight:500;
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .continue.show{display:inline-block;}
+  .continue:hover{background:var(--scrub);}
+
+  /* closing checkpoint — three quick checks, stacked */
+  .kc-intro{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0 0 26px;}
+  .kc-q{border-top:1px solid var(--line);padding-top:22px;margin-bottom:26px;}
+  .kc-q .prompt{margin-top:0;}
+  .kc-q .quote{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:3px;padding:14px 16px;margin:0 0 14px;font-size:14.5px;line-height:1.58;font-style:italic;
+  }
+
+  /* knowledge check result */
+  .kc-result{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
+  }
+  .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
+
+  /* coach panel — signature element */
+  .coach{
+    margin-top:34px;border:1px solid var(--line);border-radius:6px;
+    background:var(--paper-raised);overflow:hidden;
+  }
+  .coach-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:var(--scrub-tint);
+  }
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;max-height:46vh;overflow-y:auto;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
+  .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
+  .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
+  .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
+  .sugg{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--scrub);
+    background:transparent;border:1px solid var(--scrub);border-radius:20px;
+    padding:6px 12px;cursor:pointer;
+  }
+  .sugg:hover{background:var(--scrub);color:var(--paper);}
+  .sugg[disabled]{opacity:.35;cursor:default;}
+  .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+  .coach-disclaim{margin:0;padding:0 18px 10px;font-size:11px;color:var(--scrub);}
+  .coach-compose{display:flex;gap:8px;padding:0 18px 18px;}
+  .coach-compose textarea{
+    flex:1;resize:none;min-height:38px;max-height:120px;font:inherit;font-size:13.5px;
+    line-height:1.5;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  }
+  .coach-compose textarea:focus{outline:2px solid var(--scrub);outline-offset:-1px;}
+  .coach-compose button{
+    align-self:flex-end;font:inherit;font-size:13px;cursor:pointer;color:var(--paper);
+    background:var(--ink);border:0;border-radius:8px;padding:9px 16px;
+  }
+  .coach-compose button:disabled{opacity:.4;cursor:default;}
+
+  @media (prefers-reduced-motion: reduce){
+    .dot.current::after{animation:none;opacity:1;}
+    .feedback{animation:none;}
+  }
+  @media (max-width:520px){
+    h1{font-size:23px;}
+    .wrap{padding:22px 16px 60px;}
+    /* stack the header so "Case File" doesn't collide with the module label */
+    .chartbar{flex-direction:column;align-items:flex-start;gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chartbar">
+    <div class="brandmark">
+      <span class="wordmark"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&D</span></span>
+      <span class="name">Case File</span>
+    </div>
+    <span class="casetag">MODULE 07 · NO HIGH-STAKES DECISIONS &amp; LOCAL GOVERNANCE</span>
+  </div>
+
+  <div class="progress">
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- ── Stage 1: role selection ── -->
+  <div id="stage-role">
+    <div class="stepline">Your Role</div>
+    <h1>The Suggested Grade</h1>
+    <p class="lead-p">This one plays out differently depending on where you sit — but the standard underneath is the same in every version. Pick the seat closest to yours.</p>
+    <div class="roles" id="roles">
+      <button class="role" data-role="teacher">
+        <span class="r-name">Classroom Teacher</span>
+        <span class="r-task">Forty essays to grade before progress reports</span>
+      </button>
+      <button class="role" data-role="counselor">
+        <span class="r-name">School Counselor</span>
+        <span class="r-task">A flagged-student review list to clear today</span>
+      </button>
+      <button class="role" data-role="lead">
+        <span class="r-name">Grade-Level Lead Teacher</span>
+        <span class="r-task">Next-year course placements to finalize</span>
+      </button>
+      <button class="role" data-role="office">
+        <span class="r-name">Front Office / Support Staff</span>
+        <span class="r-task">This week's truancy escalation letters</span>
+      </button>
+      <button class="role" data-role="admin">
+        <span class="r-name">School Administrator</span>
+        <span class="r-task">A discipline decision to log</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stage 2: three segments (re-rendered from the chosen role) ── -->
+  <div id="stage-decision" style="display:none;">
+    <div class="stepline" id="dec-stepline">Segment 1</div>
+    <h1>The Suggested Grade</h1>
+    <div class="note">
+      <div class="meta" id="dec-meta"></div>
+      <div id="dec-body"></div>
+    </div>
+
+    <div class="prompt" id="dec-prompt"></div>
+    <div class="choices" id="dec-choices"></div>
+
+    <div class="feedback" id="dec-fb">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite"></div>
+    </div>
+
+    <button class="continue" id="dec-next">Continue →</button>
+  </div>
+
+  <!-- ── Stage 3: role-specific takeaway + Ask the Coach ── -->
+  <div id="stage-takeaway" style="display:none;">
+    <div class="stepline">Takeaway</div>
+    <h1>The Suggested Grade</h1>
+    <div class="note">
+      <p id="takeaway-body"></p>
+    </div>
+
+    <div class="coach">
+      <div class="coach-head">
+        <div class="coach-dot"></div>
+        <div class="coach-title">Ask the coach</div>
+      </div>
+      <div class="coach-body" id="coach-body">
+        <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
+      </div>
+      <div class="coach-suggest" id="coach-suggest">
+        <button class="sugg">If reviewing it doesn't change the outcome, do I still document anything?</button>
+        <button class="sugg">The recommendation matches our policy exactly — isn't overriding it the riskier move?</button>
+        <button class="sugg">Where's the line between using the tool and letting it decide?</button>
+      </div>
+      <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
+      <div class="coach-compose">
+        <textarea id="coach-input" rows="1" placeholder="Ask about this case…" aria-label="Ask the coach"></textarea>
+        <button id="coach-send" type="button">Send</button>
+      </div>
+    </div>
+
+    <button class="continue show" id="take-next">Continue to the checkpoint →</button>
+  </div>
+
+  <!-- ── Stage 4: closing checkpoint (shared across all five variants) ── -->
+  <div id="stage-check" style="display:none;">
+    <div class="stepline">Closing Checkpoint</div>
+    <h1>Before you're done</h1>
+    <p class="kc-intro">Three quick checks. These are the same whichever seat you picked — the standard doesn't change with the role.</p>
+
+    <div class="kc-q" id="kcq-1">
+      <div class="prompt">Agree or disagree — and why, in one line to yourself?</div>
+      <p class="quote">"A colleague says: 'If the AI's recommendation matches our official policy or process, that's basically the same as it being the right call.'"</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Policy sets the category; it can't see the specifics of one case. A recommendation that reads 'three-day suspension per policy' has confirmed the incident type was entered correctly — not that three days is right for a first offense with ambiguous circumstances. Matching policy is the floor, not the decision.">Agree</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="A recommendation can be fully policy-compliant and still be the wrong call for the student in front of you. Policy is written for the general case; the person is there to weigh what the category leaves out. 'It matches policy' answers a different question than 'is this right.'">Disagree</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-2">
+      <div class="prompt">True or false?</div>
+      <p class="quote">"Once an AI tool has looked at the same information a person would, there's no real reason for a human to review it further before the decision is finalized."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="The tool sees the data; it doesn't know what you know — a bad test week, a first-ever incident, a family situation that never made it into a field. 'The same information' is rarely actually the same, and a high-stakes decision about a student is where the human review has to happen, not be skipped.">True</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Feeding a tool the same data points doesn't give it your context, your judgment, or accountability for the outcome. On a decision that shapes a student's grade, placement, or record, human review before it's final isn't a formality — it's the control.">False</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-3">
+      <div class="prompt">Pick one. An AI tool recommends an outcome that technically follows policy, but something about the specific situation feels like it deserves a closer look. What's the right next step?</div>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Policy-compliant isn't the same as reviewed. The tool flagged a category match; the thing nagging you is the part the category doesn't capture. Going ahead now is choosing not to look.">Go with the recommendation — it's already policy-compliant.</button>
+        <button class="choice" data-correct="true" data-flag="Correct" data-fb="This is it. Look at the full situation, make the call yourself, and if you land somewhere other than the tool, write a line on why. That note is what a parent, an administrator, or a district office will ask for later.">Review the fuller context yourself, and document your reasoning if your judgment differs.</button>
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Overriding without reviewing has the same gap as accepting without reviewing — no one actually looked. A sense that something's off is a reason to open the file, not a substitute for reading it.">Overrule it based on instinct, without looking into it further.</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <button class="continue" id="next-check">See results →</button>
+  </div>
+
+  <!-- ── Stage 5: results ── -->
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You kept the high-stakes decisions with a person, and the reasoning on the record.</div>
+  </div>
+
+</div>
+
+<script>
+  /* ---- variant content: five roles, one shared segment shape ----
+     Each role carries Segment 1 (meta/body/prompt/choices/cite) plus
+     d2 (The Pattern) and d3 (the "before it's final" beat), phrased for
+     that seat. `steplines` gives the three step labels for the role. */
+  const VARIANTS = {
+    teacher: {
+      steplines: ["Segment 1", "The Pattern", "Before It's Final"],
+      meta: ["ROLE: CLASSROOM TEACHER", "TASK: ESSAY GRADING", "DUE: PROGRESS REPORTS TOMORROW"],
+      body: [
+        "You're behind on grading forty essays before progress reports go out tomorrow. You've started using an AI tool that reads student writing and suggests a grade plus brief feedback.",
+        "For the first thirty-five, its suggestions matched your own judgment closely — you tweaked the wording and moved on. Essay thirty-six is from a student who's been struggling all semester. The tool suggests a D, with feedback focused entirely on grammar and structure."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"The tool's been reliable all essay — accept the grade and feedback as suggested.",
+          fb:"Thirty-five matches tell you the tool is usually close, not that it's right on this one. A grade is a high-stakes call about a real student, and the essay you'd most want a human to actually read is the one from the student who's been struggling — not the one you wave through because the streak held." },
+        { correct:true, flag:"Correct path",
+          text:"Read the essay yourself in full before deciding on a grade, using the tool's notes only as a starting point.",
+          fb:"This is the standard. The tool can point you at what to look at; the grade is yours to decide from reading the work. Its notes are one input, not the verdict — especially when they're all about grammar and say nothing about whether the student understood the assignment." },
+        { correct:false, flag:"Middle path",
+          text:"Bump the grade up slightly to be encouraging, without actually re-reading the essay closely.",
+          fb:"You've swapped one shortcut for another. Nudging the number without reading the essay isn't judgment — it's a guess in a kinder direction, and it leaves the grade just as disconnected from the actual work as the tool's D was." }
+      ],
+      cite: "Standard — a grade is a high-stakes decision about a student; an AI tool can inform it, but a person has to read the work and make the call. A reliable track record doesn't transfer the decision to the tool.",
+      d2: {
+        body: [
+          "Reading it yourself, you notice something the tool didn't flag: the content shows real understanding, but the student is clearly writing in a rush, missing structure they usually handle fine. It's a bad day, not a knowledge gap."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Keep the tool's suggested D — the writing quality is what it is, regardless of the reason behind it.",
+            fb:"You now know something the tool never could: this isn't what the student doesn't understand, it's one rough sitting. Grading to the D anyway means entering a number you can already see is wrong, on the strength of a suggestion you've now checked and disagree with." },
+          { correct:true, flag:"Correct path",
+            text:"Grade based on what you now understand about the actual work, and note the pattern for a check-in.",
+            fb:"Right. You read the work, you saw what the tool missed, and you're grading the understanding that's actually on the page. Flagging it for a quick check-in is the part the tool can't do — it turns one odd essay into a reason to talk to the student." },
+          { correct:false, flag:"Middle path",
+            text:"Give a passing grade so the student can't fail, without discussing it with anyone.",
+            fb:"Your read of the situation is probably right, but 'floor it so they pass' isn't the same as grading the work — and doing it silently means no one, including the student, knows why. The judgment call is fine; skipping the check-in and the record isn't." }
+        ],
+        cite: "Standard — once you know something the tool's pattern-matching missed, the decision follows what you know, not the suggestion. Noting the reason and following up is the human part of the call."
+      },
+      d3: {
+        body: [
+          "You're about to enter final grades before progress reports go out."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Enter the tool's original suggestion — it's not worth revisiting now.",
+            fb:"You already did the work of re-reading and reaching your own judgment. Entering the D now throws that away for the sake of the faster keystroke, and it's the version that goes home to a parent tomorrow." },
+          { correct:false, flag:"Middle path",
+            text:"Enter your own judgment call, and move on without documenting why it differs from the AI's suggestion.",
+            fb:"The grade is right, which is the main thing. But this is exactly the kind of decision a parent or administrator asks about later, and 'I remember re-reading it' is a weaker answer than a one-line note you wrote at the time." },
+          { correct:true, flag:"Correct path",
+            text:"Enter your own judgment call, and note briefly why it differs — in case a parent or administrator asks later.",
+            fb:"This is the finish. A sentence — 'AI suggested D; re-read, content shows understanding, structure off vs. usual work' — costs ten seconds and makes the grade defensible if anyone questions it. Local governance is mostly this: leaving a trail for the decisions that matter." }
+        ],
+        cite: "Standard — when your judgment differs from the tool's, enter your call and record why. A brief note at the time is what makes a high-stakes decision reviewable later."
+      },
+      takeaway: "An AI tool can be right thirty-five times and still be wrong on the one essay where it matters most — it doesn't know a bad day from a knowledge gap, and it isn't supposed to be the one deciding. A grade is a high-stakes decision about a real student; the tool can inform it, but the judgment, and the reason behind it, stays yours."
+    },
+
+    counselor: {
+      steplines: ["Segment 1", "The Pattern", "Before You Move On"],
+      meta: ["ROLE: SCHOOL COUNSELOR", "TASK: SUPPORT-INTERVENTION REVIEW", "QUEUE: 12 STUDENTS LEFT"],
+      body: [
+        "You're using a new AI scheduling tool that flags students who might benefit from a support intervention, based on attendance and grade patterns. It flags a student as “low priority — pattern consistent with typical adjustment, no action needed.”",
+        "You have twelve other students to review before the day's over."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Trust the flag — the tool's looking at the same data you would, just faster.",
+          fb:"The tool has attendance and grades. It doesn't have the conversations, the hallway context, or the things a family mentions off the record — so 'the same data you would' isn't actually the same. 'No action needed' about a student's wellbeing is a call worth opening the file for." },
+        { correct:true, flag:"Correct path",
+          text:"Pull the student's file yourself before accepting the “no action needed” label.",
+          fb:"This is the move. The flag is a starting point that tells you where to look first, not a decision you can adopt unread. Two minutes in the file is what stands behind a 'low priority' call if it's ever questioned." },
+        { correct:false, flag:"Middle path",
+          text:"Skip this one for now since it's flagged low priority, and come back to it only if time allows.",
+          fb:"'Come back if there's time' usually means it doesn't get looked at. You'd be letting the tool's ranking decide which students get a human review — which is the part of the job the ranking was only supposed to speed up." }
+      ],
+      cite: "Standard — deciding a student needs no support is a high-stakes call. A tool's 'low priority' is a prompt to look, not a conclusion to adopt.",
+      d2: {
+        body: [
+          "Looking closer, you notice something the tool's pattern-matching missed: the dip started right after a specific event you happen to know about — a family situation you heard about informally last month."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"The tool's read is probably still right — most adjustment dips do resolve on their own.",
+            fb:"'Most' isn't this one. You're holding a specific cause the tool never had — a real event with a date that lines up — and 'it usually works out' is a reason to check in, not a reason to look away from what you already know." },
+          { correct:true, flag:"Correct path",
+            text:"Recommend a check-in based on what you actually know, regardless of the tool's flag.",
+            fb:"Right. What you know from outside the system outweighs a pattern-match that was working with less. The tool flagged low priority because it couldn't see the cause; you can, so you act on it." },
+          { correct:false, flag:"Middle path",
+            text:"Mention it to another counselor, but don't act on it yourself since the tool marked it low priority.",
+            fb:"Naming it to a colleague is better than nothing, but it's your review and your knowledge of the family situation. Handing the observation sideways while the tool's flag stands means the student can still fall through the gap between you." }
+        ],
+        cite: "Standard — knowledge the tool never had access to changes the call. A low-priority flag doesn't hold once you can see the cause behind the pattern."
+      },
+      d3: {
+        body: [
+          "You're finalizing your intervention list for the week."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Leave the student off the list — the tool's assessment stands.",
+            fb:"You've already reviewed the file and connected the dip to something real. Leaving the student off now means the finished list reflects the tool's read, not the one you actually did." },
+          { correct:false, flag:"Middle path",
+            text:"Add the student to the list, and don't note why you overrode the tool's flag.",
+            fb:"The student's on the list, which matters most. But when your call differs from the tool's, a line on why — 'tool flagged low; known family event, timing matches' — is what makes the override legible to anyone who reviews the list later." },
+          { correct:true, flag:"Correct path",
+            text:"Add the student to the list, with a brief note on why your judgment differs from the tool's.",
+            fb:"This is the finish. The student gets the check-in, and the note explains the gap between your list and the tool's flag. That record is what a supervisor or a district audit would ask for." }
+        ],
+        cite: "Standard — add the student on your judgment and note why it differs from the tool. The brief written reason is what makes the decision reviewable."
+      },
+      takeaway: "A pattern-matching tool sees data; it doesn't know what you know from an actual conversation, a family situation, or years of context about a student. “Low priority” from a tool is a starting point, not a decision — especially when you're holding information the tool never had access to in the first place."
+    },
+
+    lead: {
+      steplines: ["Segment 1", "The Pattern", "Before It's Final"],
+      meta: ["ROLE: GRADE-LEVEL LEAD TEACHER", "TASK: NEXT-YEAR PLACEMENTS", "SCOPE: GRADE-LEVEL TEAM"],
+      body: [
+        "Your team is using an AI tool to help suggest next-year course placements based on current grades and test scores. For most students, its suggestions match what the team would have decided anyway.",
+        "For one student, it suggests a lower-level track than what her teacher has been recommending all year based on classroom performance."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Go with the tool's suggestion — it's working off the same numbers everyone else would use.",
+          fb:"A placement sets a student's whole next year — about as high-stakes as a school decision gets. When the tool's output directly contradicts a teacher who's watched this student all year, 'it used the standard numbers' is the reason to slow down, not to proceed." },
+        { correct:true, flag:"Correct path",
+          text:"Bring it to the team for discussion before finalizing anything, since it conflicts with a teacher's direct observation.",
+          fb:"Right. The conflict between the data and the classroom observation is exactly what a placement team is for. The tool's job was to speed up the easy cases; the ones where it disagrees with a teacher are the ones that need people in a room." },
+        { correct:false, flag:"Middle path",
+          text:"Quietly override it yourself to match the teacher's recommendation, without looping anyone else in.",
+          fb:"You might land in the right place, but a solo override has the same flaw as a solo acceptance — one person deciding a team decision. And with nothing written down, no one can see why the placement differs from what the tool produced." }
+      ],
+      cite: "Standard — a placement is high-stakes and belongs to the team, not to the tool or to one person overriding it. A conflict between the data and a teacher's observation goes to the group.",
+      d2: {
+        body: [
+          "In the team discussion, her teacher explains: the student had two rough test days due to a health issue, but her daily classwork has been consistently strong all year — something a single data point wouldn't capture."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"The test scores are still the test scores — go with what the tool recommends.",
+            fb:"The team now has a specific, documented reason those two scores run low — and a year of classwork pointing the other way. Deferring to the tool here means knowingly placing the student on the strength of her worst two days." },
+          { correct:true, flag:"Correct path",
+            text:"Weigh the teacher's classroom observation alongside the data, and decide as a team.",
+            fb:"This is the standard working as intended. The test scores are one signal, the year of classwork is another, and the team weighs both rather than letting either the tool or a single voice settle it alone." },
+          { correct:false, flag:"Middle path",
+            text:"Let the teacher's opinion override the tool entirely, without documenting the reasoning.",
+            fb:"The teacher's account is strong evidence, but 'her teacher said so' with nothing recorded is thin if the placement is questioned later. Weigh it as a team and write down what tipped the decision." }
+        ],
+        cite: "Standard — context the data can't capture gets weighed by the team alongside the numbers. The reasoning that decides it is written down, not left to memory."
+      },
+      d3: {
+        body: [
+          "The team is ready to submit final placement recommendations."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Submit the tool's original suggestion — it's simpler to just go with the numbers.",
+            fb:"The team already did the work and reached a different answer for good reason. Reverting to the tool's version at submission because it's less friction throws away the discussion and sends the student down a track the team decided against." },
+          { correct:false, flag:"Middle path",
+            text:"Submit the team's decision, without noting how or why it differs from the tool.",
+            fb:"The recommendation is right, but placement decisions get appealed and audited. A short note — 'tool suggested lower track; team placed higher: two low test days from documented health issue, year of strong classwork' — is what answers that later." },
+          { correct:true, flag:"Correct path",
+            text:"Submit the team's decision, with a brief note on the reasoning, in case it's questioned later.",
+            fb:"This is the finish. The placement reflects the team's judgment, and the note makes the departure from the tool's output defensible to a parent, a principal, or the district. That record is the local-governance piece." }
+        ],
+        cite: "Standard — submit the team's call and record why it differs from the tool. A brief written rationale is what makes a placement decision reviewable."
+      },
+      takeaway: "A placement recommendation shapes a student's whole next year — that's exactly the kind of decision that needs more than one data point and more than one tool's suggestion. The team's job isn't to rubber-stamp the numbers or overrule them on instinct alone; it's to actually weigh what each source knows, together, before deciding."
+    },
+
+    office: {
+      steplines: ["Segment 1", "The Pattern", "Before It's Sent"],
+      meta: ["ROLE: FRONT OFFICE / SUPPORT STAFF", "TASK: TRUANCY ESCALATION", "STEP: FORMAL LETTER HOME"],
+      body: [
+        "Your office uses an AI tool to flag students for truancy escalation based on absence thresholds. It flags a student for the next escalation step — a formal letter home.",
+        "You know this family, and you know they've had a rough few months."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Process the escalation as flagged — the threshold was met, that's the rule.",
+          fb:"A formal truancy letter has real weight for a family, and the threshold being met is where the review starts, not where it ends. You already know something the absence count doesn't reflect — that's a reason to check before the letter goes out." },
+        { correct:true, flag:"Correct path",
+          text:"Check with a counselor or administrator before sending anything, given what you know about this family's situation.",
+          fb:"Right. The tool counted absences correctly; whether the next formal step makes sense is a judgment call, and it's not yours to make alone or to skip. Looping in the person who can see the fuller picture is the move." },
+        { correct:false, flag:"Middle path",
+          text:"Quietly hold the letter without telling anyone, since you feel uncomfortable sending it.",
+          fb:"Your instinct not to send it may be sound, but holding it silently just swaps the tool's unreviewed decision for your own. If the letter shouldn't go, someone with the authority to make that call should be the one saying so — on the record." }
+      ],
+      cite: "Standard — a formal escalation is high-stakes; a met threshold is a prompt to review, not an instruction to send. The call goes to someone who can see what the tool can't.",
+      d2: {
+        body: [
+          "The counselor confirms: the family's already working with the school on a documented plan related to their situation, but that context isn't something the attendance tool has access to."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send the letter anyway — the tool flagged it, so the process should follow through.",
+            fb:"There's now a documented plan the school itself put in place, and the tool never saw it. Sending the standard letter on top of that isn't 'following the process' — it's running a process that's already been overtaken by one the school agreed to." },
+          { correct:true, flag:"Correct path",
+            text:"Loop in the right person to decide whether the formal escalation still makes sense given the plan already in place.",
+            fb:"This is the standard. A documented plan changes what the right next step is, and whether the formal letter still fits is a decision for someone with the authority to weigh it against that plan — not something the threshold settles." },
+          { correct:false, flag:"Middle path",
+            text:"Decide on your own not to send it, without documenting that decision anywhere.",
+            fb:"Not sending it is very likely correct now — but an undocumented 'I decided to hold it' leaves no trace that the flag was reviewed and why. The decision needs an owner and a record, not just a quiet non-action." }
+        ],
+        cite: "Standard — a plan the tool couldn't see changes the call, and whether to escalate is decided by someone with authority to weigh it. The decision is recorded."
+      },
+      d3: {
+        body: [
+          "You're about to finalize this week's escalation letters."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send it as originally flagged — no changes.",
+            fb:"The counselor already confirmed there's a plan in place and the escalation needs a second look. Sending the letter as flagged now ignores a review that's already happened and puts a formal notice on a family that's actively working with the school." },
+          { correct:false, flag:"Middle path",
+            text:"Hold it based on the counselor's input, without any record of why.",
+            fb:"Holding it is right. But with nothing written down, the next person to run this report sees the same flag, has no idea it was reviewed, and may send the letter anyway. The hold needs a note attached to it." },
+          { correct:true, flag:"Correct path",
+            text:"Hold it, and document that it was reviewed and held given the existing plan — so there's a record if it's asked about later.",
+            fb:"This is the finish. The letter's held, and the note — 'flagged by threshold; reviewed with counselor; existing documented plan; held pending that plan' — means the decision survives past this week and past you being the one who made it." }
+        ],
+        cite: "Standard — hold the letter on the reviewed decision and document why. The written reason is what keeps the next run from re-triggering it blindly."
+      },
+      takeaway: "An attendance tool can count absences; it can't know about a family's documented plan, a hard season, or context that never made it into the system. The threshold being met doesn't mean the next step is automatic — it means it's time to check with the person who actually has the fuller picture."
+    },
+
+    admin: {
+      steplines: ["Segment 1", "The Pattern", "Before It's Finalized"],
+      meta: ["ROLE: SCHOOL ADMINISTRATOR", "TASK: DISCIPLINE DECISION", "SOURCE: DISTRICT PILOT TOOL"],
+      body: [
+        "An AI tool your district piloted this year recommends discipline outcomes based on incident type and student history. For a recent incident, it recommends a three-day suspension — consistent with the stated policy for that incident type."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Follow the recommendation — it matches policy, and that's what the tool is there for.",
+          fb:"The tool has confirmed the incident was filed under a category whose policy is three days. It hasn't confirmed that three days is right for this student and this incident — and a suspension is exactly the kind of decision a parent, the district, or a hearing can later ask you to justify." },
+        { correct:true, flag:"Correct path",
+          text:"Review the full incident report yourself before deciding, using the recommendation as one input.",
+          fb:"This is the standard. The recommendation is a starting point; the decision comes from you reading the report and weighing what the category leaves out. Policy alignment is one factor in that, not a substitute for the review." },
+        { correct:false, flag:"Middle path",
+          text:"Increase the suggested consequence yourself, since the incident felt more serious than the category suggests.",
+          fb:"Overriding upward without reading the full report has the same gap as accepting the tool's number without reading it — the decision still isn't based on the actual facts. A feeling that it's more serious is a reason to open the file, not to raise the penalty." }
+      ],
+      cite: "Standard — a discipline outcome is high-stakes and is decided by a person reviewing the full report. Matching a policy category is one input, not the decision.",
+      d2: {
+        body: [
+          "Reading the full report, you notice a detail the tool's categorization missed entirely: this was the student's first incident ever, and the circumstances were more ambiguous than the report category implies."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"The tool matched it to the right policy category — stick with the recommendation.",
+            fb:"You've now seen two things the category doesn't carry: a clean prior record and circumstances that don't fit the label cleanly. Sticking with the three-day recommendation means finalizing a suspension you can already see the category oversimplified." },
+          { correct:true, flag:"Correct path",
+            text:"Weigh the fuller context and make the call yourself, even if it differs from the tool's output.",
+            fb:"Right. First incident, ambiguous circumstances — this is precisely the judgment the tool can't do and you can. The recommendation stays as a reference point; the decision is yours, made from the full picture." },
+          { correct:false, flag:"Middle path",
+            text:"Let a colleague administrator make the call instead, since you're not sure.",
+            fb:"A second opinion is fine to seek, but handing off the decision because it's genuinely a judgment call is backwards — that's the part of the job that's yours. Consult if you want another read, then make the call." }
+        ],
+        cite: "Standard — context the category missed is weighed by the decision-maker, not deferred. Uncertainty is a reason to review carefully, not to hand the call away."
+      },
+      d3: {
+        body: [
+          "You're about to log the final disciplinary decision."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Log the tool's original recommendation — it's already justified by policy.",
+            fb:"You've read the full report and found the category understated the ambiguity and ignored a clean record. Logging the tool's three days anyway, because 'policy' is an easy justification, records a decision you no longer stand behind." },
+          { correct:false, flag:"Middle path",
+            text:"Log your own decision, without noting why it differs from the tool's suggestion.",
+            fb:"The outcome is right, but a discipline record is one of the most likely things a parent or the district office will contest. 'AI recommended three days; reduced to one after review: first offense, ambiguous circumstances' is the sentence that holds up when they do." },
+          { correct:true, flag:"Correct path",
+            text:"Log your own decision, with a clear note on the reasoning — since this is exactly the kind of record a parent or district office might ask about.",
+            fb:"This is the finish. The decision reflects your review, and the note ties it to the specific facts that moved you off the tool's number. That's the record local governance runs on — and the one that protects the student and you." }
+        ],
+        cite: "Standard — log your decision and the reasoning that took it away from the tool's recommendation. On a discipline record, the written rationale is the safeguard."
+      },
+      takeaway: "A discipline tool can match an incident to a policy category; it can't weigh a first-time offense, ambiguous circumstances, or the fuller judgment a real decision like this requires. Following a recommendation because it's consistent with policy isn't the same as confirming it's actually the right call for this student, in this situation — and when you're the one signing off, that difference is yours to catch."
+    }
+  };
+
+  let score = 0;
+  let currentRole = null;
+  let segmentStep = 1;
+  const dots = document.querySelectorAll('.dot');
+
+  function setDot(i) {
+    dots.forEach((d, j) => {
+      d.classList.toggle('done', j < i);
+      d.classList.toggle('current', j === i);
+    });
+  }
+
+  /* ---- Stage 1 -> Stage 2: pick a role, render Segment 1 ---- */
+  document.getElementById('roles').addEventListener('click', (e) => {
+    const btn = e.target.closest('.role');
+    if (!btn) return;
+    currentRole = btn.dataset.role;
+    renderSegment(1);
+    document.getElementById('stage-role').style.display = 'none';
+    document.getElementById('stage-decision').style.display = 'block';
+    setDot(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderSegment(step) {
+    segmentStep = step;
+    const v = VARIANTS[currentRole];
+    const d = step === 1 ? v : (step === 2 ? v.d2 : v.d3);
+
+    document.getElementById('dec-stepline').textContent = v.steplines[step - 1];
+
+    const meta = document.getElementById('dec-meta');
+    meta.innerHTML = '';
+    if (step === 1) {
+      meta.style.display = 'flex';
+      v.meta.forEach((m) => {
+        const s = document.createElement('span');
+        s.textContent = m;
+        meta.appendChild(s);
+      });
+    } else {
+      meta.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('dec-body');
+    bodyEl.innerHTML = '';
+    d.body.forEach((p) => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      bodyEl.appendChild(el);
+    });
+
+    document.getElementById('dec-prompt').textContent = d.prompt;
+
+    const cbox = document.getElementById('dec-choices');
+    cbox.className = 'choices';
+    cbox.innerHTML = '';
+    d.choices.forEach((c) => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = c.text;
+      b.dataset.correct = c.correct ? 'true' : 'false';
+      b.dataset.flag = c.flag;
+      b.dataset.fb = c.fb;
+      cbox.appendChild(b);
+    });
+
+    const fb = document.getElementById('dec-fb');
+    fb.className = 'feedback';
+    fb.querySelector('.flag').textContent = '';
+    fb.querySelector('.fb-text').textContent = '';
+    fb.querySelector('.cite').textContent = d.cite;
+
+    document.getElementById('dec-next').classList.remove('show');
+  }
+
+  /* ---- Stage 2: three segments in sequence ---- */
+  const decChoices = document.getElementById('dec-choices');
+  const decFb = document.getElementById('dec-fb');
+  const decNext = document.getElementById('dec-next');
+
+  decChoices.addEventListener('click', (e) => {
+    const btn = e.target.closest('.choice');
+    if (!btn || decChoices.classList.contains('answered')) return;
+    decChoices.classList.add('answered');
+    [...decChoices.children].forEach((c) => c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    // Segments are practice, not part of the scored result — only the
+    // closing checkpoint counts. Keep `correct` for feedback styling only.
+    const correct = btn.dataset.correct === 'true';
+    decFb.querySelector('.flag').textContent = btn.dataset.flag;
+    decFb.querySelector('.fb-text').textContent = btn.dataset.fb;
+    decFb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+    decNext.classList.add('show');
+  });
+
+  decNext.addEventListener('click', () => {
+    if (segmentStep < 3) {
+      const next = segmentStep + 1;
+      renderSegment(next);
+      setDot(next - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('takeaway-body').textContent = VARIANTS[currentRole].takeaway;
+      document.getElementById('stage-decision').style.display = 'none';
+      document.getElementById('stage-takeaway').style.display = 'block';
+      setDot(3);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  /* ---- Stage 3 -> Stage 4: takeaway + coach, then on to the checkpoint ---- */
+  document.getElementById('take-next').addEventListener('click', () => {
+    document.getElementById('stage-takeaway').style.display = 'none';
+    document.getElementById('stage-check').style.display = 'block';
+    setDot(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Stage 4: closing checkpoint — three independent checks ---- */
+  let checkAnswered = 0;
+  const nextCheck = document.getElementById('next-check');
+
+  document.querySelectorAll('.kc-q').forEach((q) => {
+    const choices = q.querySelector('.choices');
+    const fb = q.querySelector('.feedback');
+    choices.addEventListener('click', (e) => {
+      const btn = e.target.closest('.choice');
+      if (!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach((c) => c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if (correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      checkAnswered++;
+      if (checkAnswered === 3) nextCheck.classList.add('show');
+    });
+  });
+
+  nextCheck.addEventListener('click', () => {
+    document.getElementById('stage-check').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots.forEach((d) => { d.classList.add('done'); d.classList.remove('current'); });
+    document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 3
+      ? "All three checks held — you didn't treat “it matches policy” as the decision, and you kept the human review where a high-stakes call needs it."
+      : "Revisit the checks above. The standard is short — an AI recommendation that follows policy still isn't the decision; a person weighs what the category leaves out, and documents the reasoning when their judgment differs.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
+     Public embed path: no lab token, so the D6 per-embed rate limit applies. */
+  (function () {
+    const MODULE_ID = "07";
+    const body    = document.getElementById('coach-body');
+    const input   = document.getElementById('coach-input');
+    const send    = document.getElementById('coach-send');
+    const suggest = document.getElementById('coach-suggest');
+    let conversationId = (crypto.randomUUID
+      ? crypto.randomUUID()
+      : 'c-' + Date.now() + Math.random().toString(16).slice(2));
+    let messages = [];   // {role:'user'|'assistant', content}
+    let busy = false;
+
+    function bubble(cls, text) {
+      const el = document.createElement('div');
+      el.className = 'bubble ' + cls;
+      el.textContent = text;
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+      return el;
+    }
+    function autosize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+    input.addEventListener('input', autosize);
+
+    // Chips prefill the composer — they don't trigger a canned reply.
+    suggest.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sugg');
+      if (!btn) return;
+      input.value = btn.textContent;
+      input.focus();
+      autosize();
+    });
+
+    async function ask() {
+      const q = input.value.trim();
+      if (!q || busy) return;
+      busy = true; send.disabled = true;
+      bubble('ask', q);
+      input.value = ''; autosize();
+      messages.push({ role: 'user', content: q });
+      const reply = bubble('reply', '…');
+      let acc = '';
+      try {
+        const res = await fetch('/api/coach', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ moduleId: MODULE_ID, conversationId, messages })
+        });
+        if (!res.ok) {
+          const t = (await res.text()).trim();
+          reply.textContent = t || ('Something went wrong (' + res.status + ').');
+          messages.pop();
+          return;
+        }
+        const rd = res.body.getReader();
+        const dec = new TextDecoder();
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          acc += dec.decode(value, { stream: true });
+          reply.textContent = acc || '…';
+          body.scrollTop = body.scrollHeight;
+        }
+        acc = acc.trim();
+        reply.textContent = acc || 'No response — please try again.';
+        if (acc) messages.push({ role: 'assistant', content: acc });
+      } catch (err) {
+        reply.textContent = 'Couldn’t reach the coach. Please try again.';
+        messages.pop();
+      } finally {
+        busy = false; send.disabled = false; input.focus();
+      }
+    }
+
+    send.addEventListener('click', ask);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+    });
+  })();
+</script>
+</body>
+</html>
