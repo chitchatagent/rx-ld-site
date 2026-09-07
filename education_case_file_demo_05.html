@@ -68,6 +68,8 @@
     margin:0 0 18px;letter-spacing:-.01em;
   }
 
+  .lead-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 22px;max-width:62ch;}
+
   /* scenario chart note */
   .note{
     background:var(--paper-raised);
@@ -85,6 +87,18 @@
   .note p:last-child{margin-bottom:0;}
 
   .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  /* role picker */
+  .roles{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .role{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:15px 16px;font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .role:hover{border-color:var(--scrub);}
+  .role:active{transform:scale(.995);}
+  .role .r-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;display:block;margin-bottom:3px;}
+  .role .r-task{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);}
 
   .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
   .choice{
@@ -126,7 +140,16 @@
   .continue.show{display:inline-block;}
   .continue:hover{background:var(--scrub);}
 
-  /* knowledge check */
+  /* closing checkpoint — three quick checks, stacked */
+  .kc-intro{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0 0 26px;}
+  .kc-q{border-top:1px solid var(--line);padding-top:22px;margin-bottom:26px;}
+  .kc-q .prompt{margin-top:0;}
+  .kc-q .quote{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:3px;padding:14px 16px;margin:0 0 14px;font-size:14.5px;line-height:1.58;font-style:italic;
+  }
+
+  /* knowledge check result */
   .kc-result{
     font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
   }
@@ -198,90 +221,65 @@
     <div class="dot"></div>
     <div class="dot"></div>
     <div class="dot"></div>
+    <div class="dot"></div>
   </div>
 
-  <div id="stage-dp1">
-    <div class="stepline">Scenario</div>
+  <!-- ── Stage 1: role selection ── -->
+  <div id="stage-role">
+    <div class="stepline">Your Role</div>
+    <h1>The Drafted Letter</h1>
+    <p class="lead-p">An AI draft, a deadline, and a family-facing message that has to be right. It plays out a little differently depending on where you sit — the standard underneath doesn't. Pick the seat closest to yours.</p>
+    <div class="roles" id="roles">
+      <button class="role" data-role="office">
+        <span class="r-name">Front Office Administrator</span>
+        <span class="r-task">An early-dismissal policy update to all families</span>
+      </button>
+      <button class="role" data-role="teacher">
+        <span class="r-name">Classroom Teacher</span>
+        <span class="r-task">A late-work policy change — families notified by tomorrow</span>
+      </button>
+      <button class="role" data-role="counselor">
+        <span class="r-name">School Counselor</span>
+        <span class="r-task">A parent summary of the updated support-request process</span>
+      </button>
+      <button class="role" data-role="lead">
+        <span class="r-name">Grade-Level Lead Teacher</span>
+        <span class="r-task">A homework-policy explanation from the whole grade level</span>
+      </button>
+      <button class="role" data-role="admin">
+        <span class="r-name">School Administrator</span>
+        <span class="r-task">A discipline-referral process change, district-wide</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stage 2: three segments (re-rendered from the chosen role) ── -->
+  <div id="stage-decision" style="display:none;">
+    <div class="stepline" id="dec-stepline">Scenario</div>
     <h1>The Drafted Letter</h1>
     <div class="note">
-      <div class="meta">
-        <span>ROLE: FRONT OFFICE ADMINISTRATOR</span>
-        <span>TASK: FAMILY COMMUNICATION</span>
-      </div>
-      <p>A new district policy just changed how early-dismissal requests are handled. You need to notify all families by end of day. You open your AI assistant, paste in the old policy language, and ask it to draft an update explaining the new procedure.</p>
-      <p>The draft comes back in about ten seconds. It reads well — clear, professional, friendly. You have forty backlogged emails and a line at your desk.</p>
+      <div class="meta" id="dec-meta"></div>
+      <div id="dec-body"></div>
     </div>
 
-    <div class="prompt">What do you do with the draft?</div>
-    <div class="choices" id="choices-1">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Sending without review skips the one step that actually matters here — AI-generated accuracy isn't guaranteed, and a family-facing policy communication needs a human check before it represents the district.">It reads fine — send it as-is. You've got other things to handle.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Tone isn't the risk that matters most in this scenario — factual accuracy of a policy explanation is. A tone-only skim can miss a substantive error.">Skim it quickly for tone, then send.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Human review against source material is the standard, not just a tone check.">Read it closely against the actual policy document, checking every specific detail — dates, procedures, who to contact.</button>
-    </div>
+    <div class="prompt" id="dec-prompt"></div>
+    <div class="choices" id="dec-choices"></div>
 
-    <div class="feedback" id="fb-1">
+    <div class="feedback" id="dec-fb">
       <span class="flag"></span>
       <p class="fb-text"></p>
-      <div class="cite">Standard — AI-assisted communication gets a human review against the source before it represents the district.</div>
+      <div class="cite"></div>
     </div>
 
-    <button class="continue" id="next-1">Continue →</button>
+    <button class="continue" id="dec-next">Continue →</button>
   </div>
 
-  <div id="stage-dp2" style="display:none;">
-    <div class="stepline">The Error</div>
-    <h1>A number that doesn't match</h1>
+  <!-- ── Stage 3: role-specific takeaway + Ask the Coach ── -->
+  <div id="stage-takeaway" style="display:none;">
+    <div class="stepline">Takeaway</div>
+    <h1>The Drafted Letter</h1>
     <div class="note">
-      <p>While checking, you notice the AI draft says early-dismissal requests now require <strong>48 hours' notice</strong>. The actual new policy says <strong>24 hours</strong>.</p>
-    </div>
-
-    <div class="prompt">What do you do?</div>
-    <div class="choices" id="choices-2">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="A factual error in a district-wide policy communication isn't a rounding error — it directly misinforms every family and could cause real scheduling problems.">Close enough — 24 vs. 48 hours isn't a big difference. Send it.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Finding one error is a signal to check the rest carefully, not to stop looking — AI drafts can contain more than one factual issue.">Fix the number yourself and send it right away, without checking anything else.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="One error found means look for others, not just patch and move on.">Correct the number, then re-check the rest of the draft carefully for any other factual inconsistencies before proceeding.</button>
-    </div>
-
-    <div class="feedback" id="fb-2">
-      <span class="flag"></span>
-      <p class="fb-text"></p>
-      <div class="cite">Standard — one caught error is a prompt to re-verify the whole draft, not a green light.</div>
-    </div>
-
-    <button class="continue" id="next-2">Continue →</button>
-  </div>
-
-  <div id="stage-dp3" style="display:none;">
-    <div class="stepline">Before It Sends</div>
-    <h1>The final step</h1>
-    <div class="note">
-      <p>The draft is now accurate — the number is fixed and you've re-checked the rest against the policy.</p>
-    </div>
-
-    <div class="prompt">Before sending district-wide, what's the right final step?</div>
-    <div class="choices" id="choices-3">
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Accuracy isn't the only requirement. Many districts now require disclosure or a second-person review step for AI-assisted communications before they go out district-wide — skipping that may be a policy violation, not just a courtesy.">Send it immediately — it's accurate now, no reason to wait.</button>
-      <button class="choice" data-correct="true" data-flag="Correct path" data-fb="Transparency about AI involvement, paired with the human review you've already done, matches what several states now require or strongly encourage for family-facing AI-assisted communication.">Send it, and note in the email that AI helped draft it.</button>
-      <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Not necessarily wrong, depending on your district's policy — but the standard here is disclosure plus verified accuracy. An extra approval layer may or may not be your district's actual requirement. Know your policy specifically.">Hold it and wait for a supervisor's sign-off before sending anything, even though you already verified it yourself.</button>
-    </div>
-
-    <div class="feedback" id="fb-3">
-      <span class="flag"></span>
-      <p class="fb-text"></p>
-      <div class="cite">Standard — disclosure plus documented human review. Extra approval layers depend on your district's specific policy.</div>
-    </div>
-
-    <button class="continue" id="next-3">See results →</button>
-  </div>
-
-  <div id="stage-done" style="display:none;">
-    <div class="stepline">Complete</div>
-    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
-    <div class="kc-sub" id="kc-sub">You held the human review standard cleanly at every step.</div>
-
-    <div class="note">
-      <p><strong>The takeaway.</strong> AI can draft fast. It can't verify itself. The standard is: check the draft against source material, catch and fully resolve factual errors — not just the first one you spot — and disclose AI involvement where your district's policy requires it.</p>
-      <p>Speed is the AI's job. Accuracy and transparency are still yours.</p>
+      <p id="takeaway-body"></p>
     </div>
 
     <div class="coach">
@@ -293,9 +291,9 @@
         <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
       </div>
       <div class="coach-suggest" id="coach-suggest">
-        <button class="sugg" data-q="source">What if I don't have the policy document to check against?</button>
-        <button class="sugg" data-q="rewrote">Do I still disclose if I rewrote most of it?</button>
-        <button class="sugg" data-q="policy">What counts as my district's policy on this?</button>
+        <button class="sugg">What if I don't have the policy document to check against?</button>
+        <button class="sugg">Do I still disclose if I rewrote most of it?</button>
+        <button class="sugg">What counts as my district's policy on this?</button>
       </div>
       <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
       <div class="coach-compose">
@@ -303,58 +301,514 @@
         <button id="coach-send" type="button">Send</button>
       </div>
     </div>
+
+    <button class="continue show" id="take-next">Continue to the checkpoint →</button>
+  </div>
+
+  <!-- ── Stage 4: closing checkpoint (shared across all five variants) ── -->
+  <div id="stage-check" style="display:none;">
+    <div class="stepline">Closing Checkpoint</div>
+    <h1>Before you're done</h1>
+    <p class="kc-intro">Three quick checks. These are the same whichever seat you picked — the standard doesn't change with the role.</p>
+
+    <div class="kc-q" id="kcq-1">
+      <div class="prompt">Agree or disagree — and why, in one line to yourself?</div>
+      <p class="quote">A colleague says: "If the AI's writing sounds confident and professional, that's a good sign it's accurate."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Fluent, confident writing is what these tools produce by default — it's how the model always sounds, not evidence the facts are right. A polished draft and an accurate one are unrelated; the only way to tell them apart is to check against the source.">Agree</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Confidence and polish are the model's default register. Accuracy is a separate question, and it's answered only by checking the draft against the actual policy or process document.">Disagree</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-2">
+      <div class="prompt">True or false?</div>
+      <p class="quote">"Once you've personally verified an AI-drafted communication is accurate, that's always enough — no further sign-off is needed before it goes out district-wide."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Verified accuracy is necessary but not always sufficient. Many districts also require disclosure that AI was involved, and some require a second reviewer before district-wide family communication goes out. 'I checked it myself' doesn't automatically satisfy those.">True</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Your own verification is the core of the standard, but disclosure — and, depending on the district, a second sign-off — can also apply before something goes out district-wide. Know your specific policy.">False</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-3">
+      <div class="prompt">Pick one. An AI assistant drafts a family letter that reads perfectly and matches your own understanding of the policy. What's the right next step before sending?</div>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Your memory of the policy isn't the source. If your understanding is a step out of date — or the meeting you're recalling changed something — the draft inherits that gap. Matching your memory isn't the same as matching the document.">Send it, it matches what you know.</button>
+        <button class="choice" data-correct="true" data-flag="Correct" data-fb="This is the step. The draft reading well and matching your recollection are both easy to get; matching the written policy is the one that actually protects the families receiving it.">Check it against the actual written policy document, not just your memory of it.</button>
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Indefinite delay isn't caution, it's avoidance — the families still need the information. Check it against the written policy, disclose the AI assist, and send it.">Hold it indefinitely just in case.</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <button class="continue" id="next-check">See results →</button>
+  </div>
+
+  <!-- ── Stage 5: results ── -->
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You held the human review standard cleanly at every step.</div>
   </div>
 
 </div>
 
 <script>
+  /* ---- variant content: five roles, one shared three-segment shape ----
+     Each role carries Segment 1 (meta/body/prompt/choices/cite) plus
+     d2 (The Error) and d3 (Before It Sends), phrased for that seat, and
+     its own takeaway. The three segments are practice — only the closing
+     checkpoint scores. */
+  const STEPLINE = ["Scenario", "The Error", "Before It Sends"];
+
+  const VARIANTS = {
+    office: {
+      meta: ["ROLE: FRONT OFFICE ADMINISTRATOR", "TASK: FAMILY COMMUNICATION"],
+      body: [
+        "A new district policy just changed how early-dismissal requests are handled. You need to notify all families by end of day. You open your AI assistant, paste in the old policy language, and ask it to draft an update explaining the new procedure.",
+        "The draft comes back in about ten seconds. It reads well — clear, professional, friendly. You have forty backlogged emails and a line at your desk."
+      ],
+      prompt: "What do you do with the draft?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"It reads fine — send it as-is. You've got other things to handle.",
+          fb:"Sending without review skips the one step that actually matters here — AI-generated accuracy isn't guaranteed, and a family-facing policy communication needs a human check before it represents the district." },
+        { correct:false, flag:"Consequence",
+          text:"Skim it quickly for tone, then send.",
+          fb:"Tone isn't the risk that matters most in this scenario — factual accuracy of a policy explanation is. A tone-only skim can miss a substantive error." },
+        { correct:true, flag:"Correct path",
+          text:"Read it closely against the actual policy document, checking every specific detail — dates, procedures, who to contact.",
+          fb:"Human review against source material is the standard, not just a tone check." }
+      ],
+      cite: "Standard — AI-assisted communication gets a human review against the source before it represents the district.",
+      d2: {
+        body: [
+          "While checking, you notice the AI draft says early-dismissal requests now require 48 hours' notice. The actual new policy says 24 hours."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Close enough — 24 vs. 48 hours isn't a big difference. Send it.",
+            fb:"A factual error in a district-wide policy communication isn't a rounding error — it directly misinforms every family and could cause real scheduling problems." },
+          { correct:false, flag:"Consequence",
+            text:"Fix the number yourself and send it right away, without checking anything else.",
+            fb:"Finding one error is a signal to check the rest carefully, not to stop looking — AI drafts can contain more than one factual issue." },
+          { correct:true, flag:"Correct path",
+            text:"Correct the number, then re-check the rest of the draft carefully for any other factual inconsistencies before proceeding.",
+            fb:"One error found means look for others, not just patch and move on." }
+        ],
+        cite: "Standard — one caught error is a prompt to re-verify the whole draft, not a green light."
+      },
+      d3: {
+        body: [
+          "The draft is now accurate — the number is fixed and you've re-checked the rest against the policy."
+        ],
+        prompt: "Before sending district-wide, what's the right final step?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send it immediately — it's accurate now, no reason to wait.",
+            fb:"Accuracy isn't the only requirement. Many districts now require disclosure or a second-person review step for AI-assisted communications before they go out district-wide — skipping that may be a policy violation, not just a courtesy." },
+          { correct:true, flag:"Correct path",
+            text:"Send it, and note in the email that AI helped draft it.",
+            fb:"Transparency about AI involvement, paired with the human review you've already done, matches what several states now require or strongly encourage for family-facing AI-assisted communication." },
+          { correct:false, flag:"Consequence",
+            text:"Hold it and wait for a supervisor's sign-off before sending anything, even though you already verified it yourself.",
+            fb:"Not necessarily wrong, depending on your district's policy — but the standard here is disclosure plus verified accuracy. An extra approval layer may or may not be your district's actual requirement. Know your policy specifically." }
+        ],
+        cite: "Standard — disclosure plus documented human review. Extra approval layers depend on your district's specific policy."
+      },
+      takeaway: "AI can draft fast. It can't verify itself. The standard is: check the draft against source material, catch and fully resolve every factual error — not just the first one you spot — and disclose AI involvement where your district's policy requires it. Speed is the AI's job. Accuracy and transparency are still yours."
+    },
+
+    teacher: {
+      meta: ["ROLE: CLASSROOM TEACHER", "TASK: FAMILY COMMUNICATION"],
+      body: [
+        "A change to the school's late-work policy just came down from your department chair. You need to notify families before the new grading period starts tomorrow. You paste the old policy into your AI assistant and ask it to draft a family-friendly explanation.",
+        "The draft comes back fast — warm, clear, easy to skim. You have report cards due and a stack of makeup work to grade."
+      ],
+      prompt: "What do you do with the draft?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it as-is.",
+          fb:"Sending without review skips the one step that matters. An AI draft's accuracy isn't guaranteed, and a late-work policy your families will plan around needs a human check against the memo first." },
+        { correct:false, flag:"Consequence",
+          text:"Skim for tone, then send.",
+          fb:"Tone isn't the main risk — a wrong detail in the policy is. A skim for warmth can miss a number or a deadline that's simply incorrect." },
+        { correct:true, flag:"Correct path",
+          text:"Read closely against the actual policy memo, checking every detail.",
+          fb:"Checking the draft against the memo itself — not your memory of the meeting — is the standard. That's what makes it safe to send in the school's name." }
+      ],
+      cite: "Standard — AI-assisted family communication gets a human review against the source memo before it goes out.",
+      d2: {
+        body: [
+          "The draft says late work now earns partial credit for 24 hours. The actual memo says 48."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Close enough, send it.",
+            fb:"24 vs. 48 hours is the whole substance of the policy for a family trying to plan. A wrong window here isn't a rounding error — it misinforms every family you teach." },
+          { correct:false, flag:"Consequence",
+            text:"Fix the number, send right away.",
+            fb:"One error found is a reason to check the rest, not to stop. AI drafts often carry more than one — the next could be the contact name or the start date." },
+          { correct:true, flag:"Correct path",
+            text:"Correct it, then re-check the rest carefully.",
+            fb:"A caught error means re-verify the whole draft against the memo, not patch the one line and move on." }
+        ],
+        cite: "Standard — one caught error is a prompt to re-check the whole draft, not a green light."
+      },
+      d3: {
+        body: [
+          "The draft is accurate now — the number's fixed and you've re-checked the rest against the memo."
+        ],
+        prompt: "Final step before it goes to all your families?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send immediately.",
+            fb:"Accuracy isn't the only requirement. A growing number of districts expect disclosure — or a second reviewer — for AI-assisted family communication before it goes out. Skipping that can be a policy miss, not just a courtesy." },
+          { correct:true, flag:"Correct path",
+            text:"Send, noting AI helped draft it.",
+            fb:"Disclosure plus the review you've already done is the standard many states now encourage for family-facing AI-assisted messages. A short line does it." },
+          { correct:false, flag:"Consequence",
+            text:"Check with your department chair before sending, even though you've verified it yourself.",
+            fb:"Not necessarily wrong — your department or district may want that. But an extra approval layer isn't automatically the standard; disclosure plus verified accuracy is. Know what your policy actually requires." }
+        ],
+        cite: "Standard — disclosure plus documented human review. Whether an extra sign-off is required depends on your district's specific policy."
+      },
+      takeaway: "AI can draft fast. It can't verify itself. The standard is: check the draft against the actual policy memo, catch and fully resolve every factual error — not just the first one you spot — and disclose AI involvement where your district's policy requires it. Speed is the AI's job. Accuracy and transparency, especially to the families in your own classroom, are still yours."
+    },
+
+    counselor: {
+      meta: ["ROLE: SCHOOL COUNSELOR", "TASK: FAMILY COMMUNICATION"],
+      body: [
+        "A parent asked for a summary of the newly updated support-request process. You paste the old process into your AI assistant and ask for a draft explanation.",
+        "It comes back clear and reassuring. Three more families are waiting and you have a meeting in ten minutes."
+      ],
+      prompt: "What do you do with the draft?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it as-is.",
+          fb:"Sending unreviewed skips the step that matters. An AI draft's accuracy isn't guaranteed, and a family acting on the wrong deadline or form loses time they may not have." },
+        { correct:false, flag:"Consequence",
+          text:"Skim for tone, then send.",
+          fb:"Reassuring tone isn't the risk — a wrong deadline, form, or contact is. A skim for warmth won't catch a step that's simply incorrect." },
+        { correct:true, flag:"Correct path",
+          text:"Read closely against the actual updated process — deadlines, forms, contacts.",
+          fb:"Checking the draft against the process document itself is the standard. That's what makes it safe to hand to a family relying on it." }
+      ],
+      cite: "Standard — AI-assisted family communication gets a human review against the source process before it goes out.",
+      d2: {
+        body: [
+          "The draft says requests need 10 school days' notice. The actual process says 5."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Close enough.",
+            fb:"For a family that needs support soon, 10 days vs. 5 is the whole answer. Doubling the wait in writing isn't a small slip — it could delay help a student needs." },
+          { correct:false, flag:"Consequence",
+            text:"Fix and send right away.",
+            fb:"One error found is a reason to check the rest, not to stop. The draft could have the form name or the contact wrong too." },
+          { correct:true, flag:"Correct path",
+            text:"Correct it and re-check the rest carefully.",
+            fb:"A caught error means re-verify the whole draft against the process, not just patch the one number." }
+        ],
+        cite: "Standard — one caught error is a prompt to re-check the whole draft, not a green light."
+      },
+      d3: {
+        body: [
+          "The draft is accurate now — the timeline's fixed and you've re-checked the rest against the process."
+        ],
+        prompt: "Final step before sending to the family?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send immediately.",
+            fb:"Accuracy isn't the only requirement. Many districts now expect disclosure — or a second reviewer — for AI-assisted family communication. Skipping it can be a policy miss." },
+          { correct:true, flag:"Correct path",
+            text:"Send, noting AI helped draft it.",
+            fb:"Disclosure plus the review you've done is what many states now encourage for family-facing AI-assisted messages. One line covers it." },
+          { correct:false, flag:"Consequence",
+            text:"Get your supervisor's sign-off first, even though you've already verified it.",
+            fb:"Not necessarily wrong — your district may want that. But an extra approval layer isn't automatically the standard; disclosure plus verified accuracy is. Know your actual policy." }
+        ],
+        cite: "Standard — disclosure plus documented human review. Whether an extra sign-off applies depends on your district's specific policy."
+      },
+      takeaway: "AI can draft fast. It can't verify itself. The standard is: check the draft against the actual process document, catch and fully resolve every factual error — not just the first one you spot — and disclose AI involvement where your district's policy requires it. Speed is the AI's job. Getting the process right for a family relying on you is still yours."
+    },
+
+    lead: {
+      meta: ["ROLE: GRADE-LEVEL LEAD", "TASK: FAMILY COMMUNICATION"],
+      body: [
+        "Your principal asks you, as grade-level lead, to draft the family-facing explanation of a new homework policy — it'll go out from the whole grade level, not just your room. You hand the policy to your AI assistant and ask for a family-friendly version.",
+        "It returns a polished draft, ready to forward to your team. Your own classroom prep is waiting."
+      ],
+      prompt: "What do you do with the draft?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it as-is.",
+          fb:"Forwarding unreviewed just moves the risk to five teachers and every family in the grade. An AI draft's accuracy isn't guaranteed, and this one goes out in all your names." },
+        { correct:false, flag:"Consequence",
+          text:"Skim for tone, then send.",
+          fb:"Tone isn't the main risk — a wrong detail in the policy is. A warmth check won't catch a cap or a date that's simply incorrect, and it's about to be sent by the whole team." },
+        { correct:true, flag:"Correct path",
+          text:"Read closely against the actual policy, checking every detail.",
+          fb:"Checking the draft against the policy itself is the standard — more so when it's going out under the whole grade level's name, not just yours." }
+      ],
+      cite: "Standard — AI-assisted family communication gets a human review against the source before it goes out, especially when it represents a whole team.",
+      d2: {
+        body: [
+          "The draft says the new nightly homework cap is 45 minutes. The policy says 30."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Close enough.",
+            fb:"15 minutes a night is the whole point of the policy for a family planning their evening. Sent under the grade level's name, a wrong cap misinforms every family — and every teacher forwards it." },
+          { correct:false, flag:"Consequence",
+            text:"Fix and send right away.",
+            fb:"One error found is a reason to check the rest, not to stop. The draft could have the start date or the contact wrong too, and five teachers are about to forward it." },
+          { correct:true, flag:"Correct path",
+            text:"Correct it and re-check carefully before forwarding.",
+            fb:"A caught error means re-verify the whole draft against the policy before it goes to the team, not patch the one line." }
+        ],
+        cite: "Standard — one caught error is a prompt to re-check the whole draft, not a green light."
+      },
+      d3: {
+        body: [
+          "The draft is accurate now — the cap's fixed and you've re-checked the rest against the policy."
+        ],
+        prompt: "Before forwarding this to your whole team to send to every family?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Forward it immediately.",
+            fb:"Accuracy isn't the only requirement. Many districts expect disclosure — or a second reviewer — for AI-assisted family communication, and this one's going out at grade-level scale." },
+          { correct:true, flag:"Correct path",
+            text:"Forward it, noting AI helped draft it.",
+            fb:"Disclosure plus the review you've done is the standard many states now encourage — and it lets each teacher on your team pass it along knowing what they're sending." },
+          { correct:false, flag:"Consequence",
+            text:"Have your principal confirm the final wording first, since it's going out under the whole grade level's name.",
+            fb:"Reasonable instinct given the scale, and your principal may well want it. But an extra sign-off isn't automatically the standard — disclosure plus the verified accuracy you already have is. Check whether your school actually requires the extra step before making it the rule." }
+        ],
+        cite: "Standard — disclosure plus documented human review. Whether principal sign-off is required depends on your school's specific policy."
+      },
+      takeaway: "AI can draft fast. It can't verify itself. The standard is: check the draft against the actual policy, catch and fully resolve every factual error — not just the first one you spot — and disclose AI involvement where your district's policy requires it. Speed is the AI's job. When something goes out under your whole team's name, accuracy and transparency are still yours."
+    },
+
+    admin: {
+      meta: ["ROLE: SCHOOL ADMINISTRATOR", "TASK: STAFF & FAMILY COMMUNICATION"],
+      body: [
+        "The district revised its discipline referral process, effective Monday. You ask your AI assistant to draft the staff-and-family announcement, and it comes back quickly.",
+        "It reads clean and authoritative. You have a staff meeting in twenty minutes."
+      ],
+      prompt: "What do you do with the draft?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it as-is.",
+          fb:"An authoritative read isn't verification. Sent under your name to staff and families, a wrong step in the referral process becomes the version people follow on Monday." },
+        { correct:false, flag:"Consequence",
+          text:"Skim for tone, then send.",
+          fb:"Tone isn't the risk — a wrong threshold or step in the process is. A skim won't catch a number that's simply incorrect." },
+        { correct:true, flag:"Correct path",
+          text:"Read closely against the actual revised process.",
+          fb:"Checking the draft against the revised process itself is the standard, and it matters more when it goes out under your name as official guidance." }
+      ],
+      cite: "Standard — AI-assisted communication gets a human review against the source before it goes out, more so when it's official.",
+      d2: {
+        body: [
+          "The draft says referrals escalate to admin after 3 incidents. The revised process says 2."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Close enough.",
+            fb:"2 vs. 3 incidents is the substance of the process for every teacher applying it. A wrong threshold in an official announcement gets followed — and it's your name on it." },
+          { correct:false, flag:"Consequence",
+            text:"Fix and send right away.",
+            fb:"One error found is a reason to check the rest, not to stop. The effective date or the escalation path could be wrong too." },
+          { correct:true, flag:"Correct path",
+            text:"Correct it and re-check for other inconsistencies.",
+            fb:"A caught error means re-verify the whole draft against the revised process, not patch the one number." }
+        ],
+        cite: "Standard — one caught error is a prompt to re-check the whole draft, not a green light."
+      },
+      d3: {
+        body: [
+          "The draft is accurate now — the threshold's fixed and you've re-checked the rest against the revised process."
+        ],
+        prompt: "Before this goes out district-wide under your name?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Send immediately, you verified it.",
+            fb:"Accuracy isn't the only requirement. Many districts expect disclosure — or a second reviewer — for AI-assisted communication, and this is official process guidance going out at scale." },
+          { correct:true, flag:"Correct path",
+            text:"Send, noting AI helped draft it.",
+            fb:"Disclosure plus the review you've done is what many states now encourage for AI-assisted communication — and modeling it openly sets the norm for the staff reading it." },
+          { correct:false, flag:"Consequence",
+            text:"Get the district office's sign-off first, since it's now official district communication.",
+            fb:"Often reasonable for official district communication, and your district may require it. But an extra sign-off isn't automatically the standard; disclosure plus the verified accuracy you have is. Confirm what your district's policy actually calls for rather than assuming the extra step." }
+        ],
+        cite: "Standard — disclosure plus documented human review. Whether district-office sign-off is required depends on your district's specific policy."
+      },
+      takeaway: "AI can draft fast. It can't verify itself. The standard is: check the draft against the actual revised process, catch and fully resolve every factual error — not just the first one you spot — and disclose AI involvement where your district's policy requires it. Speed is the AI's job. When it goes out district-wide under your name, accuracy and transparency are still yours."
+    }
+  };
+
   let score = 0;
+  let currentRole = null;
+  let segmentStep = 1;
   const dots = document.querySelectorAll('.dot');
 
-  function wireStage(n, fromStage, toStage, dotFrom, dotTo, isLast){
-    const choices = document.getElementById('choices-' + n);
-    const fb = document.getElementById('fb-' + n);
-    const next = document.getElementById('next-' + n);
-
-    choices.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.choice');
-      if(!btn || choices.classList.contains('answered')) return;
-      choices.classList.add('answered');
-      [...choices.children].forEach(c=>c.classList.add('locked'));
-      btn.style.borderColor = 'var(--ink)';
-      const correct = btn.dataset.correct === 'true';
-      if(correct) score++;
-      fb.querySelector('.flag').textContent = btn.dataset.flag;
-      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
-      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
-      next.classList.add('show');
-    });
-
-    next.addEventListener('click', ()=>{
-      document.getElementById(fromStage).style.display = 'none';
-      document.getElementById(toStage).style.display = 'block';
-      dots[dotFrom].classList.remove('current');
-      dots[dotFrom].classList.add('done');
-      if(isLast){
-        dots[dotTo].classList.add('done');
-        document.getElementById('kc-result').textContent = score + '/3 — Case closed';
-        document.getElementById('kc-sub').textContent = score === 3
-          ? "You held the human review standard cleanly — checked against source, resolved every error, disclosed the AI assist."
-          : "Revisit the flagged steps above. The standard is a short chain — check the draft against source material, fully resolve every factual error, and disclose AI involvement where policy requires it.";
-      } else {
-        dots[dotTo].classList.add('current');
-      }
-      window.scrollTo({top:0, behavior:'smooth'});
+  function setDot(i) {
+    dots.forEach((d, j) => {
+      d.classList.toggle('done', j < i);
+      d.classList.toggle('current', j === i);
     });
   }
 
-  wireStage(1, 'stage-dp1', 'stage-dp2', 0, 1, false);
-  wireStage(2, 'stage-dp2', 'stage-dp3', 1, 2, false);
-  wireStage(3, 'stage-dp3', 'stage-done', 2, 3, true);
+  /* ---- Stage 1 -> Stage 2: pick a role, render Segment 1 ---- */
+  document.getElementById('roles').addEventListener('click', (e) => {
+    const btn = e.target.closest('.role');
+    if (!btn) return;
+    currentRole = btn.dataset.role;
+    renderSegment(1);
+    document.getElementById('stage-role').style.display = 'none';
+    document.getElementById('stage-decision').style.display = 'block';
+    setDot(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderSegment(step) {
+    segmentStep = step;
+    const v = VARIANTS[currentRole];
+    const d = step === 1 ? v : (step === 2 ? v.d2 : v.d3);
+
+    document.getElementById('dec-stepline').textContent = STEPLINE[step - 1];
+
+    const meta = document.getElementById('dec-meta');
+    meta.innerHTML = '';
+    if (step === 1) {
+      meta.style.display = 'flex';
+      v.meta.forEach((m) => {
+        const s = document.createElement('span');
+        s.textContent = m;
+        meta.appendChild(s);
+      });
+    } else {
+      meta.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('dec-body');
+    bodyEl.innerHTML = '';
+    d.body.forEach((p) => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      bodyEl.appendChild(el);
+    });
+
+    document.getElementById('dec-prompt').textContent = d.prompt;
+
+    const cbox = document.getElementById('dec-choices');
+    cbox.className = 'choices';
+    cbox.innerHTML = '';
+    d.choices.forEach((c) => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = c.text;
+      b.dataset.correct = c.correct ? 'true' : 'false';
+      b.dataset.flag = c.flag;
+      b.dataset.fb = c.fb;
+      cbox.appendChild(b);
+    });
+
+    const fb = document.getElementById('dec-fb');
+    fb.className = 'feedback';
+    fb.querySelector('.flag').textContent = '';
+    fb.querySelector('.fb-text').textContent = '';
+    fb.querySelector('.cite').textContent = d.cite;
+
+    document.getElementById('dec-next').classList.remove('show');
+  }
+
+  /* ---- Stage 2: three segments in sequence ---- */
+  const decChoices = document.getElementById('dec-choices');
+  const decFb = document.getElementById('dec-fb');
+  const decNext = document.getElementById('dec-next');
+
+  decChoices.addEventListener('click', (e) => {
+    const btn = e.target.closest('.choice');
+    if (!btn || decChoices.classList.contains('answered')) return;
+    decChoices.classList.add('answered');
+    [...decChoices.children].forEach((c) => c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    // Segments are practice, not part of the scored result — only the
+    // closing checkpoint counts. Keep `correct` for feedback styling only.
+    const correct = btn.dataset.correct === 'true';
+    decFb.querySelector('.flag').textContent = btn.dataset.flag;
+    decFb.querySelector('.fb-text').textContent = btn.dataset.fb;
+    decFb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+    decNext.classList.add('show');
+  });
+
+  decNext.addEventListener('click', () => {
+    if (segmentStep < 3) {
+      const next = segmentStep + 1;
+      renderSegment(next);
+      setDot(next - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('takeaway-body').textContent = VARIANTS[currentRole].takeaway;
+      document.getElementById('stage-decision').style.display = 'none';
+      document.getElementById('stage-takeaway').style.display = 'block';
+      setDot(3);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  /* ---- Stage 3 -> Stage 4: takeaway + coach, then on to the checkpoint ---- */
+  document.getElementById('take-next').addEventListener('click', () => {
+    document.getElementById('stage-takeaway').style.display = 'none';
+    document.getElementById('stage-check').style.display = 'block';
+    setDot(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Stage 4: closing checkpoint — three independent checks ---- */
+  let checkAnswered = 0;
+  const nextCheck = document.getElementById('next-check');
+
+  document.querySelectorAll('.kc-q').forEach((q) => {
+    const choices = q.querySelector('.choices');
+    const fb = q.querySelector('.feedback');
+    choices.addEventListener('click', (e) => {
+      const btn = e.target.closest('.choice');
+      if (!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach((c) => c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if (correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      checkAnswered++;
+      if (checkAnswered === 3) nextCheck.classList.add('show');
+    });
+  });
+
+  nextCheck.addEventListener('click', () => {
+    document.getElementById('stage-check').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots.forEach((d) => { d.classList.add('done'); d.classList.remove('current'); });
+    document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 3
+      ? "All three checks held — you didn't mistake a confident draft for an accurate one, and you didn't treat your own sign-off as the whole standard."
+      : "Revisit the checks above. The standard is a short chain — check the draft against the source document, fully resolve every factual error, and disclose AI involvement where policy requires it.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
      Public embed path: no lab token, so the D6 per-embed rate limit applies. */
-  (function(){
+  (function () {
     const MODULE_ID = "05";
     const body    = document.getElementById('coach-body');
     const input   = document.getElementById('coach-input');
@@ -366,7 +820,7 @@
     let messages = [];   // {role:'user'|'assistant', content}
     let busy = false;
 
-    function bubble(cls, text){
+    function bubble(cls, text) {
       const el = document.createElement('div');
       el.className = 'bubble ' + cls;
       el.textContent = text;
@@ -374,28 +828,28 @@
       body.scrollTop = body.scrollHeight;
       return el;
     }
-    function autosize(){
+    function autosize() {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 120) + 'px';
     }
     input.addEventListener('input', autosize);
 
-    // Chips prefill the composer now — they no longer trigger a canned reply.
-    suggest.addEventListener('click', (e)=>{
+    // Chips prefill the composer — they don't trigger a canned reply.
+    suggest.addEventListener('click', (e) => {
       const btn = e.target.closest('.sugg');
-      if(!btn) return;
+      if (!btn) return;
       input.value = btn.textContent;
       input.focus();
       autosize();
     });
 
-    async function ask(){
+    async function ask() {
       const q = input.value.trim();
-      if(!q || busy) return;
+      if (!q || busy) return;
       busy = true; send.disabled = true;
       bubble('ask', q);
       input.value = ''; autosize();
-      messages.push({ role:'user', content:q });
+      messages.push({ role: 'user', content: q });
       const reply = bubble('reply', '…');
       let acc = '';
       try {
@@ -415,13 +869,13 @@
         for (;;) {
           const { done, value } = await rd.read();
           if (done) break;
-          acc += dec.decode(value, { stream:true });
+          acc += dec.decode(value, { stream: true });
           reply.textContent = acc || '…';
           body.scrollTop = body.scrollHeight;
         }
         acc = acc.trim();
         reply.textContent = acc || 'No response — please try again.';
-        if (acc) messages.push({ role:'assistant', content:acc });
+        if (acc) messages.push({ role: 'assistant', content: acc });
       } catch (err) {
         reply.textContent = 'Couldn’t reach the coach. Please try again.';
         messages.pop();
@@ -431,8 +885,8 @@
     }
 
     send.addEventListener('click', ask);
-    input.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); ask(); }
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
     });
   })();
 </script>
