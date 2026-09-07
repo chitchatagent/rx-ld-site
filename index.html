@@ -175,7 +175,10 @@
   p.std-note{margin:22px 0 0;font-size:13px;line-height:1.65;font-style:italic;color:var(--slate-light);}
 
   /* ── case timeline ── */
-  .timeline .inner{padding-top:78px;padding-bottom:86px;}
+  /* same-cream boundary as Mechanism→Prescription: carry the divider rule and
+     the 74px above-rule padding so this transition reads the same, not as a void */
+  .timeline{border-top:1px solid var(--border);}
+  .timeline .inner{padding-top:74px;padding-bottom:86px;}
   .tl-head{display:flex;align-items:baseline;gap:18px;margin-bottom:38px;}
   .tl-head .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);white-space:nowrap;}
   .tl-head .n{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#9A9384;white-space:nowrap;}
