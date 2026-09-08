@@ -165,6 +165,18 @@
      .hero-photo (not inside the overflow-clipped box) so it can never be clipped. */
   .caption-tag{position:absolute;left:28px;bottom:96px;z-index:2;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
 
+  /* ── who it's for — dark image+text band; hero photo treatment, mirrored (photo left) ── */
+  .who{background:var(--navy);border-top:1px solid var(--navy-hair);}
+  .who .inner{padding:0;display:grid;grid-template-columns:520px 1fr;align-items:stretch;}
+  .who .hero-photo-wrap{min-height:520px;}
+  .who .hero-photo .img{background-image:url('images/teacher.jpg');background-size:cover;background-position:30% 32%;}
+  .who .hero-photo .scrim-x{background:linear-gradient(270deg,rgba(30,42,58,.96) 0%,rgba(30,42,58,.42) 26%,rgba(30,42,58,0) 58%),linear-gradient(90deg,rgba(30,42,58,.9) 0%,rgba(30,42,58,.4) 12%,rgba(30,42,58,0) 32%);}
+  .who .caption-tag{left:28px;bottom:44px;}
+  .who-text{padding:84px 60px 88px;display:flex;flex-direction:column;justify-content:center;}
+  .who-text .eyebrow{margin-bottom:24px;}
+  .who-text h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3.4vw,36px);line-height:1.12;letter-spacing:-.022em;color:var(--cream);max-width:16ch;margin-bottom:22px;}
+  .who-text p{font-size:16px;line-height:1.75;color:var(--slate-lighter);max-width:52ch;margin:0;}
+
   /* ── problem note ── */
   .problem{background:var(--cream-alt);border-bottom:1px solid var(--border);}
   .problem .inner{padding-top:60px;padding-bottom:62px;display:grid;grid-template-columns:220px 1fr;gap:60px;align-items:start;}
@@ -312,6 +324,12 @@
     .caption-tag{bottom:20px;}
     .hero-photo .scrim-x{background:linear-gradient(180deg,rgba(30,42,58,.92) 0%,rgba(30,42,58,.25) 20%,rgba(30,42,58,0) 44%);}
     .hero-photo .scrim-y{background:linear-gradient(0deg,rgba(30,42,58,.5) 0%,rgba(30,42,58,0) 24%);}
+    .who .inner{grid-template-columns:1fr;}
+    .who .hero-photo-wrap{min-height:0;height:min(115vw,440px);align-self:start;}
+    .who .hero-photo .img{background-position:35% 26%;}
+    .who .hero-photo .scrim-x{background:linear-gradient(0deg,rgba(30,42,58,.92) 0%,rgba(30,42,58,.22) 22%,rgba(30,42,58,0) 46%);}
+    .who .caption-tag{bottom:18px;}
+    .who-text{padding:56px 40px 56px;}
   }
   @media (max-width:900px){
     .tl-grid,.moments-grid{grid-template-columns:1fr 1fr;}
@@ -322,6 +340,7 @@
     :root{--gutter:24px;}
     /* header sits close on phones — the desktop 64px top gap reads as dead space here */
     .hero-text{padding-top:32px;}
+    .who-text{padding-top:36px;}
     .hero h1{max-width:none;}
     .ex-head{flex-direction:column;align-items:flex-start;gap:16px;}
     .ex-title{font-size:32px;}
@@ -490,6 +509,24 @@
       </div>
     </div>
     <p class="std-note">This is the prescription part — not a lecture, dosed once, but a treatment built for you and delivered on a schedule.</p>
+  </div>
+</section>
+
+<section class="band who">
+  <div class="inner">
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <div class="img" role="img" aria-label="A classroom teacher standing in her room"></div>
+        <div class="scrim-x"></div>
+        <div class="scrim-y"></div>
+      </div>
+      <span class="caption-tag">STAFF · CLASSROOM TEACHER</span>
+    </div>
+    <div class="who-text">
+      <div class="eyebrow"><span class="rule"></span>Who this is for</div>
+      <h2>You're the one who has to make the call.</h2>
+      <p>Every scenario on this site started as a real moment someone in a school actually faced — a report card deadline, a parent email, a split-second read on a hallway comment. This isn't training built for a compliance officer to check a box after the fact. It's built for the person actually standing in the room. Here's exactly how we build it.</p>
+    </div>
   </div>
 </section>
 
