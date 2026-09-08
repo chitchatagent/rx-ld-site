@@ -26,12 +26,23 @@
 <meta name="twitter:image" content="https://www.rxldtraining.com/images/og-mandated-reporter.jpg">
 <script>
   /* One-time cleanup: a service worker left over from a previous site on this domain
-     was intercepting fetches and serving stale HTML (survives cache-busted URLs).
-     This site ships no service worker — remove any that are still registered, and
-     drop their Cache Storage, so the browser serves live content again. */
+     intercepts fetches and serves stale HTML (survives cache-busted URLs) — the
+     visible symptom is a stray logo / empty band below the real footer, cleared by a
+     manual refresh. This site ships no service worker. Unregister any that remain and
+     drop their Cache Storage; if one was actually present, reload ONCE (session-
+     guarded) so the current pageview — which the stale SW may have served — gets live
+     content, not just the next navigation. Revisit removing this once logs show no
+     stale registrations. */
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations()
-      .then(function (rs) { rs.forEach(function (r) { r.unregister(); }); })
+      .then(function (rs) {
+        if (!rs.length) return;
+        return Promise.all(rs.map(function (r) { return r.unregister(); })).then(function () {
+          if (sessionStorage.getItem('sw-evicted')) return;
+          sessionStorage.setItem('sw-evicted', '1');
+          location.reload();
+        });
+      })
       .catch(function () {});
   }
   if (window.caches && caches.keys) {
