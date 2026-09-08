@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<!-- Unlisted: not linked from anywhere and kept out of search until the
+     bundled AI Literacy program (Anchors 1-4) launches together. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File 08 — The Undisclosed Draft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,680&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F0;
+    --paper-raised:#FFFFFF;
+    --ink:#1C2B2A;
+    --ink-soft:#5A6270;
+    --scrub:#1E2A3A;
+    --scrub-hover:#16202D;
+    --scrub-tint:#E6E9EE;
+    --amber:#C97B3D;
+    --amber-tint:#F5E8DA;
+    --alert:#B84C3E;
+    --alert-tint:#F6E1DD;
+    --line:#D8D3C7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+  /* header / chart tab bar */
+  .chartbar{
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;margin-bottom:6px;
+  }
+  .brandmark{display:flex;align-items:baseline;gap:12px;}
+  /* 4C Split Lockup — matches the rxldtraining.com nav/footer wordmark */
+  .wordmark{display:inline-flex;align-items:baseline;line-height:1;}
+  .wordmark .wm-rx,.wordmark .wm-dot{font-family:'Fraunces',serif;font-weight:680;font-size:21px;line-height:1;}
+  .wordmark .wm-rx{letter-spacing:-.035em;color:var(--ink);}
+  .wordmark .wm-dot{color:var(--amber);padding:0 1px;}
+  .wordmark .wm-ld{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14.5px;letter-spacing:.02em;line-height:1;color:var(--ink);}
+  .brandmark .name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);}
+  .casetag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;}
+
+  /* progress dots — real sequence, so numbering is earned */
+  .progress{display:flex;gap:6px;margin:18px 0 30px;}
+  .dot{height:4px;flex:1;background:var(--line);border-radius:2px;overflow:hidden;position:relative;}
+  .dot.done{background:var(--scrub);}
+  .dot.current::after{
+    content:'';position:absolute;inset:0;background:var(--scrub);
+    animation:fillDot 1.4s ease-in-out infinite alternate;
+  }
+  @keyframes fillDot{from{opacity:.35;}to{opacity:1;}}
+
+  .stepline{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;
+  }
+
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 18px;letter-spacing:-.01em;
+  }
+
+  .lead-p{font-size:15.5px;line-height:1.62;color:var(--ink-soft);margin:0 0 22px;max-width:62ch;}
+
+  /* scenario chart note */
+  .note{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--scrub);
+    border-radius:3px;
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .note .meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .note p{margin:0 0 10px;line-height:1.62;font-size:15.5px;}
+  .note p:last-child{margin-bottom:0;}
+
+  .prompt{font-size:15.5px;font-weight:500;margin:26px 0 14px;}
+
+  /* role picker */
+  .roles{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .role{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:15px 16px;font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .role:hover{border-color:var(--scrub);}
+  .role:active{transform:scale(.995);}
+  .role .r-name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;display:block;margin-bottom:3px;}
+  .role .r-task{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);}
+
+  .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+  .choice{
+    text-align:left;background:var(--paper-raised);border:1px solid var(--line);
+    border-radius:3px;padding:14px 16px;font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;color:var(--ink);cursor:pointer;transition:border-color .15s, transform .1s;
+  }
+  .choice:hover{border-color:var(--scrub);}
+  .choice:active{transform:scale(.995);}
+  .choice.locked{cursor:default;opacity:.55;}
+  .choice.locked:hover{border-color:var(--line);}
+
+  /* feedback */
+  .feedback{
+    display:none;margin-top:22px;border-radius:3px;padding:20px 22px;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--scrub-tint);border:1px solid var(--scrub);}
+  .feedback.caution{background:var(--amber-tint);border:1px solid var(--amber);}
+  .feedback .flag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;font-weight:500;margin-bottom:8px;display:block;
+  }
+  .feedback.good .flag{color:var(--scrub);}
+  .feedback.caution .flag{color:var(--amber);}
+  .feedback p{margin:0 0 10px;font-size:14.5px;line-height:1.6;}
+  .cite{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+    border-top:1px solid rgba(0,0,0,.08);padding-top:10px;margin-top:12px;
+  }
+
+  .continue{
+    display:none;margin-top:20px;background:var(--ink);color:var(--paper);
+    border:none;border-radius:3px;padding:12px 20px;font-size:14px;font-weight:500;
+    cursor:pointer;font-family:'IBM Plex Sans',sans-serif;
+  }
+  .continue.show{display:inline-block;}
+  .continue:hover{background:var(--scrub);}
+
+  /* closing checkpoint — three quick checks, stacked */
+  .kc-intro{font-size:15px;line-height:1.62;color:var(--ink-soft);margin:0 0 26px;}
+  .kc-q{border-top:1px solid var(--line);padding-top:22px;margin-bottom:26px;}
+  .kc-q .prompt{margin-top:0;}
+  .kc-q .quote{
+    background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:3px;padding:14px 16px;margin:0 0 14px;font-size:14.5px;line-height:1.58;font-style:italic;
+  }
+
+  /* knowledge check result */
+  .kc-result{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:6px;
+  }
+  .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
+
+  /* coach panel — signature element */
+  .coach{
+    margin-top:34px;border:1px solid var(--line);border-radius:6px;
+    background:var(--paper-raised);overflow:hidden;
+  }
+  .coach-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--line);background:var(--scrub-tint);
+  }
+  .coach-dot{width:8px;height:8px;border-radius:50%;background:var(--scrub);}
+  .coach-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);}
+  .coach-body{padding:18px;display:flex;flex-direction:column;gap:12px;min-height:64px;max-height:46vh;overflow-y:auto;}
+  .bubble{max-width:86%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
+  .bubble.ask{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:2px;}
+  .bubble.reply{align-self:flex-start;background:var(--scrub-tint);color:var(--ink);border-bottom-left-radius:2px;}
+  .coach-suggest{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px;}
+  .sugg{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--scrub);
+    background:transparent;border:1px solid var(--scrub);border-radius:20px;
+    padding:6px 12px;cursor:pointer;
+  }
+  .sugg:hover{background:var(--scrub);color:var(--paper);}
+  .sugg[disabled]{opacity:.35;cursor:default;}
+  .sugg[disabled]:hover{background:transparent;color:var(--scrub);}
+  .coach-disclaim{margin:0;padding:0 18px 10px;font-size:11px;color:var(--scrub);}
+  .coach-compose{display:flex;gap:8px;padding:0 18px 18px;}
+  .coach-compose textarea{
+    flex:1;resize:none;min-height:38px;max-height:120px;font:inherit;font-size:13.5px;
+    line-height:1.5;color:var(--ink);background:var(--paper);
+    border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  }
+  .coach-compose textarea:focus{outline:2px solid var(--scrub);outline-offset:-1px;}
+  .coach-compose button{
+    align-self:flex-end;font:inherit;font-size:13px;cursor:pointer;color:var(--paper);
+    background:var(--ink);border:0;border-radius:8px;padding:9px 16px;
+  }
+  .coach-compose button:disabled{opacity:.4;cursor:default;}
+
+  @media (prefers-reduced-motion: reduce){
+    .dot.current::after{animation:none;opacity:1;}
+    .feedback{animation:none;}
+  }
+  @media (max-width:520px){
+    h1{font-size:23px;}
+    .wrap{padding:22px 16px 60px;}
+    /* stack the header so "Case File" doesn't collide with the module label */
+    .chartbar{flex-direction:column;align-items:flex-start;gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="chartbar">
+    <div class="brandmark">
+      <span class="wordmark"><span class="wm-rx">RX</span><span class="wm-dot">·</span><span class="wm-ld">L&D</span></span>
+      <span class="name">Case File</span>
+    </div>
+    <span class="casetag">MODULE 08 · TRANSPARENCY &amp; DISCLOSURE</span>
+  </div>
+
+  <div class="progress">
+    <div class="dot current"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- ── Stage 1: role selection ── -->
+  <div id="stage-role">
+    <div class="stepline">Your Role</div>
+    <h1>The Undisclosed Draft</h1>
+    <p class="lead-p">This one plays out differently depending on where you sit — but the standard underneath is the same in every version. Pick the seat closest to yours.</p>
+    <div class="roles" id="roles">
+      <button class="role" data-role="teacher">
+        <span class="r-name">Classroom Teacher</span>
+        <span class="r-task">A parent progress email, AI-drafted and verified</span>
+      </button>
+      <button class="role" data-role="counselor">
+        <span class="r-name">School Counselor</span>
+        <span class="r-task">A meeting-summary email for a family</span>
+      </button>
+      <button class="role" data-role="lead">
+        <span class="r-name">Grade-Level Lead Teacher</span>
+        <span class="r-task">A family-facing FAQ for the whole grade</span>
+      </button>
+      <button class="role" data-role="office">
+        <span class="r-name">Front Office / Support Staff</span>
+        <span class="r-task">A schedule-change announcement to every family</span>
+      </button>
+      <button class="role" data-role="admin">
+        <span class="r-name">School Administrator</span>
+        <span class="r-task">A formal policy letter under your signature</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Stage 2: three segments (re-rendered from the chosen role) ── -->
+  <div id="stage-decision" style="display:none;">
+    <div class="stepline" id="dec-stepline">Segment 1</div>
+    <h1>The Undisclosed Draft</h1>
+    <div class="note">
+      <div class="meta" id="dec-meta"></div>
+      <div id="dec-body"></div>
+    </div>
+
+    <div class="prompt" id="dec-prompt"></div>
+    <div class="choices" id="dec-choices"></div>
+
+    <div class="feedback" id="dec-fb">
+      <span class="flag"></span>
+      <p class="fb-text"></p>
+      <div class="cite"></div>
+    </div>
+
+    <button class="continue" id="dec-next">Continue →</button>
+  </div>
+
+  <!-- ── Stage 3: role-specific takeaway + Ask the Coach ── -->
+  <div id="stage-takeaway" style="display:none;">
+    <div class="stepline">Takeaway</div>
+    <h1>The Undisclosed Draft</h1>
+    <div class="note">
+      <p id="takeaway-body"></p>
+    </div>
+
+    <div class="coach">
+      <div class="coach-head">
+        <div class="coach-dot"></div>
+        <div class="coach-title">Ask the coach</div>
+      </div>
+      <div class="coach-body" id="coach-body">
+        <div class="bubble reply">Ask a question about this case, or tap a prompt below.</div>
+      </div>
+      <div class="coach-suggest" id="coach-suggest">
+        <button class="sugg">If the content is fully accurate, what's the disclosure actually for?</button>
+        <button class="sugg">Isn't "mention it if asked" basically the same as disclosing?</button>
+        <button class="sugg">What if my district doesn't have a disclosure policy at all?</button>
+      </div>
+      <p class="coach-disclaim">A training aid — don't enter real names or personal details.</p>
+      <div class="coach-compose">
+        <textarea id="coach-input" rows="1" placeholder="Ask about this case…" aria-label="Ask the coach"></textarea>
+        <button id="coach-send" type="button">Send</button>
+      </div>
+    </div>
+
+    <button class="continue show" id="take-next">Continue to the checkpoint →</button>
+  </div>
+
+  <!-- ── Stage 4: closing checkpoint (shared across all five variants) ── -->
+  <div id="stage-check" style="display:none;">
+    <div class="stepline">Closing Checkpoint</div>
+    <h1>Before you're done</h1>
+    <p class="kc-intro">Three quick checks. These are the same whichever seat you picked — the standard doesn't change with the role.</p>
+
+    <div class="kc-q" id="kcq-1">
+      <div class="prompt">Agree or disagree — and why, in one line to yourself?</div>
+      <p class="quote">"A colleague says: 'As long as I checked the AI's work carefully and it's accurate, there's no real reason I need to mention I used it.'"</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Accuracy and disclosure are two different obligations. Checking the AI's work carefully discharges the first — it says nothing about the second. A reader who's told the message was written 'by you' is missing something true about how it was made, no matter how correct the content is.">Agree</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="Verifying the content and disclosing the assistance are separate duties. One is about whether the message is right; the other is about whether the reader knows how it was produced. Doing the first well doesn't let you skip the second — what disclosure requires is set by your district's policy, not by how confident you are in the draft.">Disagree</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-2">
+      <div class="prompt">True or false?</div>
+      <p class="quote">"If nobody asks whether AI was used to draft something, that means disclosure wasn't necessary in that situation."</p>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="Whether disclosure was required doesn't depend on whether anyone happened to ask. The obligation is set by policy and by what's true about the message — not by the reader's curiosity. 'No one asked' just means the gap wasn't noticed yet.">True</button>
+        <button class="choice" data-correct="true" data-flag="Correct direction" data-fb="A question not being asked isn't the same as disclosure not being needed. If your district's policy calls for disclosing AI assistance, that applies whether or not a parent thinks to raise it — and 'mention it only if asked' is a plan that works right up until someone asks.">False</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <div class="kc-q" id="kcq-3">
+      <div class="prompt">Pick one. You've been deciding on your own, message by message, whether to mention AI assistance — sometimes you do, sometimes you don't, depending on how it feels in the moment. What's the right next step?</div>
+      <div class="choices">
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="'Worked so far' means no one has pushed on it yet. Message-by-message instinct isn't a disclosure standard — it's the absence of one, and it produces inconsistent answers that are hard to defend when someone compares notes.">Keep doing what feels right case-by-case — it's worked so far.</button>
+        <button class="choice" data-correct="true" data-flag="Correct" data-fb="This is it. There may already be a policy that settles the question; if there is, follow it the same way every time. Consistency is the point — disclosure you apply by feel isn't something a parent, a colleague, or an administrator can rely on.">Check what your district's actual disclosure policy requires, and follow it consistently.</button>
+        <button class="choice" data-correct="false" data-flag="Consequence" data-fb="That trades a question you could just answer for giving up a tool that was helping. The issue was never that you used AI — it's that there was no consistent rule for saying so. Find the rule; keep the tool.">Stop using AI tools altogether to avoid the question.</button>
+      </div>
+      <div class="feedback"><span class="flag"></span><p class="fb-text"></p></div>
+    </div>
+
+    <button class="continue" id="next-check">See results →</button>
+  </div>
+
+  <!-- ── Stage 5: results ── -->
+  <div id="stage-done" style="display:none;">
+    <div class="stepline">Complete</div>
+    <div class="kc-result" id="kc-result">3/3 — Case closed</div>
+    <div class="kc-sub" id="kc-sub">You kept accuracy and disclosure as separate obligations, and put a consistent standard ahead of a case-by-case call.</div>
+  </div>
+
+</div>
+
+<script>
+  /* ---- variant content: five roles, one shared segment shape ----
+     Each role carries Segment 1 (meta/body/prompt/choices/cite) plus
+     d2 (The Question) and d3 (Going Forward), phrased for that seat.
+     `steplines` gives the three step labels — identical across roles here. */
+  const VARIANTS = {
+    teacher: {
+      steplines: ["Segment 1", "The Question", "Going Forward"],
+      meta: ["ROLE: CLASSROOM TEACHER", "TASK: PARENT PROGRESS EMAIL", "STATUS: SENT, VERIFIED, ACCURATE"],
+      body: [
+        "A parent emails asking for a detailed update on their child's progress. You use an AI tool to help organize your notes into a clear, well-written response — you review it carefully, verify every detail against your actual gradebook, and it's accurate.",
+        "The parent replies within the hour: “This is so thorough, thank you for taking the time to write this yourself.”"
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Let the reply stand as-is — correcting the “yourself” part feels awkward and unnecessary since the content is accurate.",
+          fb:"The content being accurate settles one question and not the other. The parent has just told you, in writing, that they believe you wrote this unaided — and letting that stand because it's uncomfortable to correct is choosing the awkwardness you can avoid over the disclosure you may owe." },
+        { correct:true, flag:"Correct path",
+          text:"Reply again, mentioning that AI helped draft the message.",
+          fb:"This is the move, and it's a light one: “Glad it was helpful — I did use an AI tool to help organize my notes, then checked everything against the gradebook.” It corrects the assumption while it's small, instead of letting it harden." },
+        { correct:false, flag:"Middle path",
+          text:"Say nothing now, but make sure to mention it if it ever comes up directly.",
+          fb:"“If it comes up” turns disclosure into something that depends on the parent asking the right question later. The opening is right now, in a reply you were going to send anyway — waiting doesn't make it more honest, just later." }
+      ],
+      cite: "Standard — verifying the content and disclosing AI assistance are separate obligations; a compliment that assumes you wrote it unaided is an opening to disclose, not a reason to stay quiet.",
+      d2: {
+        body: [
+          "Two weeks later, at conferences, the same parent asks casually: “Do teachers use AI for this kind of thing now?”"
+        ],
+        prompt: "How do you respond?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Say generally “some teachers do,” without confirming your own message specifically.",
+            fb:"A true general statement that dodges the specific one is still a dodge. The parent is standing in front of you asking a question that has a direct answer — “yes, including the email I sent you” — and “some teachers do” is built to avoid giving it." },
+          { correct:true, flag:"Correct path",
+            text:"Answer honestly that yes, you used it for that earlier email, and explain how you verified it.",
+            fb:"Right. The honest answer and the reassuring one are the same sentence: “Yes — I used it for that progress update, and I checked every detail against your child's actual grades before sending.” That's disclosure and quality control in one breath." },
+          { correct:false, flag:"Middle path",
+            text:"Change the subject, since the moment already passed weeks ago.",
+            fb:"The moment didn't pass — the parent just reopened it for you. Steering away from a direct question is a choice the parent will remember if they find out later, and it's a harder conversation then than now." }
+        ],
+        cite: "Standard — a direct question about AI use is answered directly and honestly, including about your own specific message; a true-but-evasive general answer doesn't meet it."
+      },
+      d3: {
+        body: [
+          "You realize this is going to keep coming up as you use AI tools more often for family communication."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Handle disclosure case-by-case, based on whether it feels relevant in the moment.",
+            fb:"“Feels relevant” will vary with how rushed you are and how the message reads, not with what's actually required. That produces different answers to the same question depending on the day — which is exactly what a parent or an administrator will notice if they compare two of your emails." },
+          { correct:true, flag:"Correct path",
+            text:"Check whether your district has an actual disclosure policy for AI-assisted communication, rather than deciding your own rule.",
+            fb:"This is it. There may already be a rule that settles this; if there is, it's not yours to redesign message by message. Following a set standard consistently is what makes your disclosure something a family can rely on." },
+          { correct:false, flag:"Middle path",
+            text:"Stop using AI tools for family communication entirely, to avoid the question altogether.",
+            fb:"That gives up a tool that was helping to sidestep a question you could just answer. The problem was never that you used AI — it's that there was no consistent rule for saying so. Find the rule; keep the tool." }
+        ],
+        cite: "Standard — ad-hoc, by-feel disclosure is replaced by finding and following the district's actual policy, applied consistently — not by a personal rule and not by dropping the tool."
+      },
+      takeaway: "Accuracy and disclosure are two different obligations — verifying the content doesn't satisfy the second one. A parent's compliment isn't a reason to stay quiet, and a question that arrives weeks later doesn't make the original disclosure optional. What you owe here isn't a personal comfort call; it's whatever your district's actual policy requires."
+    },
+
+    counselor: {
+      steplines: ["Segment 1", "The Question", "Going Forward"],
+      meta: ["ROLE: SCHOOL COUNSELOR", "TASK: MEETING-SUMMARY EMAIL", "STATUS: SENT, VERIFIED, ACCURATE"],
+      body: [
+        "A parent asks for a written summary of the support strategies discussed in a recent meeting. You use an AI tool to help organize your notes into a clear, professional summary — you verify every detail against your own meeting notes, and it's accurate.",
+        "You send it without mentioning how it was drafted."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"It's accurate and helpful — no need to mention the tool at all.",
+          fb:"Accurate and helpful covers the content; it doesn't cover how the parent understands the summary was produced. A meeting summary from a counselor carries a certain weight, and part of what the parent is trusting is that it came from you — disclosure is how that stays true." },
+        { correct:true, flag:"Correct path",
+          text:"Add a line noting AI helped organize the summary before sending.",
+          fb:"This is the clean version — disclose before the question ever arises. One line (“I used an AI tool to help organize my notes into this summary; the details are all from my own record of the meeting”) does it, and it's easier now than as a follow-up later." },
+        { correct:false, flag:"Middle path",
+          text:"Wait to see if the parent asks, and only explain if they do.",
+          fb:"Waiting to be asked isn't a disclosure strategy — it's a bet that the question won't come. And with a counseling-related summary, the parent finding out later that they had to ask is the kind of thing that costs trust you'll want." }
+      ],
+      cite: "Standard — disclosure of AI assistance is made because the message was AI-assisted, not because a parent asked; adding it up front is the standard, not waiting to be questioned.",
+      d2: {
+        body: [
+          "A few days later, the parent emails: “This was really clear and organized — did you put this together yourself, or is there a template you use?”"
+        ],
+        prompt: "How do you respond?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Say it's based on a template, without directly mentioning AI.",
+            fb:"“A template” is a half-answer that happens to be the one that avoids the word “AI.” The parent asked a two-part question and gave you a clean opening for the real answer — routing around it with the more comfortable half is still an evasion." },
+          { correct:true, flag:"Correct path",
+            text:"Answer honestly that you used an AI tool to help organize it, and that you verified everything against your notes.",
+            fb:"Right. The question is almost pre-written for the honest answer: “I used an AI tool to help organize it, and I checked every point against my own notes from the meeting.” That's transparent about the how and reassuring about the accuracy." },
+          { correct:false, flag:"Middle path",
+            text:"Say yes, you put it together, since you did review and approve everything in it.",
+            fb:"You did review and approve it — but “did you put this together yourself” is asking about the drafting, and “yes” lets the parent keep a picture that isn't quite right. Reviewing the output isn't the same as having written it unaided." }
+        ],
+        cite: "Standard — “did you write this yourself” is answered by disclosing the AI assistance; a technically-defensible “yes” that leaves the drafting method unstated doesn't meet it."
+      },
+      d3: {
+        body: [
+          "You realize this kind of summary is something you'll likely send again for other families."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Continue handling it case-by-case, based on whether a parent happens to ask.",
+            fb:"Tying disclosure to whether a parent asks means some families get told and some don't, for no principled reason. That inconsistency is its own problem in counseling communication, where families talk to each other and notice the difference." },
+          { correct:true, flag:"Correct path",
+            text:"Check whether your district has a disclosure policy for AI-assisted family communication.",
+            fb:"This is it. If there's a policy, it settles the question once for every summary you send; if there isn't, you've found a real gap worth raising. Either way it beats improvising the answer family by family." },
+          { correct:false, flag:"Middle path",
+            text:"Stop offering written summaries altogether to avoid the question.",
+            fb:"The written summaries are genuinely useful to families — dropping them to avoid a disclosure question is a real loss to sidestep a small conversation. The fix is a consistent way to say how they're made, not to stop making them." }
+        ],
+        cite: "Standard — a communication you'll repeat gets a consistent disclosure approach drawn from district policy, not a case-by-case call keyed to whether someone asks."
+      },
+      takeaway: "“Did you put this together yourself” is exactly the kind of question disclosure exists to answer honestly, even when the summary itself is accurate and well-verified. Waiting to see if someone asks isn't a disclosure strategy — it's hoping the question doesn't come up."
+    },
+
+    lead: {
+      steplines: ["Segment 1", "The Question", "Going Forward"],
+      meta: ["ROLE: GRADE-LEVEL LEAD TEACHER", "TASK: FAMILY-FACING FAQ", "SCOPE: WHOLE GRADE LEVEL"],
+      body: [
+        "You draft a family-facing FAQ document for your whole grade level, using an AI tool to help structure and word it clearly. You verify every fact against actual school policy.",
+        "Your team loves it and starts sending it out to families right away."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Let the team send it as-is — it's accurate, and mentioning the tool feels unnecessary for an internal document turned outward.",
+          fb:"The moment it's “turned outward” it's a family-facing document, and “internal” stops describing it. Your team is now sending something to families without any of them — or the families — knowing how it was drafted, and once it's out at scale that's harder to walk back." },
+        { correct:true, flag:"Correct path",
+          text:"Add a brief note to your team about how it was drafted before it goes out further.",
+          fb:"Right. The team can't disclose consistently what it doesn't know, so telling them is step one: “Heads up — I used an AI tool to structure this; every fact is checked against policy.” Now whoever gets asked can answer the same way." },
+        { correct:false, flag:"Middle path",
+          text:"Mention it only if someone on the team happens to ask how you made it so fast.",
+          fb:"Waiting for a colleague to ask leaves most of the team in the dark and sending the document blind. If a parent asks one of them how it was made, they can't give an answer they were never given." }
+      ],
+      cite: "Standard — a document that goes out under a team's name needs the whole team briefed on how it was drafted, so disclosure is consistent no matter who is asked.",
+      d2: {
+        body: [
+          "A parent forwards the FAQ to another parent, who asks your team, “Is this an official district document, or something the school put together?”"
+        ],
+        prompt: "How do you respond?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Confirm it's from the school, without mentioning how it was drafted.",
+            fb:"“From the school” answers where it originated, not how it was made — and the second part is the part the question is circling. Confirming the source while leaving out the drafting method is a partial answer to a question that has room for the whole one." },
+          { correct:true, flag:"Correct path",
+            text:"Explain to the team that this question is exactly why the team should know and be able to say how it was made.",
+            fb:"Right. One parent's question is a preview of many, and the team needs a single answer ready: school-produced, AI-assisted in the drafting, every fact verified against policy. Getting the team aligned now is what keeps the responses consistent." },
+          { correct:false, flag:"Middle path",
+            text:"Let whichever teacher gets the question answer however feels natural, without a consistent answer across the team.",
+            fb:"Five teachers improvising “whatever feels natural” will give five different answers, and parents compare notes. On a shared document, an inconsistent disclosure reads as evasive even when no one meant it that way." }
+        ],
+        cite: "Standard — for a shared, team-name document, disclosure is a single agreed answer everyone gives, not a per-teacher improvisation."
+      },
+      d3: {
+        body: [
+          "Your team wants to use AI to draft more shared family-facing materials this year."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Let each teacher decide their own approach to mentioning AI use.",
+            fb:"Individual approaches on a shared output is how you get contradictory answers to the same parent question. If the materials go out under the team's name, the disclosure has to be the team's, not each teacher's." },
+          { correct:true, flag:"Correct path",
+            text:"Check what your district's disclosure policy actually requires, and make sure the whole team follows the same standard.",
+            fb:"This is it. One policy check, one standard, applied by everyone — that's what makes a team's disclosure trustworthy. It also means no individual teacher is left guessing what to say." },
+          { correct:false, flag:"Middle path",
+            text:"Avoid AI tools for anything that might go out to multiple families, to sidestep the issue.",
+            fb:"That's a broad retreat from a tool the team wants to use, to avoid a question that a shared standard would answer. The issue is consistency of disclosure, not the tool — solve the first and the team keeps the second." }
+        ],
+        cite: "Standard — when a team scales up shared AI-assisted materials, it adopts one district-based disclosure standard for everyone, rather than leaving it to each member or abandoning the tool."
+      },
+      takeaway: "Once something goes out under a team's name instead of one person's, disclosure isn't a personal call anymore — it's something the whole team needs to answer the same way. “Whichever teacher gets asked answers however feels natural” isn't a policy; it's a coin flip."
+    },
+
+    office: {
+      steplines: ["Segment 1", "The Question", "Going Forward"],
+      meta: ["ROLE: FRONT OFFICE / SUPPORT STAFF", "TASK: SCHEDULE-CHANGE ANNOUNCEMENT", "SCALE: EVERY FAMILY"],
+      body: [
+        "You use an AI tool to help draft a mail-merge announcement about a schedule change, going to every family in the school. You verify the policy details carefully before sending.",
+        "The announcement goes out smoothly."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"No need to mention how it was drafted — it's a routine logistics announcement, not personal communication.",
+          fb:"“Routine” describes the topic, not whether disclosure applies. This still went to every family in the building as official school communication, and “it's just logistics” isn't one of the things that switches the disclosure question off." },
+        { correct:true, flag:"Correct path",
+          text:"Add a brief standard line noting AI assistance was used in drafting, before it goes out.",
+          fb:"Right — and a standing line is the low-effort way to do it: a short, consistent “portions of this message were drafted with AI assistance and reviewed by staff” that rides along on bulk sends. Set once, applied every time." },
+        { correct:false, flag:"Middle path",
+          text:"Only mention it if a parent calls the office asking.",
+          fb:"Disclosure that only happens for the families who call is disclosure for almost none of them. If it's worth telling the one parent who asks, it's worth the standard line that tells everyone." }
+      ],
+      cite: "Standard — a message sent to every family is official communication regardless of how routine the topic is; “routine” is not one of the conditions that removes the disclosure question.",
+      d2: {
+        body: [
+          "A parent calls the office: “This message reads differently than what we usually get — is this new?”"
+        ],
+        prompt: "How do you respond?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Say the office updated its communication style, without mentioning AI specifically.",
+            fb:"“Updated our style” is technically not false and completely beside the point. The parent noticed the change and is giving you an opening to explain it accurately — “we used an AI tool to help draft this one” — and the style answer is chosen precisely to avoid that." },
+          { correct:true, flag:"Correct path",
+            text:"Explain that an AI tool helped draft it this time, and that all the details were verified against the actual policy.",
+            fb:"Right. It's a straightforward answer that covers both halves: “Yes — we used an AI tool to help write this one, and staff checked all the schedule details against the actual policy before it went out.” Nothing to manage later." },
+          { correct:false, flag:"Middle path",
+            text:"Tell them you're not sure and transfer them to someone else.",
+            fb:"If you drafted or sent it, “I'm not sure” isn't accurate, and bouncing the call reads as dodging. A brief honest answer from the person who handled it is better than a transfer that leaves the parent wondering why." }
+        ],
+        cite: "Standard — when a parent notices and asks about a change, the accurate answer names the AI assistance and the verification; a true-but-deflecting explanation doesn't meet it."
+      },
+      d3: {
+        body: [
+          "Bulk announcements like this are something your office sends out several times a year."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Decide case-by-case whether a given announcement needs a disclosure note.",
+            fb:"Case-by-case on a recurring bulk send means the note appears on some announcements and not others, with no clear reason a parent could follow. For something this repeatable, the inconsistency is the problem." },
+          { correct:true, flag:"Correct path",
+            text:"Check whether the district has a standard disclosure practice for bulk communications, and apply it consistently.",
+            fb:"This is it. Bulk sends are exactly where a fixed practice pays off — decide once with the district's guidance, build it into the template, and every announcement is handled the same way." },
+          { correct:false, flag:"Middle path",
+            text:"Stop using AI tools for anything sent to the whole school, to avoid the question entirely.",
+            fb:"That drops a drafting aid across all school-wide communication to avoid a question a one-line standard would settle. Keep the tool; add the consistent disclosure." }
+        ],
+        cite: "Standard — recurring bulk communication gets a fixed, district-based disclosure practice built into the process, not a fresh judgment call each time."
+      },
+      takeaway: "A routine logistics announcement is still a communication that reaches every family in the building — “routine” isn't the same as “disclosure doesn't apply.” A consistent standard practice beats deciding fresh each time whether this particular message counts."
+    },
+
+    admin: {
+      steplines: ["Segment 1", "The Question", "Going Forward"],
+      meta: ["ROLE: SCHOOL ADMINISTRATOR", "TASK: FORMAL POLICY LETTER", "SIGNATURE: YOURS"],
+      body: [
+        "You use an AI tool to help draft a formal letter to families about a policy change, going out under your signature. You verify every detail against the actual board-approved policy.",
+        "It reads clearly and professionally."
+      ],
+      prompt: "What do you do?",
+      choices: [
+        { correct:false, flag:"Consequence",
+          text:"Send it under your signature as-is — it's accurate, and it's standard for official letters not to detail how they were written.",
+          fb:"Official letters don't usually footnote their drafting process — but “help from an AI tool” is a newer thing that policy is actively catching up to, and your signature is exactly what makes people read it as fully your own words. Accuracy doesn't answer that." },
+        { correct:true, flag:"Correct path",
+          text:"Add a line noting AI assistance was used in drafting, consistent with how you'd want your own staff to handle it.",
+          fb:"Right. The standard you'd set for staff is the one you hold yourself to — a brief “this letter was drafted with AI assistance and reviewed against board-approved policy” models exactly what you'd want a teacher to write." },
+        { correct:false, flag:"Consequence",
+          text:"Decide disclosure doesn't apply to formal letters from your office specifically, since they're always carefully reviewed anyway.",
+          fb:"Careful review is the accuracy safeguard; it's not a disclosure. Carving out your own office as exempt is the kind of exception that undercuts any standard you'd later ask staff to follow." }
+      ],
+      cite: "Standard — an official signature raises the disclosure stake rather than removing it, and “my letters are always reviewed” addresses accuracy, not disclosure.",
+      d2: {
+        body: [
+          "At a school board meeting, a board member asks publicly whether the district has any policy on using AI to draft official communications."
+        ],
+        prompt: "How do you respond?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Say the district handles it informally, case-by-case, based on staff judgment.",
+            fb:"“Handled case-by-case on staff judgment” describes not having a policy, phrased to sound like having one. A board member asking in public is the moment to be straight about where things actually stand." },
+          { correct:true, flag:"Correct path",
+            text:"Acknowledge there isn't a clear policy yet, and commit to establishing one.",
+            fb:"Right. The honest answer is that there's a gap, and the useful one is a commitment to close it. That's more credible than implying a practice exists, and it puts the district ahead of the question instead of behind it." },
+          { correct:false, flag:"Consequence",
+            text:"Say AI isn't really used for anything official, even though you know it was used for your own recent letter.",
+            fb:"That's a false statement to a governing board, and you have a specific example that contradicts it. If it surfaces later — and your own letter is the evidence — the problem stops being “no policy” and becomes “the administrator misled the board.”" }
+        ],
+        cite: "Standard — a public question about AI policy is answered by stating honestly whether one exists; describing an absence of policy as informal practice, or denying known use, does not meet it."
+      },
+      d3: {
+        body: [
+          "You're now responsible for shaping how your school approaches this going forward."
+        ],
+        prompt: "What do you do?",
+        choices: [
+          { correct:false, flag:"Consequence",
+            text:"Leave it to each staff member's individual judgment, same as before.",
+            fb:"That's the status quo that just got questioned in a public meeting. Individual judgment with no standard is how staff end up giving families different answers to the same question — and as the person responsible, leaving it there is a choice." },
+          { correct:true, flag:"Correct path",
+            text:"Establish a clear, written disclosure standard for your building, consistent with district and state guidance.",
+            fb:"This is it. A written standard means staff aren't each inventing an answer, families get consistency, and there's something concrete to point to next time the board asks. Aligning it to district and state guidance keeps it from being just your preference." },
+          { correct:false, flag:"Middle path",
+            text:"Ban AI use for any family-facing communication, to avoid the question permanently.",
+            fb:"A blanket ban “solves” the disclosure question by removing a tool staff are already finding useful — and it's hard to enforce. A clear disclosure standard gets you the transparency without the prohibition." }
+        ],
+        cite: "Standard — someone who sets policy responds to a disclosure gap by writing a clear standard aligned to district and state guidance, not by leaving it to individual judgment or banning the tool."
+      },
+      takeaway: "The question a board member asks in public is the same question your own staff are quietly deciding for themselves, one message at a time, without a standard to follow. If you're the one who sets policy, “case-by-case judgment” isn't a disclosure practice — it's the absence of one, and it's yours to fix."
+    }
+  };
+
+  let score = 0;
+  let currentRole = null;
+  let segmentStep = 1;
+  const dots = document.querySelectorAll('.dot');
+
+  function setDot(i) {
+    dots.forEach((d, j) => {
+      d.classList.toggle('done', j < i);
+      d.classList.toggle('current', j === i);
+    });
+  }
+
+  /* ---- Stage 1 -> Stage 2: pick a role, render Segment 1 ---- */
+  document.getElementById('roles').addEventListener('click', (e) => {
+    const btn = e.target.closest('.role');
+    if (!btn) return;
+    currentRole = btn.dataset.role;
+    renderSegment(1);
+    document.getElementById('stage-role').style.display = 'none';
+    document.getElementById('stage-decision').style.display = 'block';
+    setDot(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function renderSegment(step) {
+    segmentStep = step;
+    const v = VARIANTS[currentRole];
+    const d = step === 1 ? v : (step === 2 ? v.d2 : v.d3);
+
+    document.getElementById('dec-stepline').textContent = v.steplines[step - 1];
+
+    const meta = document.getElementById('dec-meta');
+    meta.innerHTML = '';
+    if (step === 1) {
+      meta.style.display = 'flex';
+      v.meta.forEach((m) => {
+        const s = document.createElement('span');
+        s.textContent = m;
+        meta.appendChild(s);
+      });
+    } else {
+      meta.style.display = 'none';
+    }
+
+    const bodyEl = document.getElementById('dec-body');
+    bodyEl.innerHTML = '';
+    d.body.forEach((p) => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      bodyEl.appendChild(el);
+    });
+
+    document.getElementById('dec-prompt').textContent = d.prompt;
+
+    const cbox = document.getElementById('dec-choices');
+    cbox.className = 'choices';
+    cbox.innerHTML = '';
+    d.choices.forEach((c) => {
+      const b = document.createElement('button');
+      b.className = 'choice';
+      b.textContent = c.text;
+      b.dataset.correct = c.correct ? 'true' : 'false';
+      b.dataset.flag = c.flag;
+      b.dataset.fb = c.fb;
+      cbox.appendChild(b);
+    });
+
+    const fb = document.getElementById('dec-fb');
+    fb.className = 'feedback';
+    fb.querySelector('.flag').textContent = '';
+    fb.querySelector('.fb-text').textContent = '';
+    fb.querySelector('.cite').textContent = d.cite;
+
+    document.getElementById('dec-next').classList.remove('show');
+  }
+
+  /* ---- Stage 2: three segments in sequence ---- */
+  const decChoices = document.getElementById('dec-choices');
+  const decFb = document.getElementById('dec-fb');
+  const decNext = document.getElementById('dec-next');
+
+  decChoices.addEventListener('click', (e) => {
+    const btn = e.target.closest('.choice');
+    if (!btn || decChoices.classList.contains('answered')) return;
+    decChoices.classList.add('answered');
+    [...decChoices.children].forEach((c) => c.classList.add('locked'));
+    btn.style.borderColor = 'var(--ink)';
+    // Segments are practice, not part of the scored result — only the
+    // closing checkpoint counts. Keep `correct` for feedback styling only.
+    const correct = btn.dataset.correct === 'true';
+    decFb.querySelector('.flag').textContent = btn.dataset.flag;
+    decFb.querySelector('.fb-text').textContent = btn.dataset.fb;
+    decFb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+    decNext.classList.add('show');
+  });
+
+  decNext.addEventListener('click', () => {
+    if (segmentStep < 3) {
+      const next = segmentStep + 1;
+      renderSegment(next);
+      setDot(next - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById('takeaway-body').textContent = VARIANTS[currentRole].takeaway;
+      document.getElementById('stage-decision').style.display = 'none';
+      document.getElementById('stage-takeaway').style.display = 'block';
+      setDot(3);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  /* ---- Stage 3 -> Stage 4: takeaway + coach, then on to the checkpoint ---- */
+  document.getElementById('take-next').addEventListener('click', () => {
+    document.getElementById('stage-takeaway').style.display = 'none';
+    document.getElementById('stage-check').style.display = 'block';
+    setDot(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Stage 4: closing checkpoint — three independent checks ---- */
+  let checkAnswered = 0;
+  const nextCheck = document.getElementById('next-check');
+
+  document.querySelectorAll('.kc-q').forEach((q) => {
+    const choices = q.querySelector('.choices');
+    const fb = q.querySelector('.feedback');
+    choices.addEventListener('click', (e) => {
+      const btn = e.target.closest('.choice');
+      if (!btn || choices.classList.contains('answered')) return;
+      choices.classList.add('answered');
+      [...choices.children].forEach((c) => c.classList.add('locked'));
+      btn.style.borderColor = 'var(--ink)';
+      const correct = btn.dataset.correct === 'true';
+      if (correct) score++;
+      fb.querySelector('.flag').textContent = btn.dataset.flag;
+      fb.querySelector('.fb-text').textContent = btn.dataset.fb;
+      fb.className = 'feedback show ' + (correct ? 'good' : 'caution');
+      checkAnswered++;
+      if (checkAnswered === 3) nextCheck.classList.add('show');
+    });
+  });
+
+  nextCheck.addEventListener('click', () => {
+    document.getElementById('stage-check').style.display = 'none';
+    document.getElementById('stage-done').style.display = 'block';
+    dots.forEach((d) => { d.classList.add('done'); d.classList.remove('current'); });
+    document.getElementById('kc-result').textContent = score + '/3 — Case closed';
+    document.getElementById('kc-sub').textContent = score === 3
+      ? "All three checks held — you kept accuracy and disclosure as separate obligations, and you'd replace by-feel judgment with your district's actual policy."
+      : "Revisit the checks above. The standard is short — verifying the content doesn't remove the need to disclose AI assistance; “no one asked” doesn't make it optional; and the fix for deciding case-by-case is to follow your district's actual policy, consistently.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* Ask-the-Coach — live, streamed from /api/coach. No canned answers.
+     Public embed path: no lab token, so the D6 per-embed rate limit applies. */
+  (function () {
+    const MODULE_ID = "08";
+    const body    = document.getElementById('coach-body');
+    const input   = document.getElementById('coach-input');
+    const send    = document.getElementById('coach-send');
+    const suggest = document.getElementById('coach-suggest');
+    let conversationId = (crypto.randomUUID
+      ? crypto.randomUUID()
+      : 'c-' + Date.now() + Math.random().toString(16).slice(2));
+    let messages = [];   // {role:'user'|'assistant', content}
+    let busy = false;
+
+    function bubble(cls, text) {
+      const el = document.createElement('div');
+      el.className = 'bubble ' + cls;
+      el.textContent = text;
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+      return el;
+    }
+    function autosize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+    }
+    input.addEventListener('input', autosize);
+
+    // Chips prefill the composer — they don't trigger a canned reply.
+    suggest.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sugg');
+      if (!btn) return;
+      input.value = btn.textContent;
+      input.focus();
+      autosize();
+    });
+
+    async function ask() {
+      const q = input.value.trim();
+      if (!q || busy) return;
+      busy = true; send.disabled = true;
+      bubble('ask', q);
+      input.value = ''; autosize();
+      messages.push({ role: 'user', content: q });
+      const reply = bubble('reply', '…');
+      let acc = '';
+      try {
+        const res = await fetch('/api/coach', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ moduleId: MODULE_ID, conversationId, messages })
+        });
+        if (!res.ok) {
+          const t = (await res.text()).trim();
+          reply.textContent = t || ('Something went wrong (' + res.status + ').');
+          messages.pop();
+          return;
+        }
+        const rd = res.body.getReader();
+        const dec = new TextDecoder();
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          acc += dec.decode(value, { stream: true });
+          reply.textContent = acc || '…';
+          body.scrollTop = body.scrollHeight;
+        }
+        acc = acc.trim();
+        reply.textContent = acc || 'No response — please try again.';
+        if (acc) messages.push({ role: 'assistant', content: acc });
+      } catch (err) {
+        reply.textContent = 'Couldn’t reach the coach. Please try again.';
+        messages.pop();
+      } finally {
+        busy = false; send.disabled = false; input.focus();
+      }
+    }
+
+    send.addEventListener('click', ask);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+    });
+  })();
+</script>
+</body>
+</html>

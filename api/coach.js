@@ -83,7 +83,7 @@ export async function POST(request) {
   }
 
   const scenario = getScenario(body?.moduleId);
-  if (!scenario) return text('Unknown moduleId. Use "04", "05", "06", or "07".', 400);
+  if (!scenario) return text('Unknown moduleId. Use "04", "05", "06", "07", or "08".', 400);
 
   const conversationId =
     typeof body.conversationId === "string" && /^[\w-]{6,64}$/.test(body.conversationId)
