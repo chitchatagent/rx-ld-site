@@ -353,6 +353,8 @@
   }
   @media (max-width:760px){
     :root{--gutter:24px;}
+    /* header sits close on phones — the desktop 84px top gap reads as dead space here */
+    .lp-hero .inner{padding-top:32px;}
     .problem .inner,.offer-sec .inner{grid-template-columns:1fr;gap:20px;}
     .problem p{font-size:21px;}
     .problem p.small{font-size:17px;}

@@ -320,6 +320,8 @@
   }
   @media (max-width:760px){
     :root{--gutter:24px;}
+    /* header sits close on phones — the desktop 64px top gap reads as dead space here */
+    .hero-text{padding-top:32px;}
     .hero h1{max-width:none;}
     .ex-head{flex-direction:column;align-items:flex-start;gap:16px;}
     .ex-title{font-size:32px;}
