@@ -222,9 +222,10 @@
   .staff-cut{background:var(--navy-deep);border-top:1px solid var(--navy-border);border-bottom:1px solid var(--navy-border);}
   .staff-cut .inner{padding-top:52px;padding-bottom:52px;}
   .staff-cut .shot{position:relative;overflow:hidden;border:1px solid var(--navy-border);margin:0;}
-  /* original letterbox container — fixed height; the head-crop fix is object-position only */
+  /* shared letterbox container — fixed height; head-crop tuned via object-position */
   .staff-cut .shot img{display:block;width:100%;height:clamp(220px,32vw,340px);object-fit:cover;object-position:50% 6%;}
-  .staff-cut .shot-admin img{object-position:50% 2%;}
+  /* administrator's head is taller than the shared frame — grow this one to head/shoulders-plus */
+  .staff-cut .shot-admin img{height:clamp(300px,44vw,470px);object-position:50% 3%;}
   .staff-cut .caption-tag{position:absolute;left:22px;bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
   .staff-cut .line{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(18px,2.4vw,23px);line-height:1.32;color:var(--cream);margin:22px 0 0;max-width:60ch;}
 
