@@ -110,6 +110,22 @@
   .btn-primary:hover{background:var(--orange-hover);border-color:var(--orange-hover);}
   .nav .btn-primary{font-size:13.5px;font-weight:500;padding:11px 20px;}
 
+  /* ── responsive nav — hamburger below 768 ── */
+  .nav-links{display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .nav-toggle{display:none;}
+  @media (max-width:768px){
+    .nav-right{gap:16px;}
+    .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;width:42px;height:38px;padding:8px 9px;background:transparent;border:1px solid var(--navy-border);border-radius:3px;cursor:pointer;}
+    .nav-toggle span{display:block;width:100%;height:2px;background:var(--cream);transition:transform .18s ease,opacity .15s ease;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--navy);border-bottom:1px solid var(--navy-hair);}
+    .nav-links.open{display:flex;}
+    .nav-links .nav-link{padding:15px var(--gutter);font-size:12px;border-top:1px solid var(--navy-hair);}
+    .nav-links .nav-link:hover{background:var(--navy-lift);color:var(--cream);}
+  }
+
   /* ── hero ── */
   .hero{background:var(--navy);}
   .hero .inner{padding:0;display:grid;grid-template-columns:1fr 520px;align-items:stretch;}
@@ -338,11 +354,16 @@
       <span class="wm-tagline">the <span class="rx">prescription</span> treatment for training</span>
     </div>
     <nav class="nav-right">
-      <a class="nav-link" href="#method">How it works</a>
-      <a class="nav-link" href="#offer">What we build</a>
-      <a class="nav-link" href="#exhibit">Exhibits</a>
-      <a class="nav-link" href="/ai-literacy">AI Literacy</a>
+      <div class="nav-links" id="nav-links">
+        <a class="nav-link" href="#method">How it works</a>
+        <a class="nav-link" href="#offer">What we build</a>
+        <a class="nav-link" href="#exhibit">Exhibits</a>
+        <a class="nav-link" href="/ai-literacy">AI Literacy</a>
+      </div>
       <a class="btn btn-primary" href="/#intake">Get Started</a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
   </div>
 </header>
@@ -658,6 +679,36 @@
     document.getElementById('confirm').classList.add('show');
     intakeForm.reset();
   });
+</script>
+
+<script>
+  /* responsive nav toggle */
+  (function () {
+    var toggle = document.getElementById('nav-toggle');
+    var menu = document.getElementById('nav-links');
+    if (!toggle || !menu) return;
+    function setOpen(open) {
+      menu.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(!menu.classList.contains('open'));
+    });
+    menu.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-link')) setOpen(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (menu.classList.contains('open') && !e.target.closest('.nav-right')) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 768) setOpen(false);
+    });
+  })();
 </script>
 
 </body>
