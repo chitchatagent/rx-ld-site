@@ -155,6 +155,18 @@
   }
   .kc-sub{color:var(--ink-soft);font-size:14px;margin-bottom:24px;}
 
+  /* results: spaced-practice notice + return-to-roles link */
+  .kc-booster{
+    font-size:13.5px;line-height:1.6;color:var(--ink-soft);
+    border-left:3px solid var(--amber);padding:4px 0 4px 13px;margin:0 0 22px;
+  }
+  .kc-restart{
+    display:inline-block;font:inherit;font-size:14px;color:var(--ink);
+    background:none;border:0;border-bottom:1px solid var(--line);
+    padding:0 0 1px;cursor:pointer;
+  }
+  .kc-restart:hover{border-bottom-color:var(--ink);}
+
   /* coach panel — signature element */
   .coach{
     margin-top:34px;border:1px solid var(--line);border-radius:6px;
@@ -349,6 +361,8 @@
     <div class="stepline">Complete</div>
     <div class="kc-result" id="kc-result">3/3 — Case closed</div>
     <div class="kc-sub" id="kc-sub">You applied the reasonable suspicion standard cleanly at every step.</div>
+    <p class="kc-booster">This isn't the last time you'll see this topic — a short refresher will show up later in the school year to help it stick.</p>
+    <button type="button" class="kc-restart" id="restart-role">Return to role selection →</button>
   </div>
 
 </div>
@@ -806,6 +820,38 @@
     document.getElementById('kc-sub').textContent = score === 3
       ? "All three checks held — you didn't wait for certainty, and you didn't treat a student's reassurance or a calm afternoon as the end of the obligation."
       : "The standard is a short chain — reasonable suspicion is not proof; a reluctant student doesn't cancel it; and how someone seems afterward doesn't either.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---- Results -> Stage 1: review another role, no page reload ---- */
+  document.getElementById('restart-role').addEventListener('click', () => {
+    score = 0;
+    checkAnswered = 0;
+    currentRole = null;
+    segmentStep = 1;
+
+    document.querySelectorAll('#stage-check .kc-q').forEach((q) => {
+      const choices = q.querySelector('.choices');
+      choices.classList.remove('answered');
+      [...choices.children].forEach((c) => {
+        c.classList.remove('locked');
+        c.style.borderColor = '';
+      });
+      const fb = q.querySelector('.feedback');
+      fb.className = 'feedback';
+      fb.querySelector('.flag').textContent = '';
+      fb.querySelector('.fb-text').textContent = '';
+    });
+    document.getElementById('next-check').classList.remove('show');
+
+    dots.forEach((d, j) => {
+      d.classList.remove('done');
+      d.classList.toggle('current', j === 0);
+    });
+
+    ['stage-done', 'stage-decision', 'stage-takeaway', 'stage-check']
+      .forEach((id) => { document.getElementById(id).style.display = 'none'; });
+    document.getElementById('stage-role').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
