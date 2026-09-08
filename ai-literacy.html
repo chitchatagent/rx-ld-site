@@ -221,11 +221,10 @@
   /* ── staff photo cut-ins — palette-cleanser bands between the text-heavy sections ── */
   .staff-cut{background:var(--navy-deep);border-top:1px solid var(--navy-border);border-bottom:1px solid var(--navy-border);}
   .staff-cut .inner{padding-top:52px;padding-bottom:52px;}
-  .staff-cut .shot{position:relative;overflow:hidden;border:1px solid var(--navy-border);margin:0;}
-  .staff-cut .shot img{display:block;width:100%;height:clamp(220px,32vw,340px);object-fit:cover;object-position:50% 24%;}
-  .staff-cut .shot-admin img{object-position:66% 18%;}
-  .staff-cut .caption-tag{position:absolute;left:22px;bottom:22px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
-  .staff-cut .line{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(18px,2.4vw,23px);line-height:1.32;color:var(--cream);margin:22px 0 0;max-width:34ch;}
+  .staff-cut .shot{position:relative;overflow:hidden;border:1px solid var(--navy-border);margin:0;max-width:440px;}
+  .staff-cut .shot img{display:block;width:100%;height:auto;}
+  .staff-cut .caption-tag{position:absolute;left:16px;bottom:16px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;background:var(--orange);color:#fff;padding:7px 13px;border-radius:2px;}
+  .staff-cut .line{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(18px,2.4vw,23px);line-height:1.32;color:var(--cream);margin:22px 0 0;max-width:60ch;}
 
   .sec .eyebrow{margin-bottom:20px;}
   .sec h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(25px,3.2vw,33px);line-height:1.16;letter-spacing:-.022em;margin-bottom:18px;max-width:26ch;color:var(--charcoal);}
@@ -558,7 +557,7 @@
 <section class="band staff-cut">
   <div class="inner">
     <figure class="shot">
-      <img src="images/counselors.jpg" width="1920" height="1280" loading="lazy" decoding="async" alt="Two school counselors standing together in an office">
+      <img src="images/counselors.jpg" width="1920" height="1282" loading="lazy" decoding="async" alt="Two school counselors standing together in an office">
       <figcaption class="caption-tag">STAFF · SCHOOL COUNSELORS</figcaption>
     </figure>
     <p class="line">Same standard. A completely different day.</p>
@@ -659,8 +658,8 @@
 
 <section class="band staff-cut">
   <div class="inner">
-    <figure class="shot shot-admin">
-      <img src="images/administrator.jpg" width="1920" height="1280" loading="lazy" decoding="async" alt="A school administrator standing in her office">
+    <figure class="shot">
+      <img src="images/administrator.jpg" width="1920" height="1282" loading="lazy" decoding="async" alt="A school administrator standing in her office">
       <figcaption class="caption-tag">STAFF · SCHOOL ADMINISTRATOR</figcaption>
     </figure>
     <p class="line">If you're the one deciding, here's exactly what you're getting.</p>
